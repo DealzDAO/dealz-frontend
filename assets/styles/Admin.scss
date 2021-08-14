@@ -1,0 +1,107 @@
+.admin-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 0px 5px;
+  height: 28px;
+  border-radius: 100px;
+}
+.admin-chip p {
+  font-weight: 500;
+  font-size: 12px;
+}
+.bg-primary-light2 {
+  background: rgba(4, 165, 246, 0.1);
+}
+.bg-warning-light2 {
+  background: rgba(242, 156, 90, 0.1);
+}
+.bg-success-light2 {
+  background: rgba(52, 208, 148, 0.1);
+}
+.bg-danger-light2 {
+  background: #faf8f3;
+}
+.title-helper {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(17, 17, 17, 0.64);
+}
+.user-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+.user-name2 {
+  font-weight: 600;
+  font-size: 24px;
+  color: #182744;
+}
+.user-name3 {
+  font-weight: bold;
+  font-size: 14px;
+  color: #182744;
+}
+.text-date {
+  font-weight: 500;
+  font-size: 12px;
+  color: rgba(17, 17, 17, 0.48);
+}
+.comment-text {
+  font-weight: 500;
+  font-size: 12px;
+  color: #04a5f6;
+}
+.admin-btn {
+  height: 41px;
+  border-radius: 8px;
+  padding: 12px 36px 12px 36px;
+  border: none;
+}
+.admin-btn p {
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: -3px;
+}
+.active-menu {
+  background-color: rgba(90, 205, 102, 0.24);
+}
+.data-box {
+  border: 1px solid #dfe6ec;
+  box-sizing: border-box;
+  border-radius: 12px;
+  margin: 0px 12px;
+  padding: 16px 25px;
+}
+.data-box p{
+     text-align: center;
+     margin-bottom: 0px;
+}
+.admin-icon{
+  width:22px;
+  height:22px;
+}
+.big-icon {
+  width: 50px;
+  height: 50px;
+}
+.table-container{
+  border: 1px solid #DFE6EC;
+  padding-bottom:5px;
+  border-radius:12px;
+}
+table {
+  width: 100%;
+   border-collapse: collapse;
+border-radius: 1em;
+}
+
+td,
+th {
+  border-bottom: 1px solid #DFE6EC;
+  text-align: left;
+  padding: 8px;
+
+}
+
+tr:nth-child(even) {
+  background-color: #F5F7F9;
+}

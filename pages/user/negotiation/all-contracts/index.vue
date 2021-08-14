@@ -5,7 +5,7 @@
             <div class="col">
                 <div v-if="contracts.length>0">
                     <div v-for="(item,i) in contracts" :key="i" class="mt-4">
-                        <p class="mb-1 subtitle-text4">{{item.contract_id.title}}</p>
+                        <p class="mb-1 subtitle-text4 link" @click="seeDetail(item)">{{item.contract_id.title}}</p>
                         <div class="admin-chip" :class="getBg(item)">
                             <p :class="getColor(item)">
                                 <b-icon :icon="getIcon(item)"></b-icon>
@@ -200,6 +200,12 @@ export default {
             this.page = 1
             this.getContracts()
         },
+        seeDetail(item){
+            this.$router.push({
+                name:'user-negotiation-all-contracts-id',
+                params:{id:item._id}
+            })
+        }
         
     }
 }

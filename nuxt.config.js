@@ -28,7 +28,6 @@ export default {
     { src: "~/plugins/v-toast.js", mode: "client" },
     { src: "~/plugins/ripple-directive.js", mode: "client" },
     { src: "~/plugins/persistedState.client.js"},
-    { src: "~/plugins/tinymce-vue"}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -53,7 +52,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: ["vee-validate/dist/rules","tinymce-vue"]
+    transpile: ["vee-validate/dist/rules"]
   },
 
   styleResources: {

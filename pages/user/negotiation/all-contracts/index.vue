@@ -35,8 +35,8 @@
                 </div>
                 <p v-else class="text-muted text-center">No contracts found</p>
 
-                <div v-if="contracts.length>0" class="row helper-text px-2 mt-4">
-                    <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" size="sm" next-class="next-button" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
+                <div v-if="contracts.length>0" class="px-2 mt-4">
+                    <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
                 </div>
             </div>
 
@@ -53,7 +53,7 @@ export default {
     data() {
         return {
             contracts: [],
-            limit: 5,
+            limit: 2,
             rows: 0,
             page: 1,
             hasBg: true,
@@ -210,6 +210,16 @@ export default {
     }
 }
 </script>
-<style scoped>
-
+<style lang="scss">
+    .pagination-sm .page-link{
+        padding:10px 10px;
+        border: 0px;
+    }
+    .page-item.disabled .page-link{
+          border:none;
+          background-color: #f5f7f9;
+    }
+    // .b-pagination-pills .page-item .page-link{
+        
+    // }
 </style>

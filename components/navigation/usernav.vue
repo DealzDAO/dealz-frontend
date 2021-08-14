@@ -11,8 +11,8 @@
             </div>
             <div class="sidebar-menu">
                 <div v-for="(item,i) in menu" :key="i" class="sidebar-menu-item" :class="getActiveLook(item)" @click="menuClick(item)">
-                    <p>
-                        <b-icon :icon="item.icon" class="icon-helper" :class="getActiveLook(item)"></b-icon>
+                    <p :class="getActiveLook(item)">
+                        <b-icon :icon="item.icon" class="icon-helper" ></b-icon>
                         <span class="menu-text">{{item.title}}</span>
                     </p>
                 </div>

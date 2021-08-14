@@ -5,7 +5,7 @@
             <p class="subtitle-text">Contracts</p>
         </div>
         <div class="row line-border px-4">
-            <b-tabs pills  active-nav-item-class="text-primary-light" active-tab-class="bg-primary-light" v-model="tabIndex">
+            <b-tabs pills  active-nav-item-class="text-primary" active-tab-class="bg-primary-light" v-model="tabIndex">
                 <b-tab title="Signed" @click="setTab(0,'signed')" class="menu-text" :title-link-class="linkClass(0)"></b-tab>
             </b-tabs>
         </div>

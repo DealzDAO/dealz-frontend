@@ -23,7 +23,6 @@
     "qs": "^6.10.1",
     "sass-loader": "^10",
     "vee-validate": "^3.4.10",
-    "vue-easy-tinymce": "^1.0.2",
     "vue-ripple-directive": "^2.0.1",
     "vuex-persistedstate": "^4.0.0"
   },

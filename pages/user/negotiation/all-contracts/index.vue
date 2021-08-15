@@ -214,12 +214,20 @@ export default {
     .pagination-sm .page-link{
         padding:10px 10px;
         border: 0px;
+        
     }
     .page-item.disabled .page-link{
           border:none;
           background-color: #f5f7f9;
+          font-size: 12px;
+          font-weight: 600;
     }
-    // .b-pagination-pills .page-item .page-link{
-        
-    // }
+    button.page-link{
+        background-color: #f5f7f9;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .b-pagination-pills .page-item .page-link{
+        border:none;
+    }
 </style>

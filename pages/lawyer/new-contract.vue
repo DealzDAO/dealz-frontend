@@ -49,44 +49,47 @@
 <script>
 import Editor from "@tinymce/tinymce-vue";
 import ApiService from "@/services/index.js";
+
 export default {
     components: {
         editor: Editor,
     },
-    data: () => ({
-        content: "",
-        config: {
-            height: 400,
-            menubar: false,
-            // image_upload_url:  {process.env.baseUrl}/user/upload,
-            automatic_uploads: true,
-            plugins: [
-                "advlist autolink lists link image imagetools charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table paste code help wordcount",
-            ],
-            table_toolbar: "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
-            toolbar: "undo redo | formatselect | bold italic backcolor | \alignleft aligncenter alignright alignjustify | \bullist numlist outdent indent | removeformat | help | table | image | imagetools | fullscreen",
-            file_picker_types: "image",
-            file_picker_callback: function (cb, value, meta) {
-                // Provide file and text for the link dialog
-                var input = document.createElement("input");
-                input.setAttribute("type", "file");
-                input.setAttribute("accept", "image/*");
+    data() {
+        return {
+            content: "",
+            config: {
+                height: 400,
+                menubar: false,
+                // image_upload_url:  {process.env.baseUrl}/user/upload,
+                automatic_uploads: true,
+                plugins: [
+                    "advlist autolink lists link image imagetools charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste code help wordcount",
+                ],
+                table_toolbar: "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
+                toolbar: "undo redo | formatselect | bold italic backcolor | \alignleft aligncenter alignright alignjustify | \bullist numlist outdent indent | removeformat | help | table | image | imagetools | fullscreen",
+                file_picker_types: "image",
+                file_picker_callback: function (cb, value, meta) {
+                    // Provide file and text for the link dialog
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "file");
+                    input.setAttribute("accept", "image/*");
 
-                input.onchange = function () {
-                    var file = this.files[0];
-                    ApiService.uploadImage(file).then((res) => {
-                        cb(res.data.url, {
-                            title: file.name,
+                    input.onchange = function () {
+                        var file = this.files[0];
+                        ApiService.uploadImage(file).then((res) => {
+                            cb(res.data.url, {
+                                title: file.name,
+                            });
                         });
-                    });
-                };
+                    };
 
-                input.click();
+                    input.click();
+                }
             }
         }
-    }),
+    },
     watch: {
         content(value) {
             this.$emit("input", value);
@@ -97,8 +100,13 @@ export default {
         onClick() {
             this.$refs.docUpload.click()
         },
-        onDocSelect(e) {
-            console.log(e.target.files[0])
+        onDocSelect(ev) {
+            // const file = ev.target.files[0];
+            // const reader = new FileReader();
+
+            // reader.onload = e => this.$emit("load", ev.target.result);
+            // reader.readAsText(file);
+            // console.log(reader)
         },
     }
 }

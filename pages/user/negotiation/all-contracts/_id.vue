@@ -4,7 +4,7 @@
         <div class="row px-4 pt-3">
             <p class="subtitle-text2 link">
                 <b-icon icon="arrow-left" class="link mr-lg-3" @click="goBack"></b-icon>
-                Brain Trust New Sound Exchange Procedures For LOD Terms and Agreement
+                {{contract.title}}
             </p>
         </div>
         <div class="row px-5">
@@ -34,7 +34,9 @@
                 <!-- end accepted -->
 
                 <!-- contract -->
-                <div class="contract-box mt-2"></div>
+                <div class="contract-box mt-2">
+                    <div v-html="contract.contract_details"></div>
+                </div>
                 <div class="mt-2">
                     <b-button class="my-btn bg-primary-light px-3">
                         <p>
@@ -71,19 +73,18 @@ export default {
             return this.$route.params.id
         }
     },
-    mounted() {
+    created() {
         this.getContractDetails()
     },
     methods: {
         getContractDetails() {
-            axios.get('https://dealzlegal.herokuapp.com/api/contracts/getcontract?id=60fd3395a68eb1203dd633bb', {
+            axios.get('https://dealzlegal.herokuapp.com/api/contracts/getcontract?id='+this.id, {
                     headers: {
                         Authorization: 'Bearer ' + this.token
                     }
                 })
                 .then(res => {
                     this.contract = res.data
-                    console.log(res.data)
                 })
                 .catch(err => console.log(err))
 

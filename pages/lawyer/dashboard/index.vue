@@ -6,6 +6,14 @@
         </div>
         <div class="row py-4">
             <div class="col-8">
+                <div class="row justify-content-between px-3">
+                    <p class="data-head mb-n3 ">Dealz Essentials</p><br>
+                    <div>
+                        <b-button class="dash-btn" @click="earnDialog">Earn Dealz</b-button>
+                        <b-button class="dash-btn" @click="buyDialog">Buy Dealz</b-button>
+                    </div>
+                </div>
+
                 <div class="row">
                     <!-- financial stats -->
                     <div class="col-6">
@@ -13,7 +21,7 @@
                             <div class="row">
                                 <div class="col-3">
                                     <div class="icon-back bg-earned">
-                                        <b-icon icon="cash" class="admin-icon text-warning" ></b-icon>
+                                        <p><b-icon icon="cash" class="admin-icon text-warning"></b-icon></p>
                                     </div>
                                 </div>
                                 <div class="col-9">
@@ -32,7 +40,7 @@
                             <div class="row">
                                 <div class="col-3">
                                     <div class="icon-back bg-value">
-                                        <b-icon class="admin-icon text-success" icon="globe"></b-icon>
+                                        <p><b-icon class="admin-icon text-success" icon="globe"></b-icon></p>
                                     </div>
                                 </div>
                                 <div class="col-9">
@@ -61,7 +69,7 @@
                         <div class="row">
                             <div class="col-3">
                                 <div class="icon-back" :class="getBg(item)">
-                                    <b-icon class="admin-icon" :icon="item.icon" :class="getColor(item)"></b-icon>
+                                    <p><b-icon class="admin-icon" :icon="item.icon" :class="getColor(item)"></b-icon></p>
                                 </div>
                             </div>
                             <div class="col-9">
@@ -114,12 +122,17 @@
             <!-- end essential -->
         </div>
     </div>
+     <earnDealz></earnDealz>
+     <buyDealz></buyDealz>
 </div>
 </template>
 
 <script>
+import EarnDealz from '../../../components/dialog/earndealz';
+import BuyDealz from '../../../components/dialog/buydealz';
 export default {
     layout: 'user',
+    components:{EarnDealz,BuyDealz},
     data() {
         return {
             performances: [{
@@ -196,6 +209,12 @@ export default {
             } else if (item.text == 'Approval waiting') {
                 return 'text-waiting'
             }
+        },
+        earnDialog(){
+            this.$store.commit('lawyer/setEarnDealzDialog')
+        },
+        buyDialog(){
+            this.$store.commit('lawyer/setBuyDealzDialog')
         }
     }
 }
@@ -206,11 +225,13 @@ export default {
     margin: 5px;
     padding: 10px 10px;
 }
-
-.icon-back {
-    width: 50px;
-    height: 50px;
-    border-radius: 16px;
-    padding: 10px;
+.dash-btn{
+    background: none;
+    border:1px solid #DFE6EC;;
+    border-radius:10px;
+    color:rgba(17, 17, 17, 0.64);
+    font-weight: 500;
+    font-size: 12px;
+    border-radius: 8px;
 }
 </style>

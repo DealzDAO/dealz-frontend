@@ -189,7 +189,6 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log(res.data)
                     this.contracts = res.data.contracts
                     this.rows = res.data.total_contracts
                 })
@@ -203,7 +202,7 @@ export default {
         seeDetail(item){
             this.$router.push({
                 name:'user-negotiation-all-contracts-id',
-                params:{id:item._id}
+                params:{id:item.contract_id._id}
             })
         }
         

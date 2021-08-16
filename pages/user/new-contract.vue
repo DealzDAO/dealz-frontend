@@ -222,17 +222,12 @@
 
         </div>
     </b-modal>
-    <!-- <contractDialog></contractDialog> -->
 </div>
 </template>
 
 <script>
 import axios from 'axios';
-import ContractDialog from '../../components/Dialog/contractviewdialog';
 export default {
-    components: {
-        ContractDialog
-    },
     data() {
         return {
             search: '',
@@ -413,20 +408,6 @@ export default {
 ::placeholder {
     opacity: 0.2;
     margin-left: -10px;
-}
-
-.modal-header {
-    height: 0px;
-    border-bottom: none;
-}
-
-.modal-dialog {
-    padding: 0 30px;
-}
-
-.modal-dialog-centered.modal-dialog-scrollable .modal-content {
-    padding: 0 15px;
-    height: 595px;
 }
 .adjust-btn{
     border:1px;

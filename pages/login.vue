@@ -21,7 +21,7 @@
 
                 <!-- Password -->
                 <ValidationProvider name="passowrd" rules="required" v-slot="{ errors }" class="w-100">
-                    <b-input-group class="password mt-3">
+                    <b-input-group class="password mt-3" @keyup.enter="login">
                         <b-form-input placeholder="Password" v-model="password" class="input-style" :state="errors.length > 0 ? false : null" :type="`${isPassword ? 'password' : 'text'}`"></b-form-input>
                         <b-input-group-append :class="`eye-input ${errors.length > 0 ? 'error' : ''}`" @click="togglePassword">
                             <b-icon icon="eye" aria-hidden="true" v-if="!isPassword"></b-icon>

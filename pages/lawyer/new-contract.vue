@@ -63,6 +63,7 @@ export default {
                 // image_upload_url:  {process.env.baseUrl}/user/upload,
                 automatic_uploads: true,
                 plugins: [
+                    "powerpaste",
                     "advlist autolink lists link image imagetools charmap print preview anchor",
                     "searchreplace visualblocks code fullscreen",
                     "insertdatetime media table paste code help wordcount",
@@ -101,12 +102,7 @@ export default {
             this.$refs.docUpload.click()
         },
         onDocSelect(ev) {
-            // const file = ev.target.files[0];
-            // const reader = new FileReader();
-
-            // reader.onload = e => this.$emit("load", ev.target.result);
-            // reader.readAsText(file);
-            // console.log(reader)
+            console.log(ev)
         },
     }
 }

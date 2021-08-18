@@ -122,17 +122,17 @@
             <!-- end essential -->
         </div>
     </div>
-     <earnDealz></earnDealz>
-     <buyDealz></buyDealz>
+     <!-- <earnDealz></earnDealz> -->
+     <!-- <buyDealz></buyDealz> -->
 </div>
 </template>
 
 <script>
-import EarnDealz from '../../../components/dialog/earndealz';
-import BuyDealz from '../../../components/dialog/buydealz';
+// import EarnDealz from '../../../components/dialog/earndealz';
+// import BuyDealz from '../../../components/dialog/buydealz';
 export default {
     layout: 'user',
-    components:{EarnDealz,BuyDealz},
+    // components:{EarnDealz},
     data() {
         return {
             performances: [{

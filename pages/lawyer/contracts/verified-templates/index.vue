@@ -1,5 +1,5 @@
 <template>
     <div>
-        drafts
+        templates
     </div>
 </template>

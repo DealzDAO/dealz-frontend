@@ -11,7 +11,6 @@
                 <b-tab title="Collaboration Requests" @click="setTab(1,'collaboration-requests')" class="menu-text" :title-link-class="linkClass(2)"></b-tab>
                 <b-tab title="4" style="background-color:yellow" title-link-class="badge-title" title-item-class="bg-primary-light my-badge"></b-tab>
                 <b-tab title="Verified Templates" @click="setTab(1,'verified-templates')" class="menu-text" :title-link-class="linkClass(3)"></b-tab>
-
             </b-tabs>
         </div>
     </div>

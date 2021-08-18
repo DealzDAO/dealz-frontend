@@ -6,6 +6,10 @@ export const state = () => ({
   })
   
   export const mutations = {
+    resetForm(state){
+        state.step=1
+        console.log('reset')
+    },
     setEarnDealzDialog(state){
         state.earnDealz=true
     },

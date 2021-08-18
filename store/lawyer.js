@@ -2,6 +2,7 @@
 export const state = () => ({
     earnDealz:false,
     buyDealz:false,
+    step:1
   })
   
   export const mutations = {
@@ -16,6 +17,9 @@ export const state = () => ({
     },
     unsetBuyDealzDialog(state,payload){
         state.buyDealz=payload
+    },
+    nextStep(state){
+        state.step++
     }
 
   }

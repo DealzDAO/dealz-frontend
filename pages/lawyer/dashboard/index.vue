@@ -234,4 +234,12 @@ export default {
     font-size: 12px;
     border-radius: 8px;
 }
+.text-box2{
+  width: 100%;
+  border: 2px dashed #C8D4DF;
+  border-radius: 12px;
+  margin: 8px 0px;
+  background-color: #f5f7f9;
+  border-right: none;
+}
 </style>

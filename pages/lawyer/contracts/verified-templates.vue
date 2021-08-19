@@ -66,7 +66,7 @@ export default {
         return {
             tabIndex: 0,
             tab: 0,
-            platformDialog: true
+            platformDialog: false
         }
     },
     methods: {

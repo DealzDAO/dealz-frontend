@@ -35,7 +35,7 @@
                 <b-form-checkbox id="checkbox-1" name="checkbox-1" class="data2 mt-3 mt-md-4">
                     Remember Me
                 </b-form-checkbox>
-                <p class="data2 float-right">Forgot Password</p>
+                <p class="data2 float-right link" @click="forgotPass">Forgot Password</p>
                 <b-button @click="login" block class="my-btn bg-primary-light">
                     <p>Sign in</p>
                 </b-button>
@@ -149,6 +149,9 @@ export default {
                     })
             });
         },
+        forgotPass(){
+            this.$router.push('/forgot-password')
+        }
     },
 };
 </script>

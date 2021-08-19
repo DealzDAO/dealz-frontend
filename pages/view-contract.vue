@@ -6,7 +6,7 @@
                 <a href="/dashboard">
                     <b-icon icon="arrow-left" class="mr-2 icon-helper2"></b-icon>
                 </a>
-                <b>View Contract</b>
+                <b>View Contraczt</b>
             </p>
         </div>
         <div class="row justify-content-center">

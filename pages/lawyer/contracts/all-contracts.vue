@@ -1,41 +1,29 @@
 <template>
-<div class="bg-white w-100">
-    <div class="container-fluid">
-        <div class="row justify-content-center py-2">
-            <div class="col">
-                <div class="chip mx-2 outlined-primary bg-white" v-for="(item,i) in objects" :key="i">
-                    <p>{{item.title}}</p>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-9" v-if="items.length>0">
+                <div v-for="(item,i) in items" :key="i" class="m-3">
+                    <p class="mb-1 subtitle-text4">{{item.title}}</p>
+                    <!-- status -->
+                    <div class="admin-chip" :class="getBg(item)">
+                       <p :class="getText(item)"> <b-icon :icon="getIcon(item)"></b-icon>
+                        {{item.status}}
+                        </p>
+                    </div>
+                    <!-- end status -->
+
+                    <!-- comments -->
+                    <div v-if="item.comments>0" class="admin-chip bg-secondary-soft">
+                        <p class="text-secondary-light">
+                            <b-icon icon="chat"></b-icon>
+                            <span>{{item.comments}} comments</span>
+                        </p>
+                    </div>
+                    <!-- end comments -->
                 </div>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-9">
-                <ul v-if="contracts.length>0">
-                    <li v-for="(item,i) in contracts" :key="i" class="mt-2">
-                        <a href="/view-contract" class=" list-group-item-action flex-column align-items-start">
-                            <div class="d-flex w-100 justify-content-between">
-                                <p class="mb-1 subtitle-text">{{item.title}}</p>
-                            </div>
-                        </a>
-                        <!-- status -->
-                        <div class="chip" :class="getBg(item)">
-                            <b-icon v-if="item.status !='Overdue'" :icon="getIcon(item)" class="my-icon"></b-icon>
-                            <span v-if="item.status=='Overdue'" class="text-danger">{{item.status}}</span>
-                            <span v-else>{{item.status}}</span>
-                        </div>
-                        <!-- end status -->
-
-                        <!-- comments -->
-                        <div v-if="item.comments>0" class="chip bg-warning-light">
-                            <b-icon icon="chat" class="my-icon"></b-icon>
-                            <span class="text-helper2">{{item.comments}} comments</span>
-                        </div>
-                        <!-- end spots -->
-
-                    </li>
-                </ul>
-                <p v-else class="text-muted text-center">No contracts found</p>
-            </div>
+            <p v-else class="text-muted text-center">{{noText}}</p> 
         </div>
     </div>
 </div>
@@ -48,40 +36,30 @@ export default {
     data() {
         return {
             token: '',
+            noText: '',
             contracts: [],
             items: [{
                     title: 'Brain Trust New Sound Exchange Procedures For LOD',
-                    status: 'Completed',
+                    status: 'Draft',
                     comments: 0,
                 },
                 {
-                    title: 'founder advisor standard template',
-                    status: 'Pending review',
+                    title: 'Founder advisor standard template',
+                    status: 'Verified',
                     comments: 3,
                 },
 
                 {
                     title: 'Music Contract',
-                    status: 'Overdue',
-                    comments: 8,
+                    status: 'Verification Awaiting',
+                    comments: 0,
                 },
 
             ],
-            objects: [{
-                    title: 'Pending review'
-                },
-                {
-                    title: 'Completed'
-                },
-                {
-                    title: 'Rejected'
-                },
-            ]
         }
     },
     mounted() {
         this.token = localStorage.getItem('dealz-token')
-        console.log(this.token)
         this.getLawyerContracts()
     },
     methods: {
@@ -92,27 +70,38 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log(res.data)
                     this.contracts = res.data
+                    if(res.data.length==0){
+                        this.noText='No Contracts found'
+                    }
                 })
                 .catch(err => console.log(err.response))
         },
         getBg(item) {
-            if (item.status == 'Pending review') {
-                return 'bg-secondary-light'
-            } else if (item.status == 'Completed') {
-                return 'bg-success-light'
-            } else if (item.status == 'Overdue') {
-                return 'bg-danger-light'
+            if (item.status == 'Draft') {
+                return 'bg-secondary-soft'
+            } else if (item.status == 'Verified') {
+                return 'bg-success-soft'
+            } else if (item.status == 'Verification Awaiting') {
+                return 'bg-warning-soft'
             }
         },
         getIcon(item) {
-            if (item.status == 'Pending review') {
-                return 'clock-history'
-            } else if (item.status == 'Completed') {
+            if (item.status == 'Draft') {
+                return 'pencil'
+            } else if (item.status == 'Verified') {
                 return 'check2'
-            } else if (item.status == 'Overdue') {
-                return 'bg-danger-light'
+            } else if (item.status == 'Verification Awaiting') {
+                return 'clock-history'
+            }
+        },
+        getText(item) {
+            if (item.status == 'Draft') {
+                return 'text-secondary-light'
+            } else if (item.status == 'Verified') {
+                return 'text-success-light'
+            } else if (item.status == 'Verification Awaiting') {
+                return 'text-warning-light'
             }
         }
     }

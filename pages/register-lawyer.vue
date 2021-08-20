@@ -274,8 +274,20 @@ export default {
                 text: 'Select practice'
             },
             {
-                value: 'a',
-                text: 'This is First option'
+                value: 'Art',
+                text: 'Art'
+            },
+            {
+                value: 'Crypto',
+                text: 'Crypto'
+            },
+            {
+                value: 'Music',
+                text: 'Music'
+            },
+            {
+                value: 'Startup',
+                text: 'Startup'
             },
         ],
         tab: 1,

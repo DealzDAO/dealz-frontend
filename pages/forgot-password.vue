@@ -19,9 +19,9 @@
                 <p>Send Password Reset Link</p>
             </b-button>
 
-                <b-button @click="loginPage" block class="my-btn bg-secondary-soft mt-3">
-                    <p class="text-helper2">Go Back</p>
-                </b-button>
+            <b-button @click="loginPage" block class="my-btn bg-secondary-soft mt-3">
+                <p class="text-helper2">Go Back</p>
+            </b-button>
 
         </div>
     </div>
@@ -35,8 +35,8 @@ export default {
 
         }
     },
-    methods:{
-        loginPage(){
+    methods: {
+        loginPage() {
             this.$router.push('/login')
         }
     }

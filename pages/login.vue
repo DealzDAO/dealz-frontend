@@ -15,7 +15,7 @@
                 <!-- Email -->
                 <ValidationProvider name="email" rules="required|email" v-slot="{ errors }">
                     <b-form-input placeholder="Email Address" v-model="email" type="email" :state="errors.length > 0 ? false : null" class="input-style mt-3 mt-md-4" />
-                    <span class="text-danger helper-text3">{{ errors[0] }}</span>
+                    <span class="text-danger helper-text4">{{ errors[0] }}</span>
                 </ValidationProvider>
                 <!-- Email -->
 
@@ -28,7 +28,7 @@
                             <b-icon icon="eye-slash" aria-hidden="true" v-else></b-icon>
                         </b-input-group-append>
                     </b-input-group>
-                    <span class="text-danger helper-text3">{{ errors[0] }}</span>
+                    <span class="text-danger helper-text4">{{ errors[0] }}</span>
                 </ValidationProvider>
                 <!-- Password -->
 

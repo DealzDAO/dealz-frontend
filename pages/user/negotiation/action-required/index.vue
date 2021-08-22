@@ -12,7 +12,7 @@
             <div class="col">
                 <div v-if="items.length>0">
                     <div v-for="(item,i) in items" :key="i" class="mt-4">
-                        <p class="mb-1 subtitle-text4">{{item.title}}</p>
+                        <p class="mb-1 subtitle-text4" :class="clickable(item)" @click="approve(item)">{{item.title}}</p>
                         <div class="admin-chip" :class="getBg(item)">
                             <p :class="getColor(item)">
                                 <b-icon :icon="getIcon(item)"></b-icon>
@@ -212,6 +212,16 @@ export default {
             this.page = 1
             this.getContracts()
         },
+        clickable(item){
+            if(item.status=='Received'){
+                return 'link'
+            }
+        },
+        approve(item){
+            if(item.status=='Received'){
+                this.$router.push('/user/negotiation/action-required/received')
+            }
+        }
         
     }
 }

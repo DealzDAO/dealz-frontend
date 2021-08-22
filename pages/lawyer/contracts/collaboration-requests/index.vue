@@ -11,9 +11,7 @@
         <div class="row">
             <div class="col">
                 <div v-for="(item,i) in items" :key="i" class="m-3">
-                    <a href="/lawyer/contracts/collaboration-requests/detail">
-                        <p class="mb-1 subtitle-text4">{{item.title}}</p>
-                    </a>
+                    <p class="mb-1 subtitle-text4 link" @click="seeDetail">{{item.title}}</p>
                     <!-- status -->
                     <div class="admin-chip" :class="getBg(item)">
                         <p :class="getText(item)">
@@ -100,6 +98,9 @@ export default {
             if (item.status == 'Work in Progress') {
                 return 'clock-history'
             }  
+        },
+        seeDetail(){
+            this.$router.push('/lawyer/contracts/collaboration-requests/detail')
         }
     }
 }

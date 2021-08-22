@@ -191,6 +191,10 @@ export default {
             ],
         }
     },
+    mounted(){
+       const token=localStorage.getItem('dealz-token')
+       console.log('token:',token)
+    },
     methods: {
         getBg(item) {
             if (item.text == 'Contracts pending') {

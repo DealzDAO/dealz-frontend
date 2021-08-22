@@ -1,47 +1,32 @@
 <template>
 <div>
-    <div class="container">
+    <div class="container p-3">
         <div class="row">
             <div class="col">
-                <a href="#" class=" list-group-item-action flex-column align-items-start">
-                    <div class="d-flex w-100 justify-content-between">
-                        <p class="mb-1 subtitle-text">
-                            Brain Trust New Sound Exchange Procedures For LOD Terms and Agreement
-                        </p>
-                    </div>
-                </a>
+                <p class="mb-1 subtitle-text4">
+                    Brain Trust New Sound Exchange Procedures For LOD Terms and Agreement
+                </p>
                 <!-- status -->
-                <div class="chip bg-secondary-light">
-                    <b-icon icon="clock-history" class="my-icon"></b-icon>
-                    <span>Pending review</span>
+                <div class="admin-chip bg-danger-soft">
+                    <p class="text-danger-light">Overdue</p>
                 </div>
                 <!-- end status -->
 
                 <!-- comments -->
-                <div class="chip bg-warning-light">
+                <!-- <div class="chip bg-warning-light">
                     <b-icon icon="chat" class="my-icon"></b-icon>
                     <span>3 comments</span>
-                </div>
+                </div> -->
                 <!-- end spots -->
 
                 <!-- accepted -->
                 <div class="chip bg-white">
-                    <span>Sent 2 days ago</span>
+                    <span>Accepted 7 days ago</span>
                 </div>
                 <!-- end accepted -->
+
+                <div class="contract-box mt-3"></div>
             </div>
-        </div>
-        <div class="row center-push">
-            <!-- contract -->
-            <div class="col">
-                <p class="title-text3 mt-5">Your Contract</p>
-                <div class="contract-box"></div>
-                <p class="text-helper helper-text mt-3">
-                    <b-icon icon="pencil"></b-icon>
-                    <span>Edit Contract</span>
-                </p>
-            </div>
-            <!-- end contract -->
         </div>
     </div>
 

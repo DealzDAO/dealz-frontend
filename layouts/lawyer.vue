@@ -24,6 +24,7 @@ export default {
         }
     },
     created() {
+        // console.log(localStorage.getItem('dealz-token'))
         // if (this.userType != 'Lawyer') {
         //     this.$router.go(-1)
         // } 

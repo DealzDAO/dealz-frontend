@@ -43,7 +43,7 @@
 export default {
     data() {
         return {
-            viewDialog: '',
+            viewDialog: false,
             data: [{
                     title: 'Vitae purus proin urna, senectus montes, sollicitudin vitae aliquet.',
                     text: 'Habitasse nisl faucibus enim interdum varius. Venenatis viverra consectetur egestas amet, egestas ac amet ullamcorper faucibus. Molestie duis augue velit felis id ut at ac.'

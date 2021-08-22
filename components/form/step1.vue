@@ -25,7 +25,7 @@
                             <p>Continue</p>
                         </b-button>
                         <div>
-                            <b-button class="btn-outlined">
+                            <b-button class="btn-outlined" @click="saveDraft">
                                 <p class="text-primary-light">Save Draft</p>
                             </b-button>
                             <b-button class="my-btn bg-white">
@@ -71,6 +71,8 @@ export default {
     },
     data() {
         return {
+            title:'',
+            detail:'',
             config: {
                 height: 400,
                 menubar: false,
@@ -145,6 +147,14 @@ export default {
         onDocSelect(ev) {
             console.log(ev)
         },
+        saveDraft(){
+            axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',{
+                title:this.title,
+                contract_details:this.detail
+            }).then(res=>{
+                this.$router.push('/lawyer/contracts/my-drafts')
+            }).catch(err=>console.log(err.response))
+        }
 
     }
 }

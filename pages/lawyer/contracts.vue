@@ -9,7 +9,7 @@
                 <b-tab title="All contracts" @click="setTab(0,'all-contracts')" class="menu-text" :title-link-class="linkClass(0)"></b-tab>
                 <b-tab title="My Drafts" @click="setTab(1,'my-drafts')" class="menu-text" :title-link-class="linkClass(1)"></b-tab>
                 <b-tab title="Collaboration Requests" @click="setTab(2,'collaboration-requests')" class="menu-text" :title-link-class="linkClass(2)"></b-tab>
-                <b-tab title="4" style="background-color:yellow" title-link-class="badge-title" title-item-class="bg-primary-light my-badge"></b-tab>
+                <b-tab title="4" style="background-color:yellow" title-link-class="badge-title" title-item-class="bg-secondary my-badge"></b-tab>
                 <b-tab title="Verified Templates" @click="setTab(4,'verified-templates')" class="menu-text" :title-link-class="linkClass(4)"></b-tab>
             </b-tabs>
         </div>

@@ -16,7 +16,7 @@
                             Upload a Microsoft Word document
                         </p>
                     </div>
-                    <input ref="docUpload" class="d-none" type="file" @change="onDocSelect" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <input ref="docUpload" class="d-none" type="file" @change="onDocSelect" accept=".docx">
 
                     <editor api-key="u6uz6imfxze284v1oj8ahn7iiw763kggsw7mgwt11wl0jr81" :init="config" v-model="detail" />
                     <p class="data2 mt-4"><b>Step 2:</b> <span class="helper-text">Review Contract</span></p>
@@ -44,6 +44,8 @@
 <script>
 import Editor from "@tinymce/tinymce-vue";
 import ApiService from "@/services/index.js";
+import axios from 'axios'
+var mammoth = require("mammoth");
 import {
     mapMutations
 } from 'vuex';
@@ -67,22 +69,23 @@ extend('max200', {
 });
 export default {
     components: {
-        editor: Editor,ValidationProvider,ValidationObserver
+        editor: Editor,
+        ValidationProvider,
+        ValidationObserver
     },
     data() {
         return {
-            title:'',
-            detail:'',
+            title: '',
+            detail: '',
             config: {
                 height: 400,
                 menubar: false,
                 // image_upload_url:  {process.env.baseUrl}/user/upload,
                 automatic_uploads: true,
                 plugins: [
-                    "powerpaste",
                     "advlist autolink lists link image imagetools charmap print preview anchor",
                     "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table paste code help wordcount",
+                    "insertdatetime media table code help wordcount",
                 ],
                 table_toolbar: "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
                 toolbar: "undo redo | formatselect | bold italic backcolor | \alignleft aligncenter alignright alignjustify | \bullist numlist outdent indent | removeformat | help | table | image | imagetools | fullscreen",
@@ -107,53 +110,40 @@ export default {
             }
         }
     },
-    computed: {
-        title: {
-            get() {
-                this.$store.state.lawyer.title
-            },
-            set(value) {
-                this.$store.commit('lawyer/setTitle', value)
-            }
-
-        },
-        detail: {
-            get() {
-                this.$store.state.lawyer.detail
-            },
-            set() {
-                this.$store.commit('lawyer/setDetail', )
-            }
-        }
-    },
-    mounted(){
-        console.log(this.validRules)
-    },
-    watch: {
-        content(value) {
-            this.$emit("input", value);
-        },
-    },
-
     methods: {
         next() {
-            if(this.$refs.contractForm.validate()){
+            if (this.$refs.contractForm.validate()) {
                 this.$store.commit('lawyer/nextStep')
             }
         },
         onClick() {
             this.$refs.docUpload.click()
         },
+
         onDocSelect(ev) {
-            console.log(ev)
+            const file = ev.target.files[0];
+            var reader = new FileReader();
+            reader.onloadend = () => {
+                var arrayBuffer = reader.result;
+                mammoth.convertToHtml({
+                    arrayBuffer: arrayBuffer
+                }).then(res => this.detail = res.value)
+            }
+            reader.readAsArrayBuffer(file);
         },
-        saveDraft(){
-            axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',{
-                title:this.title,
-                contract_details:this.detail
-            }).then(res=>{
+        saveDraft() {
+            const params = {
+                title: this.title,
+                contract_details: this.detail,
+            }
+            const config = {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                }
+            }
+            axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
                 this.$router.push('/lawyer/contracts/my-drafts')
-            }).catch(err=>console.log(err.response))
+            }).catch(err => console.log(err.response))
         }
 
     }

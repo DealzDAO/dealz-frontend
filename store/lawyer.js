@@ -4,8 +4,8 @@ export const state = () => ({
     buyDealz:false,
     step:1,
     //creating contract
-    title:'',
-    detail:'',
+    title:'tt',
+    detail:'bb',
     questions:[],
     description:'',
     useCase:'',
@@ -15,6 +15,10 @@ export const state = () => ({
   })
   
   export const mutations = {
+    test(state){
+        console.log(state.title)
+        console.log(state.detail)
+    },
     setTitle(state,payload){
         state.title=payload
     },
@@ -53,8 +57,10 @@ export const state = () => ({
     },
     nextStep(state){
         state.step++
+    },
+    setUploadedDoc(state,payload){
+        state.detail=payload
     }
-
 
   }
   export const actions= {
@@ -71,11 +77,12 @@ export const state = () => ({
                 Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
             }
         }
-        axios.post('https://dealzlegal.herokuapp.com/api/contracts/upload',params,config)
-        .then(res=>{
-            console.log(res.data)
-            this.$router.push('lawyer/contracts')
-        }).catch(err=>console.log(err.response))
+        // axios.post('https://dealzlegal.herokuapp.com/api/contracts/upload',params,config)
+        // .then(res=>{
+        //     console.log(res.data)
+        //     this.$router.push('lawyer/contracts')
+        // }).catch(err=>console.log(err.response))
+        console.log(params)
     }
 
   }

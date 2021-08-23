@@ -5,7 +5,7 @@
             <p class="title-text2 mb-0">Contracts</p>
         </div>
         <div class="row px-4 line-border">
-            <b-tabs pills active-nav-item-class="font-weight-bold text-primary" active-tab-class="bg-primary-light" v-model="tabIndex">
+            <b-tabs pills active-nav-item-class="text-primary" active-tab-class="bg-primary-light" v-model="tabIndex">
                 <b-tab title="All contracts" @click="setTab(0,'all-contracts')" class="menu-text" :title-link-class="linkClass(0)"></b-tab>
                 <b-tab title="My Drafts" @click="setTab(1,'my-drafts')" class="menu-text" :title-link-class="linkClass(1)"></b-tab>
                 <b-tab title="Collaboration Requests" @click="setTab(2,'collaboration-requests')" class="menu-text" :title-link-class="linkClass(2)"></b-tab>

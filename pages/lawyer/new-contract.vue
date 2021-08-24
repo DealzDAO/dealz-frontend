@@ -1,18 +1,15 @@
 <template>
 <div>
     <div class="container">
-        <div class="row py-3 px-4 line-border mild-back">
+        <div class="row py-3 px-5 line-border mild-back">
             <p class="subtitle-text mb-0">
-                <a href="/user/dashboard">
-                    <b-icon icon="arrow-left" class="mr-2"></b-icon>
-                </a>
-                <span class="subtitle-text">Create a new contract</span>
+                Create a new contract
             </p>
         </div>
-            <step1 v-if="step==1"></step1>
-            <step2 v-if="step==2"></step2>
-            <step3 v-if="step==3"></step3>
-            <step4 v-if="step==4"></step4>
+        <step1 v-if="step==1"></step1>
+        <step2 v-if="step==2"></step2>
+        <step3 v-if="step==3"></step3>
+        <step4 v-if="step==4"></step4>
     </div>
 
 </div>
@@ -35,7 +32,7 @@ export default {
 
         }
     },
-    mounted(){
+    mounted() {
         this.$store.commit('lawyer/resetForm')
     },
     computed: {

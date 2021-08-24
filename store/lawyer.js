@@ -4,8 +4,8 @@ export const state = () => ({
     buyDealz:false,
     step:1,
     //creating contract
-    title:'tt',
-    detail:'bb',
+    title:'',
+    detail:'',
     questions:[],
     description:'',
     useCase:'',
@@ -15,15 +15,10 @@ export const state = () => ({
   })
   
   export const mutations = {
-    test(state){
-        console.log(state.title)
-        console.log(state.detail)
-    },
-    setTitle(state,payload){
-        state.title=payload
-    },
-    setDescription(state,payload){
-        state.description=payload
+    setFirstStepData(state,payload){
+        state.title=payload.title,
+        state.detail=payload.detail
+        console.log('yes:',state.title)
     },
     setUseCase(state,payload){
         state.useCase=payload
@@ -64,6 +59,21 @@ export const state = () => ({
 
   }
   export const actions= {
+    saveSecondDraft(context,payload){
+        const params = {
+            title: context.state.title,
+            contract_details: context.state.detail,
+            questions:payload
+        }
+        const config = {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+            }
+        }
+        axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
+            this.$router.push('/lawyer/contracts/my-drafts')
+        }).catch(err => console.log(err.response))
+    },
     createContract(context){
         const params = {
             title: context.state.title,

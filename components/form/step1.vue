@@ -113,6 +113,7 @@ export default {
     methods: {
         next() {
             if (this.$refs.contractForm.validate()) {
+                this.$store.commit('lawyer/setFirstStepData',({'title':this.title,'detail':this.detail}))
                 this.$store.commit('lawyer/nextStep')
             }
         },

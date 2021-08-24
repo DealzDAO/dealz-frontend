@@ -22,7 +22,7 @@
                 <p class="helper-text3" v-if="questions.length==0">No questions yet</p>
 
                 <!-- added question list -->
-                <div class="row" v-for="(item,i) in questions" :key="i">
+                <div class="row mt-2" v-for="(item,i) in questions" :key="i">
                     <div>
                         <div class="q-title">
                             <span class="helper-text3 bg-highlight">{{item.title}}</span>
@@ -110,7 +110,7 @@ export default {
             selected: '',
             optionMode: false,
             optionCount: 2,
-            optionWarn:false,
+            optionWarn: false,
             form: {
                 option: []
             },
@@ -149,9 +149,9 @@ export default {
                 this.warn = false
             }
         },
-        form(newValue,oldValue){
-            if(newValue.option.length==this.optionCount){
-                this.optionWarn=false
+        form(newValue, oldValue) {
+            if (newValue.option.length == this.optionCount) {
+                this.optionWarn = false
             }
         }
     },
@@ -209,40 +209,47 @@ export default {
                         type: this.type,
                         question: this.question
                     })
+                    this.selected = ''
+                    this.question = null
+                    this.type = null
+                    this.questioning = false
+                    this.optionMode = false
+                    this.optionCount = 2
+                    this.form.option = []
                 } else if (this.type == 'Multiple Choice') {
-                    if(this.optionCount==this.form.option.length){
+                    if (this.optionCount == this.form.option.length) {
                         this.questions.push({
                             title: this.selected,
                             type: this.type,
                             question: this.question,
-                            options:this.form.option
+                            options: this.form.option
                         })
-                        this.selected = '',
-                        this.question = null,
-                        this.type = null,
-                        this.questioning = false
-                        this.optionMode=false,
-                        this.optionCount=2
-                        this.form.option=[]
+
+                    } else {
+                        this.warnText = 'Plese fill all options'
+                        this.optionWarn = true
                     }
-                    else{
-                        this.warnText='Plese fill all options'
-                        this.optionWarn=true
-                    }
-                   
-                }   
-               
+
+                }
+                this.selected = ''
+                this.question = null
+                this.type = null
+                this.questioning = false
+                this.optionMode = false
+                this.optionCount = 2
+                this.form.option = []
+
             }
 
         },
         removeQuestion(item) {
             this.questions.splice(this.questions.indexOf(item), 1)
         },
-        saveSecondDraft(){
-            if(this.questions.length>0){
-                this.$store.dispatch('lawyer/saveSecondDraft',this.questions)
+        saveSecondDraft() {
+            if (this.questions.length > 0) {
+                this.$store.dispatch('lawyer/saveSecondDraft', this.questions)
             }
-            
+
         }
     }
 }

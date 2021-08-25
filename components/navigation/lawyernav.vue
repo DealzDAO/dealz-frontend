@@ -83,6 +83,8 @@ export default {
 
         },
         createNew(item) {
+            this.$store.commit('lawyer/resetForm')
+            this.$store.commit('lawyer/resetStep')
             this.active = item.title
             this.$router.push('/lawyer/new-contract')
         },

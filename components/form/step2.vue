@@ -11,8 +11,8 @@
                         <p>Continue</p>
                     </b-button>
                     <div>
-                        <b-button class="btn-outlined">
-                            <p class="text-primary-light">Save Draft</p>
+                        <b-button class="btn-outlined" @click="saveSecond" :disabled="btnDisabled">
+                            <p class="text-primary-light">{{btnText}}</p>
                         </b-button>
                         <b-button class="my-btn bg-white">
                             <p class="text-danger-light">Continue</p>
@@ -30,7 +30,8 @@
 export default {
     data() {
         return {
-
+            btnText:'Save Draft',
+            btnDisabled:false
         }
     },
     computed:{
@@ -42,6 +43,11 @@ export default {
         next() {
             this.$store.commit('lawyer/nextStep')
         },
+        saveSecond(){
+            this.btnText='Saving...'
+            this.btnDisabled=true
+            this.$store.dispatch('lawyer/saveSecondDraft')
+        }
     }
 }
 </script>

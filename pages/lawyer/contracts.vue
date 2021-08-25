@@ -27,6 +27,20 @@ export default {
             tab: 0
         }
     },
+    computed:{
+        contractTabs(){
+            return this.$store.state.lawyer.contractTabs
+        }
+    },
+    mounted(){
+        //redirects to tab from other pages
+        // if(this.contractTabs != null){
+        //     this.tab=1
+        //     console.log(this.contractTabs)
+        //     this.$router.push('/lawyer/contracts/'+this.contractTabs.title)
+        // }
+        
+    },
     methods: {
         linkClass(idx) {
             this.tabIndex == idx

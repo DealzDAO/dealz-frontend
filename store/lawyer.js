@@ -1,5 +1,6 @@
 import axios from "axios";
 export const state = () => ({
+    contractTabs:null,
     earnDealz:false,
     buyDealz:false,
     step:1,
@@ -65,10 +66,33 @@ export const state = () => ({
     resetStep(state){
         state.step=1
         state.contractFinishDialog=false
+    },
+    setContractTabs(state,payload){
+        state.contractTabs=payload
+    },
+    resetContractTabs(state){
+        state.contractTabs=null
     }
   }
   export const actions= {
-    saveSecondDraft(context,payload){
+    saveSecondDraft(context){
+        const params = {
+            title: context.state.title,
+            contract_details: context.state.detail,
+        }
+        const config = {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+            }
+        }
+        axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
+            context.commit('resetForm')
+            context.commit('resetStep')
+            // context.commit('setContractTabs',{'n':1,'title':'my-drafts'})
+            this.$router.push('/lawyer/dashboard')
+        }).catch(err => console.log(err.response))
+    },
+    saveThirdDraft(context,payload){
         const params = {
             title: context.state.title,
             contract_details: context.state.detail,
@@ -82,7 +106,29 @@ export const state = () => ({
         axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
             context.commit('resetForm')
             context.commit('resetStep')
-            this.$router.push('/lawyer/contracts/my-drafts')
+            this.$router.push('/lawyer/dashboard')
+        }).catch(err => console.log(err.response))
+    },
+    saveForthDraft(context){
+        const params = {
+            title: context.state.title,
+            contract_details:context.state.detail,
+            questions:context.state.questions,
+            description:context.state.description,
+            useCase:context.state.useCase,
+            info:context.state.info,
+            min_price:context.state.minPrice,
+            max_price:context.state.maxPrice,
+        }
+        const config = {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+            }
+        }
+        axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
+            context.commit('resetForm')
+            context.commit('resetStep')
+            this.$router.push('/lawyer/dashboard')
         }).catch(err => console.log(err.response))
     },
     createContract(context){

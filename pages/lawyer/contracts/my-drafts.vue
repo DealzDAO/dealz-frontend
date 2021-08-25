@@ -30,6 +30,9 @@ export default {
 
             ]
         }
+    },
+    mounted(){
+        this.$store.commit('lawyer/resetContractTabs')
     }
 }
 </script>

@@ -86,7 +86,7 @@
                 <!-- end question adding form -->
 
                 <div class="mt-3">
-                    <b-button class="btn-outlined" @click="saveSecondDraft" :disabled="btnDisabled">
+                    <b-button class="btn-outlined" @click="saveThirdDraft" :disabled="btnDisabled">
                         <p class="text-primary-light">{{btnText}}</p>
                     </b-button>
                     <b-button class="my-btn bg-white">
@@ -255,10 +255,10 @@ export default {
         removeQuestion(item) {
             this.questions.splice(this.questions.indexOf(item), 1)
         },
-        saveSecondDraft() {
+        saveThirdDraft() {
             this.btnText='Saving'
             this.btnDisabled=true
-            this.$store.dispatch('lawyer/saveSecondDraft', this.questions)
+            this.$store.dispatch('lawyer/saveThirdDraft', this.questions)
         }
     }
 }

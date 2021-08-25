@@ -54,8 +54,8 @@
                             <p>{{btnText}}</p>
                         </b-button>
                         <div>
-                            <b-button class="btn-outlined">
-                                <p class="text-primary-light">Save Draft</p>
+                            <b-button class="btn-outlined" :disabled="draftDisabled" @click="saveForth">
+                                <p class="text-primary-light">{{draftText}}</p>
                             </b-button>
                             <b-button class="my-btn bg-white">
                                 <p class="text-danger-light">Continue</p>
@@ -134,7 +134,9 @@ export default {
             maxPrice:'',
             contractDialog: false,
             btnText:'Finish Creating Contract',
-            btnDisabled:false
+            btnDisabled:false,
+            draftText:'Save Draft',
+            draftDisabled:false
         }
     },
     computed:{
@@ -162,7 +164,14 @@ export default {
         },
         dashboard(){
             this.$store.commit('lawyer/resetStep')
+             this.$store.commit('lawyer/resetForm')
             this.$router.push('/lawyer/dashboard')
+        },
+        saveForth(){
+            this.draftText='Saving...'
+            this.draftDisabled=true
+            this.$store.commit('lawyer/setFormDetails',{'description':this.description,'useCase':this.useCase,'info':this.info,'minPrice':this.minPrice,'maxPrice':this.maxPrice})
+            this.$store.dispatch('lawyer/saveForthDraft')
         }
     }
 }

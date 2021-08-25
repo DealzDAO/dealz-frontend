@@ -17,8 +17,11 @@
                         </p>
                     </div>
                     <input ref="docUpload" class="d-none" type="file" @change="onDocSelect" accept=".docx">
-
-                    <editor api-key="u6uz6imfxze284v1oj8ahn7iiw763kggsw7mgwt11wl0jr81" :init="config" v-model="detail" />
+                    <ValidationProvider name="detail" rules="required" v-slot="{ errors }">
+                        <editor api-key="u6uz6imfxze284v1oj8ahn7iiw763kggsw7mgwt11wl0jr81" :init="config" v-model="detail" />
+                        <span class="text-danger helper-text4">{{ errors[0] }}</span>
+                    </ValidationProvider>
+                    
                     <p class="data2 mt-4"><b>Step 2:</b> <span class="helper-text">Review Contract</span></p>
                     <div class="row justify-content-between px-3">
                         <b-button class="my-btn px-5 bg-primary-light" @click="next">
@@ -78,8 +81,8 @@ export default {
         return {
             title: '',
             detail: '',
-            btnText:'Save Draft',
-            btnDisabled:false,
+            btnText: 'Save Draft',
+            btnDisabled: false,
             config: {
                 height: 400,
                 menubar: false,
@@ -115,7 +118,7 @@ export default {
     },
     methods: {
         next() {
-             this.$refs.contractForm.validate().then((success) => {
+            this.$refs.contractForm.validate().then((success) => {
                 if (!success) {
                     return;
                 }
@@ -124,8 +127,8 @@ export default {
                     'detail': this.detail
                 }))
                 this.$store.commit('lawyer/nextStep')
-             })
-            
+            })
+
         },
         onClick() {
             this.$refs.docUpload.click()
@@ -147,22 +150,14 @@ export default {
                 if (!success) {
                     return;
                 }
-                this.btnText='Saving...'
-                this.btnDisabled=true
-                const params = {
-                    title: this.title,
-                    contract_details: this.detail,
-                }
-                const config = {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
-                    }
-                }
-                axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft', params, config).then(res => {
-                    this.$store.commit('lawyer/resetForm')
-                    this.$store.commit('lawyer/resetStep')
-                    this.$router.push('/lawyer/contracts/my-drafts')
-                }).catch(err => console.log(err.response))
+                this.btnText = 'Saving...'
+                this.btnDisabled = true
+
+                this.$store.commit('lawyer/setFirstStepData', ({
+                    'title': this.title,
+                    'detail': this.detail
+                }))
+                this.$store.dispatch('lawyer/saveSecondDraft')
             })
 
         }

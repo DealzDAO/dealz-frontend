@@ -5,7 +5,7 @@
             <div class="col">
                 <p class="data2">Enter the name of your contract</p>
                 <ValidationObserver ref="contractForm">
-                    <ValidationProvider name="email" rules="required|max200" v-slot="{ errors }">
+                    <ValidationProvider name="title" rules="required|max200" v-slot="{ errors }">
                         <b-form-input v-model="title" placeholder="Contract Name" class="text-box" style="border-radius:10px" />
                         <span class="text-danger helper-text4">{{ errors[0] }}</span>
                     </ValidationProvider>
@@ -71,7 +71,8 @@ export default {
     components: {
         editor: Editor,
         ValidationProvider,
-        ValidationObserver
+        ValidationObserver,
+        extend
     },
     data() {
         return {
@@ -112,10 +113,17 @@ export default {
     },
     methods: {
         next() {
-            if (this.$refs.contractForm.validate()) {
-                this.$store.commit('lawyer/setFirstStepData',({'title':this.title,'detail':this.detail}))
+             this.$refs.contractForm.validate().then((success) => {
+                if (!success) {
+                    return;
+                }
+                this.$store.commit('lawyer/setFirstStepData', ({
+                    'title': this.title,
+                    'detail': this.detail
+                }))
                 this.$store.commit('lawyer/nextStep')
-            }
+             })
+            
         },
         onClick() {
             this.$refs.docUpload.click()
@@ -133,18 +141,24 @@ export default {
             reader.readAsArrayBuffer(file);
         },
         saveDraft() {
-            const params = {
-                title: this.title,
-                contract_details: this.detail,
-            }
-            const config = {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+            this.$refs.contractForm.validate().then((success) => {
+                if (!success) {
+                    return;
                 }
-            }
-            axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
-                this.$router.push('/lawyer/contracts/my-drafts')
-            }).catch(err => console.log(err.response))
+                const params = {
+                    title: this.title,
+                    contract_details: this.detail,
+                }
+                const config = {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                    }
+                }
+                axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft', params, config).then(res => {
+                    this.$router.push('/lawyer/contracts/my-drafts')
+                }).catch(err => console.log(err.response))
+            })
+
         }
 
     }

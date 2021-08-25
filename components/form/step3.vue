@@ -6,7 +6,7 @@
             <div class="col-6">
                 <p class="data2">Add questions</p>
                 <div class="contract-box w-100 hidden-scroll">
-                    <div v-html="detail" contenteditable="true" @dblclick="selectWord()"></div>
+                    <div v-html="detail" ref="contract" contenteditable="true" @click="selectWord()"></div>
                 </div>
                 <p class="data2 mt-4"><b>Step 3:</b> <span class="helper-text">Send for approval</span></p>
                 <div class="row justify-content-between px-3">
@@ -127,6 +127,10 @@ export default {
                     value: "Multiple Choice",
                     text: "Multiple Choice"
                 },
+                {
+                    value: "Date",
+                    text: "Date"
+                },
             ],
             warn: false,
             warnText: '',
@@ -157,26 +161,30 @@ export default {
     },
     methods: {
         next() {
+            this.$store.commit('lawyer/setQuestions',this.questions)
             this.$store.commit('lawyer/nextStep')
         },
         selectWord() {
-            this.selected = window.getSelection().toString()
-            if (this.selected.length > 1) {
-                if (!this.selectedWords.includes(this.selected)) {
-                    document.execCommand('backColor', false, "#ffff00")
-                    this.questioning = true
-                    this.selectedWords.push(this.selected)
-                } else {
-                    document.execCommand('backColor', false, "#ffffff")
-                    this.questioning = false
-                    this.selectedWords.splice(this.selectedWords.indexOf(this.selected, 1))
-                    for (var x = 0; x < this.questions.length; x++) {
-                        if (this.selected == this.questions[x].title) {
-                            this.questions.splice(this.questions.indexOf(this.questions[x]), 1)
-                        }
-                    }
-                }
-            }
+            this.selected='Question '+(this.questions.length+1)
+            this.questioning=true
+            document.execCommand('insertHtml', false,"<span style='display:hidden'>{{"+this.selected+"}}</span>")
+            //this.selected = window.getSelection()
+            // if (this.selected.length > 1) {
+            //     if (!this.selectedWords.includes(this.selected)) {
+            //         document.execCommand('backColor', false, "#ffff00")
+            //         this.questioning = true
+            //         this.selectedWords.push(this.selected)
+            //     } else {
+            //         document.execCommand('backColor', false, "#ffffff")
+            //         this.questioning = false
+            //         this.selectedWords.splice(this.selectedWords.indexOf(this.selected, 1))
+            //         for (var x = 0; x < this.questions.length; x++) {
+            //             if (this.selected == this.questions[x].title) {
+            //                 this.questions.splice(this.questions.indexOf(this.questions[x]), 1)
+            //             }
+            //         }
+            //     }
+            // }
 
         },
         checkType() {
@@ -202,7 +210,7 @@ export default {
                     this.warn = true
                 }
             } else {
-                if (this.type == 'Short Answer') {
+                if (this.type == 'Short Answer' || this.type== 'Date') {
 
                     this.questions.push({
                         title: this.selected,
@@ -246,10 +254,7 @@ export default {
             this.questions.splice(this.questions.indexOf(item), 1)
         },
         saveSecondDraft() {
-            if (this.questions.length > 0) {
-                this.$store.dispatch('lawyer/saveSecondDraft', this.questions)
-            }
-
+            this.$store.dispatch('lawyer/saveSecondDraft', this.questions)
         }
     }
 }

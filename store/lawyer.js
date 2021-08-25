@@ -11,32 +11,24 @@ export const state = () => ({
     useCase:'',
     info:'',
     minPrice:'',
-    maxPrice:''
+    maxPrice:'',
+    contractFinishDialog:false
   })
   
   export const mutations = {
     setFirstStepData(state,payload){
         state.title=payload.title,
         state.detail=payload.detail
-        console.log('yes:',state.title)
     },
-    setUseCase(state,payload){
-        state.useCase=payload
+    setQuestions(state,payload){
+        state.questions=payload
     },
-    setInfo(state,payload){
-        state.info=payload
-    },
-    setMinPrice(state,payload){
-        state.minPrice=payload
-    },
-    setMaxPrice(state,payload){
-        state.maxPrice=payload
-    },
-    setDetail(state,payload){
-        state.detail=payload
-    },
-    resetForm(state){
-        state.step=1
+    setFormDetails(state,payload){
+        state.description=payload.description
+        state.useCase=payload.useCase
+        state.info=payload.info
+        state.minPrice=payload.minPrice
+        state.maxPrice=payload.maxPrice
     },
     setEarnDealzDialog(state){
         state.earnDealz=true
@@ -55,8 +47,25 @@ export const state = () => ({
     },
     setUploadedDoc(state,payload){
         state.detail=payload
+    },
+    setContractFinishDialog(state){
+        state.contractFinishDialog=true
+    },
+    resetForm(state){
+        // state.step=1
+        state.title=''
+        state.detail=''
+        state.questions=[]
+        state.description=''
+        state.useCase=''
+        state.info=''
+        state.minPrice=''
+        state.maxPrice=''
+    },
+    resetStep(state){
+        state.step=1
+        state.contractFinishDialog=false
     }
-
   }
   export const actions= {
     saveSecondDraft(context,payload){
@@ -77,22 +86,24 @@ export const state = () => ({
     createContract(context){
         const params = {
             title: context.state.title,
-            contract_details: context.state.detail,
+            contract_details:context.state.detail,
+            questions:context.state.questions,
+            description:context.state.description,
+            useCase:context.state.useCase,
+            info:context.state.info,
             min_price:context.state.minPrice,
-            maxPrice:context.state.maxPrice,
-            questions:['question1','question2']
+            max_price:context.state.maxPrice,
         }
         const config = {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
             }
         }
-        // axios.post('https://dealzlegal.herokuapp.com/api/contracts/upload',params,config)
-        // .then(res=>{
-        //     console.log(res.data)
-        //     this.$router.push('lawyer/contracts')
-        // }).catch(err=>console.log(err.response))
-        console.log(params)
+        axios.post('https://dealzlegal.herokuapp.com/api/contracts/upload',params,config)
+        .then(res=>{
+            context.commit('setContractFinishDialog')
+            context.commit('resetForm')
+        }).catch(err=>console.log(err.response))
     }
 
   }

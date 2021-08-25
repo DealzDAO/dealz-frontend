@@ -3,19 +3,19 @@
     <div class="container">
         <div class="row p-3">
             <div class="col">
-                <ValidationObserver ref="contractForm">
+                <ValidationObserver ref="form4">
                     <p class="data-head">General contact information</p>
-                    <ValidationProvider name="email" rules="required|max200" v-slot="{ errors }">
+                    <ValidationProvider name="description" rules="max10k" v-slot="{ errors }">
                         <b-form-textarea v-model="description" rows="3" size="sm" class="mb-3 radius10" placeholder="Description of the content"></b-form-textarea>
                         <span class="helper-text4 text-danger">{{ errors[0] }}</span>
                     </ValidationProvider>
 
-                    <ValidationProvider name="email" rules="required|max200" v-slot="{ errors }">
+                    <ValidationProvider name="useCase" rules="max10k" v-slot="{ errors }">
                         <b-form-textarea v-model="useCase" rows="3" size="sm" class="mb-3 radius10" placeholder="Use cases"></b-form-textarea>
                         <span class="helper-text4 text-danger">{{ errors[0] }}</span>
                     </ValidationProvider>
 
-                    <ValidationProvider name="email" rules="required|max200" v-slot="{ errors }">
+                    <ValidationProvider name="info" rules="max10k" v-slot="{ errors }">
                         <b-form-textarea v-model="info" rows="3" size="sm" class="mb-3 radius10" placeholder="Additional info"></b-form-textarea>
                         <span class="helper-text4 text-danger">{{ errors[0] }}</span>
                     </ValidationProvider>
@@ -26,13 +26,19 @@
                             <p class="data3 visible2">Min price</p>
                         </div>
                         <div class="col-2">
-                            <b-form-input v-model="minPrice" placeholder="$" class="text-box" style="border-radius:10px" />
+                            <ValidationProvider name="minPrice" rules="positive" v-slot="{ errors }">
+                                <b-form-input v-model="minPrice" placeholder="$" class="text-box ml-n4" style="border-radius:10px" />
+                                <span class="helper-text4 text-danger">{{ errors[0] }}</span>
+                            </ValidationProvider>
                         </div>
                         <div class="col-1 p-0">
                             <p class="data3 visible2">Max price</p>
                         </div>
                         <div class="col-2">
-                            <b-form-input v-model="maxPrice" placeholder="$" class="text-box" style="border-radius:10px" />
+                            <ValidationProvider name="maxPrice" rules="positive" v-slot="{ errors }">
+                                <b-form-input v-model="maxPrice" placeholder="$" class="text-box ml-n4" style="border-radius:10px" />
+                                <span class="helper-text4 text-danger">{{ errors[0] }}</span>
+                            </ValidationProvider>
                         </div>
                     </div>
                     <p class="helper-text4 visible2">
@@ -62,7 +68,7 @@
         </div>
     </div>
     <!-- contract dialog -->
-    <b-modal centered size="lg" v-model="contractDialog" hide-footer>
+    <b-modal centered size="lg" v-model="contractFinishDialog" hide-footer>
         <div>
             <div class="bg-white viewBox">
                 <div class="row justify-content-center">
@@ -73,11 +79,9 @@
                         <p class="title-text2 text-center">Contract created successfully</p>
                         <p class="helper-text3 text-center">Our Admins have received the contract. We will notify you as we review it. Thank you.</p>
                         <p class="text-center">
-                            <a href="/lawyer/dashboard">
-                                <b-button class="my-btn bg-primary-light px-5">
+                                <b-button class="my-btn bg-primary-light px-5" @click="dashboard">
                                     <p>Go to Dashboard</p>
                                 </b-button>
-                            </a>
                         </p>
                     </div>
                 </div>
@@ -105,65 +109,56 @@ extend("required", {
 });
 extend('max10k', {
     validate: value => {
-        return value.length <= 10000;
+        return value.length <= 10;
     },
     message: 'Less than 10000 characters'
 });
+extend('positive', {
+    validate: value => {
+        return value > 0;
+    },
+    message: 'Price is negative'
+});
 export default {
+    components: {
+        ValidationProvider,
+        ValidationObserver,
+        extend
+    },
     data() {
         return {
+            description:'',
+            useCase:'',
+            info:'',
+            minPrice:'',
+            maxPrice:'',
             contractDialog: false
         }
     },
-    computed: {
-        description: {
-            get() {
-                this.$store.state.lawyer.description
+    computed:{
+        contractFinishDialog:{
+            get(){
+                return this.$store.state.lawyer.contractFinishDialog
             },
-            set(value) {
-                this.$store.commit('lawyer/setDescription', value)
-            }
-        },
-        useCase: {
-            get() {
-                this.$store.state.lawyer.useCase
-            },
-            set(value) {
-                this.$store.commit('lawyer/setUseCase', value)
-            }
-        },
-        info: {
-            get() {
-                this.$store.state.lawyer.info
-            },
-            set(value) {
-                this.$store.commit('lawyer/setInfo', value)
-            }
-        },
-        minPrice: {
-            get() {
-                this.$store.state.lawyer.minPrice
-            },
-            set(value) {
-                this.$store.commit('lawyer/setMinPrice', value)
-            }
-        },
-        maxPrice: {
-            get() {
-                this.$store.state.lawyer.maxPrice
-            },
-            set(value) {
-                this.$store.commit('lawyer/setMaxPrice', value)
+            set(value){
+                this.$store.commit('lawyer/setContractFinishDialog',value)
             }
         }
     },
     methods: {
         create() {
-            if (this.$refs.contractForm.validate()) {
-                this.contractDialog = true
+            this.$refs.form4.validate().then((success) => {
+                if (!success) {
+                    return;
+                }
+                this.$store.commit('lawyer/setFormDetails',{'description':this.description,'useCase':this.useCase,'info':this.info,'minPrice':this.minPrice,'maxPrice':this.maxPrice})
                 this.$store.dispatch('lawyer/createContract')
-            }
+            })
 
+        },
+        dashboard(){
+            this.$store.commit('lawyer/resetStep')
+            this.$router.push('/lawyer/dashboard')
         }
     }
 }

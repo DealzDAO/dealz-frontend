@@ -25,8 +25,8 @@
                             <p>Continue</p>
                         </b-button>
                         <div>
-                            <b-button class="btn-outlined" @click="saveDraft">
-                                <p class="text-primary-light">Save Draft</p>
+                            <b-button class="btn-outlined" @click="saveDraft" :disabled="btnDisabled">
+                                <p class="text-primary-light">{{btnText}}</p>
                             </b-button>
                             <b-button class="my-btn bg-white">
                                 <p class="text-danger-light">Continue</p>
@@ -78,6 +78,8 @@ export default {
         return {
             title: '',
             detail: '',
+            btnText:'Save Draft',
+            btnDisabled:false,
             config: {
                 height: 400,
                 menubar: false,
@@ -145,6 +147,8 @@ export default {
                 if (!success) {
                     return;
                 }
+                this.btnText='Saving...'
+                this.btnDisabled=true
                 const params = {
                     title: this.title,
                     contract_details: this.detail,
@@ -155,6 +159,8 @@ export default {
                     }
                 }
                 axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft', params, config).then(res => {
+                    this.$store.commit('lawyer/resetForm')
+                    this.$store.commit('lawyer/resetStep')
                     this.$router.push('/lawyer/contracts/my-drafts')
                 }).catch(err => console.log(err.response))
             })

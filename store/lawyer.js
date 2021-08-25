@@ -80,6 +80,8 @@ export const state = () => ({
             }
         }
         axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
+            context.commit('resetForm')
+            context.commit('resetStep')
             this.$router.push('/lawyer/contracts/my-drafts')
         }).catch(err => console.log(err.response))
     },

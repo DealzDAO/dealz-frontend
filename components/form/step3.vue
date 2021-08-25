@@ -86,8 +86,8 @@
                 <!-- end question adding form -->
 
                 <div class="mt-3">
-                    <b-button class="btn-outlined" @click="saveSecondDraft">
-                        <p class="text-primary-light">Save Draft</p>
+                    <b-button class="btn-outlined" @click="saveSecondDraft" :disabled="btnDisabled">
+                        <p class="text-primary-light">{{btnText}}</p>
                     </b-button>
                     <b-button class="my-btn bg-white">
                         <p class="text-danger-light">Continue</p>
@@ -135,6 +135,8 @@ export default {
             warn: false,
             warnText: '',
             selectedWords: [],
+            btnText:'Save Draft',
+            btnDisabled:false
         }
     },
     computed: {
@@ -254,6 +256,8 @@ export default {
             this.questions.splice(this.questions.indexOf(item), 1)
         },
         saveSecondDraft() {
+            this.btnText='Saving'
+            this.btnDisabled=true
             this.$store.dispatch('lawyer/saveSecondDraft', this.questions)
         }
     }

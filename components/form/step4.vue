@@ -50,8 +50,8 @@
                         To reply to their comments, simply find this contract in your dasboard.
                     </p>
                     <div class="row justify-content-between px-3">
-                        <b-button class="my-btn px-5 bg-primary-light" @click="create">
-                            <p>Finish Creating Contract</p>
+                        <b-button class="my-btn px-5 bg-primary-light" @click="create" :disabled="btnDisabled">
+                            <p>{{btnText}}</p>
                         </b-button>
                         <div>
                             <b-button class="btn-outlined">
@@ -109,7 +109,7 @@ extend("required", {
 });
 extend('max10k', {
     validate: value => {
-        return value.length <= 10;
+        return value.length <= 10000;
     },
     message: 'Less than 10000 characters'
 });
@@ -132,7 +132,9 @@ export default {
             info:'',
             minPrice:'',
             maxPrice:'',
-            contractDialog: false
+            contractDialog: false,
+            btnText:'Finish Creating Contract',
+            btnDisabled:false
         }
     },
     computed:{
@@ -151,6 +153,8 @@ export default {
                 if (!success) {
                     return;
                 }
+                this.btnText='Creating contract...'
+                this.btnDisabled=true
                 this.$store.commit('lawyer/setFormDetails',{'description':this.description,'useCase':this.useCase,'info':this.info,'minPrice':this.minPrice,'maxPrice':this.maxPrice})
                 this.$store.dispatch('lawyer/createContract')
             })

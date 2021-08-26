@@ -35,7 +35,7 @@
                 </div>
                 <p v-else class="text-muted text-center">No contracts found</p>
 
-                <div v-if="contracts.length>0" class="px-2 mt-4">
+                <div v-if="contracts.length>0" class="px-4 mt-4">
                     <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
                 </div>
             </div>
@@ -209,24 +209,4 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-    .pagination-sm .page-link{
-        padding:10px 10px;
-        border: 0px;
-        
-    }
-    .page-item.disabled .page-link{
-          border:none;
-          background-color: #f5f7f9;
-          font-size: 12px;
-          font-weight: 600;
-    }
-    button.page-link{
-        background-color: #f5f7f9;
-        font-size: 12px;
-        font-weight: 600;
-    }
-    .b-pagination-pills .page-item .page-link{
-        border:none;
-    }
-</style>
+

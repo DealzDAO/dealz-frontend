@@ -2,8 +2,8 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-9" v-if="items.length>0">
-                <div v-for="(item,i) in items" :key="i" class="m-3">
+            <div class="col-9" v-if="contracts.length>0">
+                <div v-for="(item,i) in contracts" :key="i" class="m-3">
                     <p class="mb-1 subtitle-text4">{{item.title}}</p>
                     <!-- status -->
                     <div class="admin-chip" :class="getBg(item)">
@@ -23,7 +23,10 @@
                     <!-- end comments -->
                 </div>
             </div>
-            <p v-else class="text-muted text-center">{{noText}}</p> 
+            <p v-else class="text-muted text-center">{{noText}}</p>
+            <div v-if="contracts.length>0" class="px-4 mt-4">
+                    <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
+                </div> 
         </div>
     </div>
 </div>
@@ -38,6 +41,9 @@ export default {
             token: '',
             noText: '',
             contracts: [],
+            limit: 5,
+            rows: 0,
+            page: 1,
             items: [{
                     title: 'Brain Trust New Sound Exchange Procedures For LOD',
                     status: 'Draft',
@@ -64,16 +70,18 @@ export default {
     },
     methods: {
         getLawyerContracts() {
-            axios.get('https://dealzlegal.herokuapp.com/api/user/lawyer/contracts', {
+            axios.get('https://dealzlegal.herokuapp.com/api/user/lawyer/contracts?page=' + this.page + '&limit=' + this.limit,{
                     headers: {
                         Authorization: 'Bearer ' + this.token
                     }
                 })
                 .then(res => {
-                    this.contracts = res.data
+                    this.contracts = res.data.contracts
+                    this.rows=res.data.total_contracts
                     if(res.data.length==0){
                         this.noText='No Contracts found'
                     }
+                    console.log(res.data)
                 })
                 .catch(err => console.log(err.response))
         },
@@ -103,7 +111,11 @@ export default {
             } else if (item.status == 'Verification Awaiting') {
                 return 'text-warning-light'
             }
-        }
+        },
+        input(e) {
+            this.page = e
+            this.getLawyerContracts()
+        },
     }
 }
 </script>

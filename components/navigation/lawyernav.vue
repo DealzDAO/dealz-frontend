@@ -18,17 +18,14 @@
                 </div>
             </div>
 
-            <div class="sidebar-bottom">
-                <p>
-                    <b-icon icon="chat-square-text" class="icon-helper"></b-icon>
-                    <span class="menu-text">Messages</span>
-                    <b-badge pill variant="danger">3</b-badge>
-                </p>
-                <p>
-                    <b-icon icon="bell" class="icon-helper"></b-icon>
-                    <span class="menu-text">Notifications</span>
-                    <b-badge pill variant="danger" class="ml-10">14</b-badge>
-                </p>
+            <div class="sidebar-menu">
+                <div v-for="(item,i) in menu2" :key="i" class="sidebar-menu-item" :class="getActiveLook(item)" @click="menuClick(item)">
+                    <p>
+                        <b-icon :icon="item.icon" class="icon-helper"></b-icon>
+                        <span class="menu-text">{{item.title}}</span>
+                        <b-badge pill variant="danger">{{item.num}}</b-badge>
+                    </p>
+                </div>
                 <hr>
                 <p>
                     <b-icon icon="gear" class="icon-helper"></b-icon>
@@ -39,6 +36,7 @@
                     <span class="menu-text">Logout</span>
                 </p>
             </div>
+
         </div>
     </div>
 </div>
@@ -64,6 +62,19 @@ export default {
                     icon: 'check-square',
                     link: '/lawyer/ecosystem-governance'
                 },
+            ],
+            menu2: [{
+                    title: 'Messages',
+                    icon: 'chat-square-text',
+                    link: '/lawyer/messages',
+                    num: 3
+                },
+                {
+                    title: 'Notifications',
+                    icon: 'bell',
+                    link: '/lawyer/notifications',
+                    num: 14
+                },
             ]
         }
     },
@@ -88,7 +99,7 @@ export default {
             this.active = item.title
             this.$router.push('/lawyer/new-contract')
         },
-         logout(){
+        logout() {
             localStorage.removeItem('dealz-token')
             this.$router.push('/login')
         }
@@ -130,7 +141,6 @@ export default {
 }
 
 .sidebar-bottom {
-    margin: 0px 20px;
     position: absolute;
     bottom: 0px;
 }

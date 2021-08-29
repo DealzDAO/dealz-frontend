@@ -1,48 +1,89 @@
 import axios from "axios";
 export const state = () => ({
-        selectedContract:'',
-        detail:'',
-        selectedLawyer:'',
-        lawyerDetail:''
-  })
-  
+  contracts: [],
+  selectedContract: "",
+  detail: "",
+  comments:[],
+
+  lawyers:[],
+  selectedLawyer: "",
+  lawyerDetail: ""
+});
+
 export const mutations = {
-    selectContract(state,payload){
-        state.selectedContract=payload
-    },
-    setContractDetail(state,payload){
-        state.detail=payload
-    },
-    selectLawyer(state,payload){
-        state.selectedLawyer=payload
-    },
-    setLawyerDetail(state,payload){
-        state.lawyerDetail=payload
-    }
-  }
-  export const actions= {
-      getDetail(context){
-        axios.get('https://dealzlegal.herokuapp.com/api/admin/single-contract/' + context.state.selectedContract._id,{
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+  setContracts(state, payload) {
+    state.contracts = payload;
+  },
+  selectContract(state, payload) {
+    state.selectedContract = payload;
+  },
+  setContractDetail(state, payload) {
+    state.detail = payload;
+  },
+  updateComment(state, payload) {
+    state.comments.push = payload;
+  },
+  setComment(state, payload) {
+    state.comments=payload;
+    console.log("detail with comments:", state.detail);
+  },
+  updateContractStatus(state) {
+    state.selectedContract.status = "Available";
+  },
+  setLawyers(state,payload){
+    state.lawyers=payload
+  },
+  selectLawyer(state, payload) {
+    state.selectedLawyer = payload;
+  },
+  setLawyerDetail(state, payload) {
+    state.lawyerDetail = payload;
+  },
+};
+export const actions = {
+  getDetail(context) {
+    axios
+      .get(
+        "https://dealzlegal.herokuapp.com/api/admin/single-contract/" +
+        context.state.selectedContract._id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("dealz-token")
+          }
+        }
+      )
+      .then(res => {
+        context.commit("setContractDetail", res.data);
+      })
+      .catch(err => console.log(err.response));
+
+      axios
+          .get(
+            "https://dealzlegal.herokuapp.com/api/contracts/get-comment/" +
+            context.state.selectedContract._id, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("dealz-token")
+              }
             }
-        })
-        .then(res => {
-            context.commit('setContractDetail',res.data)
-            console.log(res.data)
-        })
-        .catch(err => console.log(err.response))
-      },
-      getLawyerDetail(context){
-        axios.get('https://dealzlegal.herokuapp.com/api/admin/lawyer/' + context.state.selectedLawyer._id,{
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
-            }
-        })
-        .then(res => {
-            console.log('lawyer detail:',res.data)
-            context.commit('setLawyerDetail',res.data)
-        })
-        .catch(err => console.log(err.response))
-      }
+          )
+          .then(response => {
+            console.log("comments", response.data);
+            context.commit("setComment", response.data);
+          })
+          .catch(err => console.log(err.response));
+  },
+  getLawyerDetail(context) {
+    axios
+      .get(
+        "https://dealzlegal.herokuapp.com/api/admin/single-lawyer/" +
+        context.state.selectedLawyer._id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("dealz-token")
+          }
+        }
+      )
+      .then(res => {
+        context.commit("setLawyerDetail", res.data[0]);
+      })
+      .catch(err => console.log(err.response));
   }
+};

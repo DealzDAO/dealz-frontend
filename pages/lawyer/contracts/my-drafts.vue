@@ -10,6 +10,9 @@
 
             </div>
         </div>
+        <div class="row">
+             <p>{{noText}}</p>
+        </div>
     </div>
 </div>
 </template>
@@ -23,16 +26,7 @@ export default {
         return {
             moment:moment,
             drafts:[],
-            items: [{
-                    title: 'Brain Trust New Sound Exchange Procedures for LOD',
-                    date: '2',
-                },
-                {
-                    title: 'Founder advisor standard template',
-                    date: '1',
-                },
-
-            ]
+            noText:''
         }
     },
     mounted(){
@@ -40,7 +34,11 @@ export default {
     },
     methods:{
         getAllDrafts(){
-            axios.get('https://dealzlegal.herokuapp.com/api/contracts/getalldrafts')
+            axios.get('https://dealzlegal.herokuapp.com/api/contracts/all-drafts',{
+                 headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                    }
+            })
             .then(res=>this.drafts=res.data)
             .catch(err=>console.log(err.response))
         }

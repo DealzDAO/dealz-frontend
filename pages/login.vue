@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {
     mapMutations
 } from 'vuex'
@@ -115,13 +116,10 @@ export default {
                     return;
                 }
                 this.isProcessing = true;
-                this.$auth
-                    .loginWith("local", {
-                        data: {
-                            email: this.email,
-                            password: this.password
-                        },
-                    })
+                axios.post('https://dealzlegal.herokuapp.com/api/auth/login',{
+                    email:this.email,
+                    password:this.password
+                })
                     .then((response) => {
                         if (response.data.token) {
                             localStorage.setItem('dealz-token', response.data.token)
@@ -139,6 +137,8 @@ export default {
                                 this.$router.push('/user')
                             } else if (decoded.User_type == 'Lawyer') {
                                 this.$router.push('/lawyer')
+                            }else if (decoded.User_type == 'Admin') {
+                                this.$router.push('/admin')
                             }
                             this.successToast(response.data.message);
                         }

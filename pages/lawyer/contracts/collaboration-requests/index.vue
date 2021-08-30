@@ -1,6 +1,6 @@
 <template>
-<div class="bg-white w-100">
-    <div class="container-fluid">
+<div>
+    <div class="container">
         <div class="row justify-content-center py-2">
             <div class="col">
                 <div class="admin-chip mx-2 bg-primary-soft" v-for="(item,i) in objects" :key="i">
@@ -8,10 +8,10 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="collabs.length>0">
             <div class="col">
-                <div v-for="(item,i) in items" :key="i" class="m-3">
-                    <p class="mb-1 subtitle-text4 link" @click="seeDetail">{{item.title}}</p>
+                <div v-for="(item,i) in collabs" :key="i" class="m-3">
+                    <p class="mb-1 subtitle-text4 link" @click="seeDetail(item)">{{item.title}}</p>
                     <!-- status -->
                     <div class="admin-chip" :class="getBg(item)">
                         <p :class="getText(item)">
@@ -29,20 +29,24 @@
                         </p>
                     </div>
                     <!-- end comments -->
-                    
 
                 </div>
             </div>
-
+        </div>
+        <div v-else class="row justify-content-center">
+            <p class="helper-text3">{{noText}}</p>
         </div>
     </div>
 </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
+            collabs: [],
+            noText: '',
             items: [{
                     title: 'Founder advisor standard template',
                     status: 'Overdue',
@@ -75,7 +79,24 @@ export default {
             ]
         }
     },
+    mounted() {
+        this.getCollabs()
+    },
     methods: {
+        getCollabs() {
+            axios.get('https://dealzlegal.herokuapp.com/api/lawyer/all-collab-requests', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                    }
+                })
+                .then(res => {
+                    this.collabs = res.data
+                    if (res.data.length == 0) {
+                        this.noText = 'No requests found'
+                    }
+                })
+                .catch(err => console.log(err.response))
+        },
         getBg(item) {
             if (item.status == 'Overdue') {
                 return 'bg-danger-soft'
@@ -97,10 +118,32 @@ export default {
         getIcon(item) {
             if (item.status == 'Work in Progress') {
                 return 'clock-history'
-            }  
+            }
         },
-        seeDetail(){
-            this.$router.push('/lawyer/contracts/collaboration-requests/detail')
+        seeDetail(item) {
+            if (item.status == 'Available') {
+                this.$router.push({
+                    name: 'lawyer-contracts-collaboration-requests-id-accept',
+                    params: {
+                        id: item._id
+                    }
+                })
+            } else if (item.status == 'Work in Progress') {
+                this.$router.push({
+                    name: 'lawyer-contracts-collaboration-requests-id-approve',
+                    params: {
+                        id: item._id
+                    }
+                })
+            } else if (item.status == 'Overdue') {
+                this.$router.push({
+                    name: 'lawyer-contracts-collaboration-requests-id-overdue',
+                    params: {
+                        id: item._id
+                    }
+                })
+            }
+
         }
     }
 }

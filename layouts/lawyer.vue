@@ -11,11 +11,12 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     // middleware: "auth",
     computed: {
@@ -29,6 +30,17 @@ export default {
         //     this.$router.go(-1)
         // } 
     },
+    mounted() {
+        axios.get('https://dealzlegal.herokuapp.com/api/profile/me' ,{
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                }
+            })
+            .then(res => {
+                this.$store.commit('dealz/setDealzAuth', res.data)
+            })
+            .catch(err => console.log(err.response))
+    }
 };
 </script>
 

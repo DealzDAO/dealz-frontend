@@ -10,8 +10,8 @@
 
             </div>
         </div>
-        <div class="row">
-             <p>{{noText}}</p>
+        <div class="row justify-content-center mt-5">
+             <p class="helper-text3">{{noText}}</p>
         </div>
     </div>
 </div>
@@ -39,7 +39,12 @@ export default {
                         Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
                     }
             })
-            .then(res=>this.drafts=res.data)
+            .then(res=>{
+                this.drafts=res.data
+                if(res.data.length==0){
+                    this.noText='No Drafts found'
+                }
+            })
             .catch(err=>console.log(err.response))
         }
     }

@@ -1,9 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
 #admin section
-components/Admin/
-layouts/admin.vue
-pages/admin/
+# components/Admin/
+# layouts/admin.vue
+# pages/admin/
 # Logs
 /logs
 *.log

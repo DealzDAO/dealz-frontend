@@ -12,8 +12,8 @@
                     <div class="col-6" v-for="(item,i) in templates" :key="i">
                         <div class="data-box my-2">
                             <p class="data2 text-left mb-0">{{item.title}}</p>
-                            <div class="admin-chip bg-light-light">
-                                <p class="helper-text">{{item.type}}</p>
+                            <div v-if="item.bundles" class="admin-chip bg-light-light">
+                                <p class="helper-text">{{item.bundles}}</p>
                             </div>
                         </div>
                     </div>
@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     layout: 'user',
     data() {
@@ -126,28 +127,26 @@ export default {
                 },
 
             ],
-            templates: [{
-                    title: 'Brain Trust New Sound Exchange Procedures for LOD',
-                    type: 'Startup'
-                },
-                {
-                    title: 'Brain Trust New Sound Exchange Procedures for LOD',
-                    type: 'Music'
-                },
-                {
-                    title: 'Brain Trust New Sound Exchange Procedures for LOD',
-                    type: 'Art'
-                },
-                {
-                    title: 'Brain Trust New Sound Exchange Procedures for LOD',
-                    type: 'Art'
-                },
-
-            ],
+            templates: [],
         }
     },
+    mounted(){
+        this.getContracts()
+        console.log(localStorage.getItem('dealz-token'))
+    },
     methods: {
-
+        getContracts(){
+             axios.get('https://dealzlegal.herokuapp.com/api/user/userdash-contract', {
+                 headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                    }
+             })
+                    .then(res => {
+                       this.templates=res.data
+                       console.log(res.data)
+                    })
+                    .catch(err => console.log(err.response))
+        }
     }
 }
 </script>

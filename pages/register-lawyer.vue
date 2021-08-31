@@ -92,7 +92,7 @@
                     <!-- bio -->
                     <div class="row px-3">
                         <ValidationProvider name="fullName" rules="max500" ref="name" v-slot="{ errors }">
-                            <b-form-textarea placeholder="Your bio" rows="3" class="text-box w-100"></b-form-textarea>
+                            <b-form-textarea placeholder="Your bio" class="radius10 my-2" style="width:400px;"></b-form-textarea>
                             <span class="helper-text4 text-danger">{{ errors[0] }}</span>
                         </ValidationProvider>
                     </div>
@@ -290,7 +290,7 @@ export default {
                 text: 'Startup'
             },
         ],
-        tab: 1,
+        tab: 2,
         btnText: 'Next',
         btnText2: 'Finish Registration',
         formText: 'Please fill up the following details to register.',

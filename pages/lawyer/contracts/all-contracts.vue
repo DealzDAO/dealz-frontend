@@ -63,7 +63,6 @@ export default {
                     if(res.data.length==0){
                         this.noText='No Contracts found'
                     }
-                    console.log(res.data)
                 })
                 .catch(err => console.log(err.response))
         },

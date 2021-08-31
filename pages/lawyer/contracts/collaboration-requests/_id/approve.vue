@@ -122,7 +122,6 @@ export default {
                 })
                 .then(res => {
                     this.comments = res.data
-                    console.log('comments:',res.data)
                 })
                 .catch(err => console.log(err.response))
         },

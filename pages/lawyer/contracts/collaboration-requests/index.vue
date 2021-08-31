@@ -90,7 +90,6 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log(res.data)
                     this.collabs = res.data
                     if (res.data.length == 0) {
                         this.noText = 'No requests found'

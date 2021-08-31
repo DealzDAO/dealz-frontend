@@ -71,7 +71,6 @@ export default {
                 .then(res => {
                     this.contract=res.data
                     this.getBtn()
-                    console.log('detail:',res.data)
                 })
                 .catch(err => console.log(err.response))
         },

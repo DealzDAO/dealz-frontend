@@ -76,13 +76,17 @@ export default {
                 .catch(err => console.log(err.response))
         },
         acceptContract(){
-             axios.post('https://dealzlegal.herokuapp.com/api/lawyer/accept-contract-collab/'+this.contract._id,{
-                    headers: {
+            const params={
+                id:this.contract._id
+            }
+            const config={
+                   headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
                     }
-                })
+            }
+             axios.post('https://dealzlegal.herokuapp.com/api/lawyer/accept-contract-collab',params,config)
                 .then(res => {
-                    this.contract.accepted.push(res.data.lawyer_id)
+                    this.contract=res.data
                     this.getBtn()
                 })
                 .catch(err => console.log(err.response))

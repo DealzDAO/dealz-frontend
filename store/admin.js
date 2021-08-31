@@ -25,10 +25,13 @@ export const mutations = {
   },
   setComment(state, payload) {
     state.comments=payload;
-    console.log("detail with comments:", state.detail);
   },
   updateContractStatus(state) {
     state.selectedContract.status = "Available";
+  },
+  contractRejected(state){
+    state.selectedContract.status = "Rejected";
+
   },
   setLawyers(state,payload){
     state.lawyers=payload
@@ -52,6 +55,7 @@ export const actions = {
         }
       )
       .then(res => {
+        console.log(res.data)
         context.commit("setContractDetail", res.data);
       })
       .catch(err => console.log(err.response));
@@ -66,7 +70,6 @@ export const actions = {
             }
           )
           .then(response => {
-            console.log("comments", response.data);
             context.commit("setComment", response.data);
           })
           .catch(err => console.log(err.response));

@@ -146,19 +146,23 @@ export default {
                 .catch(err => console.log(err.response))
         },
         approveContract(){
-             axios.post('https://dealzlegal.herokuapp.com/api/lawyer/approve-collab-contract/'+this.contract._id,{
-                    headers: {
+            const params={
+                id:this.contract._id
+            }
+            const config={
+                   headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
                     }
-                })
+            }
+             axios.post('https://dealzlegal.herokuapp.com/api/lawyer/approve-collab-contract',params,config)
                 .then(res => {
-                    this.contract.approved.push(res.data.lawyer_id)
+                    this.contract=res.data
                     this.getBtn()
                 })
                 .catch(err => console.log(err.response))
         },
         getBtn(){
-            if(this.contract.accepted.includes(this.dealzUser.id)){
+            if(this.contract.approved.includes(this.dealzUser.id)){
                 this.disabled=true
                 this.btnText='Contract Approved'
             }

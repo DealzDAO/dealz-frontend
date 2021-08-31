@@ -76,13 +76,15 @@ export default {
                 return 'bg-primary-soft'
             } else if (item.status =='Available' || item.status=='Work in Progress') {
                 return 'bg-warning-soft'
+            }else if (item.status =='Rejected') {
+                return 'bg-danger-soft'
             }
         },
         getStatus(item){
-            if (item.status == 'Draft' || item.status == 'Verified' || item.status=='New') {
-                return item.status
-            } else if (item.status =='Available' || item.status=='Work in Progress') {
+            if (item.status =='Available' || item.status=='Work in Progress') {
                 return 'Verification Pending'
+            } else {
+                return item.status
             }
         },
         getIcon(item) {
@@ -105,6 +107,8 @@ export default {
                 return 'text-warning-light'
             }else if (item.status == 'New') {
                 return 'text-primary-light'
+            }else if (item.status == 'Rejected') {
+                return 'text-danger-light'
             }
         },
         input(e) {

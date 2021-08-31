@@ -15,7 +15,7 @@
                     <!-- status -->
                     <div class="admin-chip" :class="getBg(item)">
                         <p :class="getText(item)">
-                            <b-icon v-if="item.status=='Work in Progress'" :icon="getIcon(item)"></b-icon>
+                            <b-icon :icon="getIcon(item)"></b-icon>
                             {{item.status}}
                         </p>
                     </div>
@@ -90,6 +90,7 @@ export default {
                     }
                 })
                 .then(res => {
+                    console.log(res.data)
                     this.collabs = res.data
                     if (res.data.length == 0) {
                         this.noText = 'No requests found'

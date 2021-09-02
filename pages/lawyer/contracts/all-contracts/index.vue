@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12" v-if="contracts.length>0">
-                <div v-for="(item,i) in contracts" :key="i" class="m-3">
+                <div v-for="(item,i) in contracts" :key="i" class="m-3 link" @click="viewContract(item)">
                     <p class="mb-1 subtitle-text4">{{item.title}}</p>
                     <!-- status -->
                     <div class="admin-chip" :class="getBg(item)">
@@ -118,6 +118,14 @@ export default {
             this.page = e
             this.getLawyerContracts()
         },
+        viewContract(item){
+            this.$router.push({
+                    name: 'lawyer-contracts-all-contracts-id',
+                    params: {
+                        id: item._id
+                    }
+                })
+        }
     }
 }
 </script>

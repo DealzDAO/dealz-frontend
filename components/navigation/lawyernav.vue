@@ -78,10 +78,6 @@ export default {
             ]
         }
     },
-    created() {
-        this.$router.push('/lawyer/dashboard')
-
-    },
     methods: {
         menuClick(item) {
             this.active = item.title
@@ -102,6 +98,7 @@ export default {
         },
         logout() {
             localStorage.removeItem('dealz-token')
+            this.$store.commit('dealz/resetUser')
             this.$router.push('/login')
         }
     }

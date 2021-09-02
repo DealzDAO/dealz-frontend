@@ -1,6 +1,5 @@
 <template>
 <div>
-    <div class="container bg-light-light py-3">
         <div class="row">
             <div class="col" style="overflow-wrap: break-word;">
                 <p class="title-text2">{{detail.title}}</p>
@@ -88,7 +87,6 @@
             </div>
         </div>
         <!-- end action buttons -->
-    </div>
 </div>
 </template>
 

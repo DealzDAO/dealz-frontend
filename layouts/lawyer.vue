@@ -18,19 +18,7 @@
 <script>
 import axios from 'axios'
 export default {
-    middleware({ store, redirect }) {
-    if (store.state.dealz.dealzToken == null) {
-      return redirect("/login");
-    } else {
-      if (store.state.dealz.dealzUser.User_type == "User") {
-        return redirect("/user");
-      } else if (store.state.dealz.dealzUser.User_type == "Admin") {
-        return redirect("/admin");
-      }
-    }
-  }
-
-};
+}
 </script>
 
 <style lang="scss">

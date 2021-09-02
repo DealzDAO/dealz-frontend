@@ -27,8 +27,8 @@
                 <!-- end accepted -->
 
                 <div class="contract-box mt-3 hidden-scroll" v-html="contract.contract_details"></div>
-
-                <b-button class="my-btn bg-primary-light mt-3" @click="acceptContract()" :disabled="disabled">
+        
+                <b-button  class="my-btn bg-primary-light mt-3" @click="acceptContract()" :disabled="disabled">
                     <b-spinner class="float-left mr-2" small v-if="accepting"></b-spinner>
                     <p class="float-right">{{btnText}}</p>
                 </b-button>
@@ -85,6 +85,7 @@ export default {
     },
     mounted() {
         this.getContractDetails()
+        console.log('user:',this.dealzUser)
     },
     methods: {
         getContractDetails() {
@@ -113,13 +114,13 @@ export default {
                 .then(res => {
                     this.contract = res.data
                     this.getBtn()
-                    this.acceptDialog=true
+                    this.acceptedDialog=true
                     this.accepting=false
                 })
                 .catch(err => console.log(err.response))
         },
         getBtn() {
-            if (this.contract.accepted.includes(this.dealzUser.id)) {
+            if (this.contract.accepted.includes(this.dealzUser._id)) {
                 this.disabled = true
                 this.btnText = 'Collaborator Request Accepted'
             } else {

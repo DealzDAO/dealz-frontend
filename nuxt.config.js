@@ -27,7 +27,8 @@ export default {
   plugins: [
     { src: "~/plugins/v-toast.js", mode: "client" },
     { src: "~/plugins/ripple-directive.js", mode: "client" },
-    { src: "~/plugins/persistedState.client.js"},
+    { src: "~/plugins/persistedState.js",mode:"client"},
+    { src: "~/plugins/auth-check.js",mode:"client"},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -156,7 +156,6 @@ export default {
     max-height: 100%;
     padding: 25px 0px;
     background-color: white;
-    
 }
 
 .adjusted {

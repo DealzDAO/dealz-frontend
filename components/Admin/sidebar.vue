@@ -12,7 +12,7 @@
                 </div>
             </div>
 
-            <div class="sidebar-bottom ">
+            <div class="sidebar-bottom">
                 <div class="sidebar-menu-outlined mb-2">
                     <p>
                         <b-icon icon="file-earmark-plus" class="icon-helper"></b-icon>
@@ -78,10 +78,6 @@ export default {
 </script>
 
 <style lang="scss">
-.sidebar {
-    max-width:200px;
-    height: 100%;
-}
 
 .sidebar-menu-item {
     height: 40px;
@@ -97,9 +93,12 @@ export default {
     cursor: pointer;
     background-color: rgba(90, 205, 102, 0.24);
 }
+.fixed{
+    position:fixed
+}
 .sidebar-bottom {
-    position: absolute;
-    bottom: 0px;
+    position: fixed;
+    bottom: 0;
 }
 
 .sidebar-menu-outlined {

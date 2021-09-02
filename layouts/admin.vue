@@ -2,11 +2,11 @@
   <div>
     <div class="container-fluid bg-light-light">
       <div class="row">
-        <div class="col-lg-2 col-md-3" style="border-right:1px solid rgba(17, 17, 17, 0.1);">
+        <div class="col-2" style="border-right:1px solid rgba(17, 17, 17, 0.1);">
                 <AdminSidebar />
             </div>
 
-            <div class="col-lg-10 col-md-9 p-0">
+            <div class="col p-0">
                 <Nuxt></Nuxt>
             </div>
       </div>
@@ -16,17 +16,17 @@
 
 <script>
 export default {
-  middleware({ store, redirect }) {
-    if (store.state.dealz.dealzToken == null) {
-      return redirect("/login");
-    } else {
-      if (store.state.dealz.dealzUser.User_type == "User") {
-        return redirect("/user");
-      } else if (store.state.dealz.dealzUser.User_type == "Lawyer") {
-        return redirect("/lawyer");
-      }
-    }
-  }
+  // middleware({ store, redirect }) {
+  //   if (store.state.dealz.dealzToken == null) {
+  //     return redirect("/login");
+  //   } else {
+  //     if (store.state.dealz.dealzUser.User_type == "User") {
+  //       return redirect("/user");
+  //     } else if (store.state.dealz.dealzUser.User_type == "Lawyer") {
+  //       return redirect("/lawyer");
+  //     }
+  //   }
+  // }
 };
 </script>
 

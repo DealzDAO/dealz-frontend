@@ -6,7 +6,7 @@
                 <AdminSidebar />
             </div>
 
-            <div class="col p-0">
+            <div class="col-10 p-0">
                 <Nuxt></Nuxt>
             </div>
       </div>

@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="container">
-        <div class="row px-3">
+        <div v-if="drafts.length>0" class="row px-3">
             <div class="col">
                 <div v-for="(item,i) in drafts" :key="i" class="mt-4">
                     <p class="subtitle-text4 mb-2">{{item.title}}</p>
@@ -10,6 +10,9 @@
 
             </div>
         </div>
+        <div v-else-if="drafts.length==0 && noText==''" class="d-flex justify-content-center mt-5">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
         <div class="row justify-content-center mt-5">
              <p class="helper-text3">{{noText}}</p>
         </div>

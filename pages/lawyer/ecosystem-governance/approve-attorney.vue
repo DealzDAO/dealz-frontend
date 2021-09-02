@@ -6,30 +6,37 @@
                 <p class="text-primary-light">{{item.title}}</p>
             </div>
         </div>
-        <div class="row mb-4" v-for="(item,i) in attorneys" :key="i">
-            <div class="col pa-0">
-                <p class="subtitle-text4 mb-0">{{item.name}}</p>
-                <p v-if="item.bio" class="helper-text3">{{item.bio}}</p>
+        <div v-if="attorneys.length>0">
+            <div class="row mb-4" v-for="(item,i) in attorneys" :key="i">
+                <div class="col pa-0">
+                    <p class="subtitle-text4 mb-0">{{item.name}}</p>
+                    <p v-if="item.bio" class="helper-text3">{{item.bio}}</p>
 
-                <div v-if="!item.downVote.includes(dealzUser.id)" class="admin-chip link" :class="getBg(item)" @click="upVote(item)">
-                    <p :class="getTextColor(item)">
-                        <b-icon icon="hand-thumbs-up"></b-icon>
-                        {{getText(item)}}
-                    </p>
-                </div>
+                    <div v-if="!item.downVote.includes(dealzUser.id)" class="admin-chip link" :class="getBg(item)" @click="upVote(item)">
+                        <p :class="getTextColor(item)">
+                            <b-icon icon="hand-thumbs-up"></b-icon>
+                            {{getText(item)}}
+                        </p>
+                    </div>
 
-                <div v-if="!item.upVote.includes(dealzUser.id)" class="admin-chip link" :class="getBg2(item)" @click="downVote(item)">
-                    <p :class="getTextColor2(item)">
-                        <b-icon icon="hand-thumbs-down"></b-icon>
-                        {{getText2(item)}}
-                    </p>
-                </div>
+                    <div v-if="!item.upVote.includes(dealzUser.id)" class="admin-chip link" :class="getBg2(item)" @click="downVote(item)">
+                        <p :class="getTextColor2(item)">
+                            <b-icon icon="hand-thumbs-down"></b-icon>
+                            {{getText2(item)}}
+                        </p>
+                    </div>
 
-                <div v-if="item.bundles" class="admin-chip bg-light-light">
-                    <p class="table-data">{{item.bundles}}</p>
+                    <div v-if="item.bundles" class="admin-chip bg-light-light">
+                        <p class="table-data">{{item.bundles}}</p>
+                    </div>
                 </div>
             </div>
         </div>
+        <div v-else-if="attorneys.length==0 && noText==''" class="d-flex justify-content-center mt-5">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
+            
+            <p v-else class="helper-text3 text-center">{{noText}}</p>
     </div>
 </div>
 </template>
@@ -55,7 +62,7 @@ export default {
     },
     computed: {
         dealzUser() {
-            return this.$store.state.auth.dealzUser
+            return this.$store.state.dealz.dealzUser
         }
     },
     mounted() {

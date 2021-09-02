@@ -14,6 +14,9 @@ export const mutations = {
   setContracts(state, payload) {
     state.contracts = payload;
   },
+  insertIntoContract(state,payload){
+     state.contracts.push(payload)
+  },
   selectContract(state, payload) {
     state.selectedContract = payload;
   },
@@ -21,7 +24,7 @@ export const mutations = {
     state.detail = payload;
   },
   updateComment(state, payload) {
-    state.comments.push = payload;
+    state.comments.push(payload);
   },
   setComment(state, payload) {
     state.comments=payload;

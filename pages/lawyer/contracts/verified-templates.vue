@@ -24,6 +24,9 @@
                 </div>
             </div>
         </div>
+        <div v-else-if="contracts.length==0 && noText==''" class="d-flex justify-content-center mt-5">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
         <div v-else class="row justify-content-center mt-5">
             <p class="helper-text3">{{noText}}</p> 
         </div>

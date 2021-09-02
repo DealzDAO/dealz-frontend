@@ -18,29 +18,18 @@
 <script>
 import axios from 'axios'
 export default {
-    // middleware: "auth",
-    computed: {
-        userType() {
-            return this.$store.state.userType
-        }
-    },
-    created() {
-        // console.log(localStorage.getItem('dealz-token'))
-        // if (this.userType != 'Lawyer') {
-        //     this.$router.go(-1)
-        // } 
-    },
-    mounted() {
-        axios.get('https://dealzlegal.herokuapp.com/api/profile/me' ,{
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
-                }
-            })
-            .then(res => {
-                this.$store.commit('dealz/setDealzAuth', res.data)
-            })
-            .catch(err => console.log(err.response))
+    middleware({ store, redirect }) {
+    if (store.state.dealz.dealzToken == null) {
+      return redirect("/login");
+    } else {
+      if (store.state.dealz.dealzUser.User_type == "User") {
+        return redirect("/user");
+      } else if (store.state.dealz.dealzUser.User_type == "Admin") {
+        return redirect("/admin");
+      }
     }
+  }
+
 };
 </script>
 

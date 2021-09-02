@@ -15,7 +15,7 @@
                     <!-- status -->
                     <div class="admin-chip" :class="getBg(item)">
                         <p :class="getText(item)">
-                            <b-icon :icon="getIcon(item)"></b-icon>
+                            <b-icon v-if="item.status=='Working in Progress'" :icon="getIcon(item)"></b-icon>
                             {{item.status}}
                         </p>
                     </div>
@@ -33,6 +33,9 @@
                 </div>
             </div>
         </div>
+        <div v-else-if="collabs.length==0 && noText==''" class="d-flex justify-content-center mt-5">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
         <div v-else class="row justify-content-center">
             <p class="helper-text3">{{noText}}</p>
         </div>
@@ -148,3 +151,8 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+    .link:hover{
+        background: none;
+    }
+</style>

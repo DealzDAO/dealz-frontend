@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="bg-light-light sidebar">
+    <div class="bg-light-light">
         <div class="sidebar">
             <b-img src="/logo.png" fluid alt="Responsive image"></b-img>
             <div class="sidebar-menu">
@@ -70,6 +70,7 @@ export default {
         },
         logout(){
             localStorage.removeItem('dealz-token')
+            this.$store.commit('dealz/resetUser')
             this.$router.push('/login')
         }
     }
@@ -78,14 +79,8 @@ export default {
 
 <style lang="scss">
 .sidebar {
-    width: 225px;
+    max-width:200px;
     height: 100%;
-    position: fixed;
-    border-right:1px solid rgba(17, 17, 17, 0.1);
-}
-
-.sidebar-menu {
-    margin: 20px 20px;
 }
 
 .sidebar-menu-item {
@@ -103,7 +98,6 @@ export default {
     background-color: rgba(90, 205, 102, 0.24);
 }
 .sidebar-bottom {
-    margin: 0px 20px;
     position: absolute;
     bottom: 0px;
 }

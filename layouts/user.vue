@@ -17,17 +17,17 @@
 
 <script>
 export default {
-    // middleware: "auth",
-    computed: {
-        userType() {
-            return this.$store.state.userType
-        }
-    },
-    created() {
-        if (this.userType != 'User') {
-            this.$router.go(-1)
-        } 
-    },
+    middleware({ store, redirect }) {
+    if (store.state.dealz.dealzToken == null) {
+      return redirect("/login");
+    } else {
+      if (store.state.dealz.dealzUser.User_type == "Admin") {
+        return redirect("/admin");
+      } else if (store.state.dealz.dealzUser.User_type == "Lawyer") {
+        return redirect("/lawyer");
+      }
+    }
+  }
 };
 </script>
 

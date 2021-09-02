@@ -2,10 +2,10 @@
 <div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-4 p-0">
+            <div class="col-4 p-0" style="border-right:1px solid rgba(17, 17, 17, 0.1);">
                 <AdminLawyerSidebar/>
             </div>
-            <div class="col-8 p-0">
+            <div class="col-8 p-0" >
                 <detail></detail>
             </div>
         </div>

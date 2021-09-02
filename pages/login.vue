@@ -37,7 +37,8 @@
                 </b-form-checkbox>
                 <p class="data2 float-right link" @click="forgotPass">Forgot Password</p>
                 <b-button @click="login" block class="my-btn bg-primary-light">
-                    <p>Sign in</p>
+                    <b-spinner class="mr-2" small v-if="isProcessing"></b-spinner>
+                    <p class="">Sign in</p>
                 </b-button>
                 <p class="data2 mt-2">or sign in using</p>
                 <b-button @click="login" block class="my-btn" style="background:#DFE6EC;">
@@ -130,8 +131,8 @@ export default {
                                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                             }).join(''));
                             var decoded = JSON.parse(jsonPayload)
-                            localStorage.setItem('dealz-user-type', decoded.User_type)
-                            this.$store.commit('setUserType', decoded.User_type)
+                            this.$store.commit('dealz/setDealzAuth',decoded)
+                            this.$store.commit('dealz/setToken',response.data.token)
 
                             if (decoded.User_type == 'User') {
                                 this.$router.push('/user')
@@ -145,6 +146,7 @@ export default {
 
                     })
                     .catch((err) => {
+                        this.isProcessing=false
                         this.failureToast(err.response.data.message);
                     })
             });

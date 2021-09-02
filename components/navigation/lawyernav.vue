@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="bg-light-light sidebar">
-        <div class="sidebar">
+        <div class="sidebar" id="full">
             <b-img src="/logo.png" fluid alt="Responsive image"></b-img>
             <div class="sidebar-menu-outlined link" @click="createNew({title:'new'})" :class="getActiveLook({title:'new'})">
                 <p>
@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class="sidebar-menu">
+            <div class="sidebar-menu" style="position:absolute;bottom:0px">
                 <div v-for="(item,i) in menu2" :key="i" class="sidebar-menu-item" :class="getActiveLook(item)" @click="menuClick(item)">
                     <p>
                         <b-icon :icon="item.icon" class="icon-helper"></b-icon>
@@ -27,7 +27,7 @@
                     </p>
                 </div>
                 <hr>
-                <p>
+                <p class="sidebar-menu-item mb-0">
                     <b-icon icon="gear" class="icon-helper"></b-icon>
                     <span class="menu-text">Setting</span>
                 </p>
@@ -80,6 +80,7 @@ export default {
     },
     created() {
         this.$router.push('/lawyer/dashboard')
+
     },
     methods: {
         menuClick(item) {

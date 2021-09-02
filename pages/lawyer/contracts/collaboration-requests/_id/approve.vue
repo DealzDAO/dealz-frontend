@@ -26,7 +26,8 @@
                 <div class="contract-box mt-3 hidden-scroll" v-html="contract.contract_details"></div>
 
                 <b-button class="my-btn bg-primary-light mt-3" @click="approveContract()" :disabled="disabled">
-                    <p>{{btnText}}</p>
+                    <b-spinner class="float-left mr-2" small v-if="approving"></b-spinner>
+                    <p class="float-right">{{btnText}}</p>
                 </b-button>
 
             </div>
@@ -64,7 +65,27 @@
             </div>
         </div>
     </div>
+    <b-modal size="lg" centered v-model="approvedDialog" hide-footer>
+        <div>
+            <div class="bg-white viewBox">
+                <div class="row justify-content-center">
+                    <div class="col-9">
+                        <p class="text-center h1">
+                            <b-icon icon="check" variant="success"></b-icon>
+                        </p>
+                        <p class="title-text2 text-center">Ownership accepted</p>
+                        <p class="helper-text3 text-center">You can find the contract from your dashboard.</p>
+                        <p class="text-center">
+                            <b-button class="my-btn bg-primary-light px-5" @click="seeCollabs">
+                                <p>See Other Collaborations</p>
+                            </b-button>
+                        </p>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+    </b-modal>
 </div>
 </template>
 
@@ -80,7 +101,9 @@ export default {
             commentText: '',
             sendDisabled: true,
             disabled: false,
-            btnText:'Approve Contract'
+            btnText:'Approve Contract',
+            approving:false,
+            approvedDialog:false
         }
     },
     computed: {
@@ -145,6 +168,7 @@ export default {
                 .catch(err => console.log(err.response))
         },
         approveContract(){
+            this.approving=true
             const params={
                 id:this.contract._id
             }
@@ -157,6 +181,8 @@ export default {
                 .then(res => {
                     this.contract=res.data
                     this.getBtn()
+                    this.approving=false
+                    this.approvedDialog=true
                 })
                 .catch(err => console.log(err.response))
         },

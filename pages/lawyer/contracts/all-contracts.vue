@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="container">
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-12" v-if="contracts.length>0">
                 <div v-for="(item,i) in contracts" :key="i" class="m-3">
                     <p class="mb-1 subtitle-text4">{{item.title}}</p>
@@ -26,6 +26,10 @@
                 <b-pagination class="mx-3" v-model="page" pills prev-text="Prev" next-text="Next" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
 
             </div>
+            <div v-else-if="contracts.length==0 && noText==''" class="d-flex justify-content-center mt-5">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
+            
             <p v-else class="helper-text3 text-center">{{noText}}</p>
         </div>
     </div>

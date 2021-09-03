@@ -27,7 +27,7 @@
         </div>
         <hr class="mb-0">
         <b-list-group flush class=" py-0 mx-0">
-            <b-list-group-item v-for="(item,i) in lawyers" :key="i" :class="checkActive(item)" @click="selectLawyer(item)">
+            <b-list-group-item class="link" v-for="(item,i) in lawyers" :key="i" :class="checkActive(item)" @click="selectLawyer(item)">
                 <div class="row">
                     <div class="col-3">
                         <b-img src="https://picsum.photos/125/125/?image=58" alt="circle" width="58" height="58" rounded="circle"></b-img>
@@ -102,7 +102,7 @@ export default {
         },
         checkActive(item){
             if(this.selectedLawyer==item){
-                return 'active-contract'
+                return 'active-lawyer'
             }
         },
         selectLawyer(item){
@@ -125,7 +125,7 @@ export default {
 .adjusted {
     margin: 0px 15px;
 }
-.active-contract{
+.active-lawyer{
     background-color: #f5f7f9;
     border-right:3px solid #04A5F6 !important;
 }

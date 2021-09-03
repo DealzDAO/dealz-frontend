@@ -2,14 +2,13 @@
   <div>
     <div class="container-fluid bg-light-light">
       <div class="row">
-        <div class="col-2" style="border-right:1px solid rgba(17, 17, 17, 0.1);">
+            <div style="width:268px;border-right:1px solid rgba(17, 17, 17, 0.1);">
                 <AdminSidebar />
             </div>
-
-            <div class="col-10 p-0">
+            <div class="col p-0">
                 <Nuxt></Nuxt>
             </div>
-      </div>
+        </div>
     </div>
   </div>
 </template>

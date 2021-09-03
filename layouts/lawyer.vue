@@ -2,7 +2,7 @@
 <div>
     <div class="container-fluid">
         <div class="row">
-            <div style="width:268px">
+            <div style="width:268px;border-right:1px solid rgba(17, 17, 17, 0.1);">
                 <NavigationLawyernav />
             </div>
             <div class="col p-0">

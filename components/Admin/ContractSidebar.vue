@@ -100,7 +100,8 @@ export default {
         },
     },
     mounted() {
-        this.filterSectionHeight
+        // this.filterSectionHeight()
+        this.getContracts()
     },
     methods: {
         getContracts() {
@@ -153,9 +154,9 @@ export default {
 <style lang="scss">
 .sidebar-2 {
     max-width: 400px;
-    max-height: 100%;
     padding: 25px 0px;
     background-color: white;
+    border:1px solid #DFE6EC;
 }
 
 .adjusted {

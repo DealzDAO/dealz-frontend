@@ -1,5 +1,6 @@
 <template>
 <div>
+    <div class="container-fluid bg-white">
         <div class="row">
             <div class="col" style="overflow-wrap: break-word;">
                 <p class="title-text2">{{detail.title}}</p>
@@ -87,6 +88,7 @@
             </div>
         </div>
         <!-- end action buttons -->
+    </div>
 </div>
 </template>
 

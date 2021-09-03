@@ -97,6 +97,7 @@
 <script>
 import axios from 'axios'
 export default {
+    middleware:'isUser',
     layout: 'user',
     data() {
         return {
@@ -132,7 +133,6 @@ export default {
     },
     mounted(){
         this.getContracts()
-        console.log(localStorage.getItem('dealz-token'))
     },
     methods: {
         getContracts(){

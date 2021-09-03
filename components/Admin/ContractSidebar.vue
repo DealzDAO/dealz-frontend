@@ -68,7 +68,7 @@
                 <p class="helper-text3">{{noText}}</p>
             </div>
 
-            <div v-if="contracts.length>0" class="d-flex justify-content-center mb-3">
+            <div class="d-flex justify-content-center mb-3">
                 <p v-if="dataEnd" class="helper-text3">End of contracts</p>
                 <b-spinner v-else variant="primary" v-b-visible="loadOnScroll"></b-spinner>
             </div>
@@ -98,10 +98,6 @@ export default {
         contracts() {
             return this.$store.state.admin.contracts
         },
-    },
-    mounted() {
-        // this.filterSectionHeight()
-        this.getContracts()
     },
     methods: {
         getContracts() {
@@ -144,9 +140,6 @@ export default {
             this.page += 1
             this.getContracts()
         },
-        filterSectionHeight() {
-            return window.innerHeight
-        }
     }
 }
 </script>
@@ -165,7 +158,7 @@ export default {
 
 .active-contract {
     background-color: #f5f7f9;
-    border-right: 10px solid #04A5F6 !important;
+    border-right: 3px solid #04A5F6 !important;
 }
 
 .link:hover {

@@ -7,6 +7,7 @@
 <script>
 import Dashboard from './dashboard/index';
 export default {
+    middleware:'isLawyer',
     components:{Dashboard}
 }
 </script>

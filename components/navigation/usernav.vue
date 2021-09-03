@@ -95,7 +95,7 @@ export default {
             this.$router.push('/user/new-contract')
         },
         logout() {
-            localStorage.removeItem('dealz-token')
+            this.$auth.logout()
             this.$router.push('/login')
         }
     }

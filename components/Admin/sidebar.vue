@@ -1,34 +1,30 @@
 <template>
 <div>
-    <div class="container-fluid">
-        <div class="col">
-            <div class="sidebar">
-                <b-img src="/logo.png" fluid alt="Responsive image"></b-img>
-                <div class="sidebar-menu">
-                    <div v-for="(item,i) in menu" :key="i" class="sidebar-menu-item" :class="getActiveLook(item)" @click="menuClick(item)">
-                        <p>
-                            <b-icon :icon="item.icon" class="icon-helper"></b-icon>
-                            <span class="menu-text">{{item.title}}</span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="sidebar-bottom">
-                    <div class="sidebar-menu-outlined mb-2">
-                        <p>
-                            <b-icon icon="file-earmark-plus" class="icon-helper"></b-icon>
-                            <span class="helper-text">Create a new contract</span>
-                        </p>
-                    </div>
-                    <div class="sidebar-menu">
-                        <p @click="logout" class="sidebar-menu-item">
-                            <b-icon icon="box-arrow-left" class="icon-helper"></b-icon>
-                            <span class="menu-text">Logout</span>
-                        </p>
-                    </div>
-
-                </div>
+    <div class="sidebar">
+        <b-img src="/logo.png" fluid alt="Responsive image"></b-img>
+        <div class="sidebar-menu">
+            <div v-for="(item,i) in menu" :key="i" class="sidebar-menu-item" :class="getActiveLook(item)" @click="menuClick(item)">
+                <p>
+                    <b-icon :icon="item.icon" class="icon-helper"></b-icon>
+                    <span class="menu-text">{{item.title}}</span>
+                </p>
             </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-menu-outlined mb-2">
+                <p>
+                    <b-icon icon="file-earmark-plus" class="icon-helper"></b-icon>
+                    <span class="helper-text">Create a new contract</span>
+                </p>
+            </div>
+            <div class="sidebar-menu">
+                <p @click="logout" class="sidebar-menu-item">
+                    <b-icon icon="box-arrow-left" class="icon-helper"></b-icon>
+                    <span class="menu-text">Logout</span>
+                </p>
+            </div>
+
         </div>
     </div>
 </div>
@@ -74,8 +70,7 @@ export default {
 
         },
         logout() {
-            localStorage.removeItem('dealz-token')
-            this.$store.commit('dealz/resetUser')
+            this.$auth.logout()
             this.$router.push('/login')
         }
     }
@@ -83,10 +78,19 @@ export default {
 </script>
 
 <style lang="scss">
+.sidebar {
+    width: 268px;
+    height: 100%;
+    position: fixed;
+    z-index: 50;
+}
 .sidebar-menu-item {
     height: 40px;
     border-radius: 8px;
     padding: 8px 16px;
+}
+.sidebar-menu {
+    margin: 20px 20px;
 }
 
 .sidebar-menu-item:hover {
@@ -112,6 +116,7 @@ export default {
     height: 40px;
     border-radius: 8px;
     padding: 8px 16px;
+    margin: 0px 20px;
     border: 1px solid rgba(52, 208, 148, 0.3);
 }
 </style>

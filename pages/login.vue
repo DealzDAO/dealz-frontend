@@ -92,6 +92,7 @@ extend("email", {
 });
 
 export default {
+    middleware:'check-login',
     components: {
         BCard,
         BInputGroup,
@@ -121,7 +122,7 @@ export default {
                     }
                 })
                 this.$auth.setUser(response)
-                console.log(this.$auth)
+                
                 var token = response.data.token
                 var base64Url = token.split('.')[1];
                 var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

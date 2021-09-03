@@ -97,7 +97,7 @@ export default {
             this.$router.push('/lawyer/new-contract')
         },
         logout() {
-            // this.$auth.logout()
+            this.$auth.logout()
             this.$router.push('/login')
         }
     }

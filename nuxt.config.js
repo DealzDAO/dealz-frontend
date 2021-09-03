@@ -78,12 +78,16 @@ export default {
         },
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          // logout: { url: "/auth/logout", method: "post" },
-          user:{url:"/profile/me",method:"get"}
+          // logout: { url: "/accounts/logout", method: "get" },
+          user: { url: "/profile/me", method: "get" }
         }
       }
     },
+    redirect: {
+      home: "/login"
+    }
   },
+
   env: {
     baseUrl: API_URL,
   }

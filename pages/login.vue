@@ -111,47 +111,38 @@ export default {
         togglePassword() {
             this.isPassword = !this.isPassword;
         },
-        login() {
-            this.$refs.loginForm.validate().then((success) => {
-                if (!success) {
-                    return;
-                }
-                this.isProcessing = true;
-                axios.post('https://dealzlegal.herokuapp.com/api/auth/login',{
-                    email:this.email,
-                    password:this.password
+        async login() {
+            this.isProcessing = true;
+            try {
+                let response = await this.$auth.loginWith('local', {
+                    data: {
+                        email: this.email,
+                        password: this.password
+                    }
                 })
-                    .then((response) => {
-                        if (response.data.token) {
-                            localStorage.setItem('dealz-token', response.data.token)
-                            var token = response.data.token
-                            var base64Url = token.split('.')[1];
-                            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                            }).join(''));
-                            var decoded = JSON.parse(jsonPayload)
-                            this.$store.commit('dealz/setDealzAuth',decoded)
-                            this.$store.commit('dealz/setToken',response.data.token)
-
-                            if (decoded.User_type == 'User') {
-                                this.$router.push('/user')
-                            } else if (decoded.User_type == 'Lawyer') {
-                                this.$router.push('/lawyer')
-                            }else if (decoded.User_type == 'Admin') {
-                                this.$router.push('/admin')
-                            }
-                            this.successToast(response.data.message);
-                        }
-
-                    })
-                    .catch((err) => {
-                        this.isProcessing=false
-                        this.failureToast(err.response.data.message);
-                    })
-            });
+                this.$auth.setUser(response)
+                console.log(this.$auth)
+                var token = response.data.token
+                var base64Url = token.split('.')[1];
+                var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                var decoded = JSON.parse(jsonPayload)
+                console.log(decoded)
+                if (decoded.User_type == 'User') {
+                    this.$router.push('/user')
+                } else if (decoded.User_type == 'Lawyer') {
+                    this.$router.push('/lawyer')
+                } else if (decoded.User_type == 'Admin') {
+                    this.$router.push('/admin')
+                }
+                this.successToast(response.data.message);
+            } catch (err) {
+                console.log(err)
+            }
         },
-        forgotPass(){
+        forgotPass() {
             this.$router.push('/forgot-password')
         }
     },

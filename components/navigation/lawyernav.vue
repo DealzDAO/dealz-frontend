@@ -97,8 +97,7 @@ export default {
             this.$router.push('/lawyer/new-contract')
         },
         logout() {
-            localStorage.removeItem('dealz-token')
-            this.$store.commit('dealz/resetUser')
+            // this.$auth.logout()
             this.$router.push('/login')
         }
     }

@@ -28,7 +28,6 @@ export default {
     { src: "~/plugins/v-toast.js", mode: "client" },
     { src: "~/plugins/ripple-directive.js", mode: "client" },
     { src: "~/plugins/persistedState.js",mode:"client"},
-    { src: "~/plugins/auth-check.js",mode:"client"},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -75,20 +74,16 @@ export default {
         },
         user: {
           property: false,
-          autoFetch: true
+          autoFetch: false
         },
         endpoints: {
-          login: { url: "/user/login", method: "post" },
-          // logout: { url: "/accounts/logout", method: "get" },
-          user: { url: "/user/me", method: "get" }
+          login: { url: "/auth/login", method: "post" },
+          // logout: { url: "/auth/logout", method: "post" },
+          user:{url:"/profile/me",method:"get"}
         }
       }
     },
-    redirect: {
-      home: "/user"
-    }
   },
-
   env: {
     baseUrl: API_URL,
   }

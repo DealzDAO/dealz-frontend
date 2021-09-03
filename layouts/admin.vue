@@ -16,17 +16,7 @@
 
 <script>
 export default {
-  // middleware({ store, redirect }) {
-  //   if (store.state.dealz.dealzToken == null) {
-  //     return redirect("/login");
-  //   } else {
-  //     if (store.state.dealz.dealzUser.User_type == "User") {
-  //       return redirect("/user");
-  //     } else if (store.state.dealz.dealzUser.User_type == "Lawyer") {
-  //       return redirect("/lawyer");
-  //     }
-  //   }
-  // }
+  middleware:['auth','isAdmin']
 };
 </script>
 

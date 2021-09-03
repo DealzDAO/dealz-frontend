@@ -12,19 +12,11 @@ import Navbar from "../components/navigation/navbar.vue";
 import Header from "../components/landing/header.vue";
 import Footer from "../components/navigation/footer.vue";
 export default {
+  middleware:'check-login',
   data: () => ({
     errorCount: 0,
   }),
-  mounted() {
-        let type = localStorage.getItem('dealz-user-type')
-        if (type) {
-            if (type == 'User') {
-                this.$router.push('/user')
-            } else if (type == 'Lawyer') {
-                this.$router.push('/lawyer')
-            }
-        }
-    },
+  
   components: {
     Navbar,
     Header,

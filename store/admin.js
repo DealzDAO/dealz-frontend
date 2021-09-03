@@ -53,7 +53,7 @@ export const actions = {
         "https://dealzlegal.herokuapp.com/api/admin/single-contract/" +
         context.state.selectedContract._id, {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("dealz-token")
+            Authorization: "Bearer " + this.$auth.$state.user.data.token
           }
         }
       )
@@ -68,7 +68,7 @@ export const actions = {
             "https://dealzlegal.herokuapp.com/api/contracts/get-comment/" +
             context.state.selectedContract._id, {
               headers: {
-                Authorization: "Bearer " + localStorage.getItem("dealz-token")
+                Authorization: "Bearer " + this.$auth.$state.user.data.token
               }
             }
           )
@@ -83,7 +83,7 @@ export const actions = {
         "https://dealzlegal.herokuapp.com/api/admin/single-lawyer/" +
         context.state.selectedLawyer._id, {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("dealz-token")
+            Authorization: "Bearer " + this.$auth.$state.user.data.token
           }
         }
       )

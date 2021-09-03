@@ -89,7 +89,7 @@ export default {
         getLawyer(){
             axios.get('https://dealzlegal.herokuapp.com/api/admin/all-lawyer',{
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {

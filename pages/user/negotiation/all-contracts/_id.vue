@@ -80,7 +80,7 @@ export default {
         getContractDetails() {
             axios.get('https://dealzlegal.herokuapp.com/api/contracts/getcontract?id='+this.id, {
                     headers: {
-                        Authorization: 'Bearer ' + this.token
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {

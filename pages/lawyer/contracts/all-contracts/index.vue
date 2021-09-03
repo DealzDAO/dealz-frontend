@@ -51,14 +51,13 @@ export default {
         }
     },
     mounted() {
-        this.token = localStorage.getItem('dealz-token')
         this.getLawyerContracts()
     },
     methods: {
         getLawyerContracts() {
             axios.get('https://dealzlegal.herokuapp.com/api/lawyer/all-contracts?page=' + this.page + '&limit=' + this.limit,{
                     headers: {
-                        Authorization: 'Bearer ' + this.token
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {

@@ -128,7 +128,7 @@ export default {
         getContractDetails() {
             axios.get('https://dealzlegal.herokuapp.com/api/lawyer/single-collab-requests/' + this.id, {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {
@@ -140,7 +140,7 @@ export default {
         getComments() {
             axios.get('https://dealzlegal.herokuapp.com/api/contracts/get-comment/' + this.contract._id, {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {
@@ -156,7 +156,7 @@ export default {
             }
             const config = {
                 headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                 }
             }
             axios.post('https://dealzlegal.herokuapp.com/api/contracts/comment/' + this.contract._id, params, config)
@@ -174,7 +174,7 @@ export default {
             }
             const config={
                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
             }
              axios.post('https://dealzlegal.herokuapp.com/api/lawyer/approve-collab-contract',params,config)

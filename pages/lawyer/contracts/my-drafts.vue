@@ -39,7 +39,7 @@ export default {
         getAllDrafts(){
             axios.get('https://dealzlegal.herokuapp.com/api/contracts/all-drafts',{
                  headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
             })
             .then(res=>{

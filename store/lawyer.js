@@ -82,7 +82,7 @@ export const state = () => ({
         }
         const config = {
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                Authorization: 'Bearer ' + this.$auth.$state.user.data.token
             }
         }
         axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
@@ -100,7 +100,7 @@ export const state = () => ({
         }
         const config = {
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                Authorization: 'Bearer ' + this.$auth.$state.user.data.token
             }
         }
         axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
@@ -122,7 +122,7 @@ export const state = () => ({
         }
         const config = {
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                Authorization: 'Bearer ' + this.$auth.$state.user.data.token
             }
         }
         axios.post('https://dealzlegal.herokuapp.com/api/contracts/saveasdraft',params,config).then(res => {
@@ -144,7 +144,7 @@ export const state = () => ({
         }
         const config = {
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                Authorization: 'Bearer ' + this.$auth.$state.user.data.token
             }
         }
         axios.post('https://dealzlegal.herokuapp.com/api/contracts/upload',params,config)

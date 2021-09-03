@@ -105,7 +105,6 @@ export default {
         }
     },
     mounted() {
-        this.token = localStorage.getItem('dealz-token')
         this.getContracts()
 
     },
@@ -185,7 +184,7 @@ export default {
         getContracts() {
             axios.get('https://dealzlegal.herokuapp.com/api/user/contracts?page=' + this.page + '&limit=' + this.limit, {
                     headers: {
-                        Authorization: 'Bearer ' + this.token
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {

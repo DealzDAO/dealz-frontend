@@ -106,7 +106,7 @@ export default {
         getContracts() {
             axios.get('https://dealzlegal.herokuapp.com/api/admin/all-contracts?page=' + this.page + '&limit=' + this.limit, {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {

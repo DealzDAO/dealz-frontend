@@ -130,7 +130,7 @@ export default {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
                 var decoded = JSON.parse(jsonPayload)
-                console.log(decoded)
+
                 if (decoded.User_type == 'User') {
                     this.$router.push('/user')
                 } else if (decoded.User_type == 'Lawyer') {

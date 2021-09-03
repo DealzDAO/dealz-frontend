@@ -83,11 +83,8 @@ export default {
         }
       }
     },
-    redirect: {
-      home: "/login"
-    }
+    redirect:false
   },
-
   env: {
     baseUrl: API_URL,
   }

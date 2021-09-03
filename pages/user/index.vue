@@ -7,7 +7,8 @@
 <script>
 import Dashboard from './dashboard/index';
 export default {
-    components:{Dashboard},
     middleware:'isUser',
+    components:{Dashboard},
+    
 }
 </script>

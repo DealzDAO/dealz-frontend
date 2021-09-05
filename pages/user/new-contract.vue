@@ -19,42 +19,21 @@
                 </template>
                 <b-form-input v-model="search" class="input-style" style="border-left:none;" :state="null" placeholder="Contract Templates"></b-form-input>
             </b-input-group>
-
+            <div v-if="searched==true">
+                <p class="helper-text2 mt-3">Search Results</p>
+                <ul v-if="results.length>0">
+                    <li v-for="(item,i) in results" :key="i" class="mt-2" @click="seeContractDetail(item)">
+                        <a href="#" class=" list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-1 subtitle-text">{{item.title}}</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <small v-else class="text-muted ml-5">No contracts found. Try something else.</small>
+            </div>
         </div>
 
-        <!-- search section -->
-        <div class="row px-3 mt-3">
-            <div class="col-6">
-                <p class="subtitle-text4">Search contract templates</p>
-                <b-input-group>
-                    <template #prepend>
-                        <b-input-group-text class="bg-white input-prepend">
-                            <b-icon icon="search" style="opacity:0.2"></b-icon>
-                        </b-input-group-text>
-                    </template>
-                    <b-form-input v-model="search" class="input-style" style="border-left:none;" :state="null" placeholder="Contract Templates"></b-form-input>
-                </b-input-group>
-
-                <div v-if="searched==true">
-                    <p class="helper-text2 mt-3">Search Results</p>
-                    <ul v-if="results.length>0">
-                        <li v-for="(item,i) in results" :key="i" class="mt-2" @click="seeContractDetail(item)">
-                            <a href="#" class=" list-group-item-action flex-column align-items-start">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <p class="mb-1 subtitle-text">{{item.title}}</p>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <small v-else class="text-muted ml-5">No contracts found. Try something else.</small>
-                </div>
-            </div>
-            <div class="col-6">
-                <p class="subtitle-text4">Or select a contract bundle</p>
-                <b-form-select v-model="bundle" :options="bundles" class="input-style"></b-form-select>
-            </div>
-
-        </div>
         <div class="row center-push justify-content-center" v-if="results.length>0">
             <b-pagination v-model="page" prev-text="Prev" next-text="Next" size="sm" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
         </div>
@@ -248,8 +227,8 @@ export default {
                     disabled: true
                 },
                 {
-                    value: "Music Artist",
-                    text: "Music Artist"
+                    value: "Startup",
+                    text: "Startup"
                 },
                 {
                     value: "Designer",
@@ -258,6 +237,10 @@ export default {
                 {
                     value: "Founder",
                     text: "Founder"
+                },
+                {
+                    value: "Art",
+                    text: "Art"
                 },
             ],
             readyContract: false,
@@ -354,16 +337,24 @@ export default {
 
         }
     },
-    mounted() {
-        this.token = localStorage.getItem('dealz-token')
-    },
     methods: {
+
         searchContracts() {
-            axios.get('https://dealzlegal.herokuapp.com/api/contracts/search?search=' + this.search + '&page=' + this.page + '&limit=' + this.limit)
+            const params = {
+                    bundles: this.bundle,
+                    title: this.search
+                }
+                const config = {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                    }
+                }
+            axios.post(this.$axios.defaults.baseURL+'/user/search-by-bundles?' + 'page=' + this.page + '&limit=' + this.limit,params,config)
                 .then(res => {
+                    console.log(res.data)
                     this.searched = true
-                    this.results = res.data.search
-                    this.rows = res.data.total_results
+                    this.results = res.data
+                    // this.rows = res.data.total_results
                 }).catch(err => console.log(err.response))
         },
         input(e) {
@@ -373,23 +364,28 @@ export default {
         seeContractDetail(item) {
             this.selectedContract = item
             this.viewContractDialog = true
-            axios.get('https://dealzlegal.herokuapp.com/api/contracts/getcontract?id=' + item._id)
+            const config = {
+                headers: {
+                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                }
+            }
+            axios.get(this.$axios.defaults.baseURL+'/user/get-single-contract/' + item._id,config)
                 .then(res => {
                     this.selectedContract = res.data
                 })
                 .catch(err => console.log(err.response))
         },
         continuePayment() {
-            const bodyParameters = {
-                contract_id: this.selectedContract._id,
-                txnId: 123
+            const params = {
+                id: this.selectedContract._id,
+
             }
             const config = {
                 headers: {
-                    Authorization: 'Bearer ' + this.token
+                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                 }
             }
-            axios.post('https://dealzlegal.herokuapp.com/api/contracts/select', bodyParameters, config)
+            axios.post(this.$axios.defaults.baseURL+'/user/select-contract',params, config)
                 .then(res => {
                     this.readyContract = true
                 }).catch(err => console.log(err.response))
@@ -409,19 +405,21 @@ export default {
     opacity: 0.2;
     margin-left: -10px;
 }
-.adjust-btn{
-    border:1px;
-    margin:0px 0px 1px 1px;
+
+.adjust-btn {
+    border: 1px;
+    margin: 0px 0px 1px 1px;
     border-right: 1px solid #dfe6ec;
     border-left: none;
     border-top: none;
     border-bottom: none;
-    border-top-left-radius:10px;
-    border-bottom-left-radius:10px;
-    border-top-right-radius:0px;
-    border-bottom-right-radius:0px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 
 }
+
 b-card {
     box-shadow: none;
 }

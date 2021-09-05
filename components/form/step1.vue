@@ -79,8 +79,8 @@ export default {
     },
     data() {
         return {
-            title: '',
-            detail: '',
+            // title: '',
+            // detail: '',
             btnText: 'Save Draft',
             btnDisabled: false,
             config: {
@@ -116,16 +116,30 @@ export default {
             }
         }
     },
+    computed:{
+        title:{
+            get(){
+                return this.$store.state.lawyer.title
+            },
+            set(value){
+                this.$store.commit('lawyer/setTitle',value)
+            }
+        },
+        detail:{
+            get(){
+                return this.$store.state.lawyer.detail
+            },
+            set(value){
+                this.$store.commit('lawyer/setDetail',value)
+            }
+        }
+    },
     methods: {
         next() {
             this.$refs.contractForm.validate().then((success) => {
                 if (!success) {
                     return;
                 }
-                this.$store.commit('lawyer/setFirstStepData', ({
-                    'title': this.title,
-                    'detail': this.detail
-                }))
                 this.$store.commit('lawyer/nextStep')
             })
 
@@ -152,11 +166,6 @@ export default {
                 }
                 this.btnText = 'Saving...'
                 this.btnDisabled = true
-
-                this.$store.commit('lawyer/setFirstStepData', ({
-                    'title': this.title,
-                    'detail': this.detail
-                }))
                 this.$store.dispatch('lawyer/saveSecondDraft')
             })
 

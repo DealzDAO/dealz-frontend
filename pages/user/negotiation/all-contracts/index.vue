@@ -1,12 +1,12 @@
 <template>
 <div>
     <div class="container">
-        <div class="row px-2">
-            <div class="col">
+        <div class="row px-2 justify-content-center">
+            <div class="col" v-if="contracts.length>0">
                 <div v-if="contracts.length>0">
                     <div v-for="(item,i) in contracts" :key="i" class="mt-4">
-                        <p class="mb-1 subtitle-text4 link" @click="seeDetail(item)">{{item.contract_id.title}}</p>
-                        <div class="admin-chip" :class="getBg(item)">
+                        <p class="mb-1 subtitle-text4 link" @click="seeDetail(item)">Title is missing in api response</p>
+                        <div class="chip" :class="getBg(item)">
                             <p :class="getColor(item)">
                                 <b-icon :icon="getIcon(item)"></b-icon>
                                 {{item.status}}
@@ -39,9 +39,14 @@
                     <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
                 </div>
             </div>
-
+             <div v-else-if="contracts.length==0 && noText==''" class="d-flex justify-content-center mt-5">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
+            
+            <p v-else class="helper-text3 text-center">{{noText}}</p>
         </div>
-    </div>
+        </div>
+    
 </div>
 </template>
 
@@ -101,7 +106,7 @@ export default {
                 },
 
             ],
-            token: ''
+            noText:''
         }
     },
     mounted() {
@@ -182,14 +187,18 @@ export default {
             }
         },
         getContracts() {
-            axios.get('https://dealzlegal.herokuapp.com/api/user/contracts?page=' + this.page + '&limit=' + this.limit, {
+            axios.get(this.$axios.defaults.baseURL+'/user/all-contracts?page=' + this.page + '&limit=' + this.limit, {
                     headers: {
                         Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {
+                    console.log('nego:',res.data)
                     this.contracts = res.data.contracts
-                    this.rows = res.data.total_contracts
+                    this.rows = res.data.docCount
+                    if(contracts.length==0){
+                        this.noText='No Contracts Found'
+                    }
                 })
                 .catch(err => console.log(err))
 

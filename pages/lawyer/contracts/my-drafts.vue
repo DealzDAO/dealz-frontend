@@ -3,7 +3,7 @@
     <div class="container">
         <div v-if="drafts.length>0" class="row px-3">
             <div class="col">
-                <div v-for="(item,i) in drafts" :key="i" class="mt-4">
+                <div v-for="(item,i) in drafts" :key="i" class="mt-4 link">
                     <p class="subtitle-text4 mb-2">{{item.title}}</p>
                     <p class="helper-text"><b>Last Edited:</b> {{ moment.utc(item.createdAt).fromNow()}}</p>
                 </div>
@@ -49,6 +49,10 @@ export default {
                 }
             })
             .catch(err=>console.log(err.response))
+        },
+        editDraft(item){
+            this.$store.commit('lawyer/editDraft',item)
+            this.$store.dispatch('lawyer')
         }
     }
 }

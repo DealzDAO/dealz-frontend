@@ -19,18 +19,11 @@
             </div>
 
             <div class="sidebar-menu sidebar-bottom">
-                <div class="sidebar-menu-item">
+                 <div v-for="(item,i) in menu2" :key="i" class="sidebar-menu-item" :class="getActiveLook(item)" @click="menuClick(item)">
                     <p>
-                        <b-icon icon="chat-square-text" class="icon-helper"></b-icon>
-                        <span class="menu-text">Messages</span>
-                        <b-badge pill variant="danger">3</b-badge>
-                    </p>
-                </div>
-                <div class="sidebar-menu-item">
-                    <p>
-                        <b-icon icon="bell" class="icon-helper"></b-icon>
-                        <span class="menu-text">Notifications</span>
-                        <b-badge pill variant="danger" class="ml-10">14</b-badge>
+                        <b-icon :icon="item.icon" class="icon-helper"></b-icon>
+                        <span class="menu-text">{{item.title}}</span>
+                        <b-badge pill variant="danger">{{item.num}}</b-badge>
                     </p>
                 </div>
                 <hr>
@@ -72,6 +65,19 @@ export default {
                     icon: 'journal-check',
                     link: '/user/executed'
                 }
+            ],
+            menu2: [{
+                    title: 'Messages',
+                    icon: 'chat-square-text',
+                    link: '/user/messages',
+                    num: 3
+                },
+                {
+                    title: 'Notifications',
+                    icon: 'bell',
+                    link: '/user/notifications',
+                    num: 14
+                },
             ]
         }
     },

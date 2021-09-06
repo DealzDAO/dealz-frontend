@@ -3,9 +3,9 @@
     <div class="container">
         <div v-if="drafts.length>0" class="row px-3">
             <div class="col">
-                <div v-for="(item,i) in drafts" :key="i" class="mt-4 link">
+                <div v-for="(item,i) in drafts" :key="i" class="p-2 mt-2 clickable">
                     <p class="subtitle-text4 mb-2">{{item.title}}</p>
-                    <p class="helper-text"><b>Last Edited:</b> {{ moment.utc(item.createdAt).fromNow()}}</p>
+                    <p class="helper-text mb-0"><b>Last Edited:</b> {{ moment.utc(item.createdAt).fromNow()}}</p>
                 </div>
 
             </div>

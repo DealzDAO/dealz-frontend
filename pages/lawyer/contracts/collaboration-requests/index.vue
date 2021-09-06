@@ -10,7 +10,7 @@
         </div>
         <div class="row" v-if="collabs.length>0">
             <div class="col">
-                <div v-for="(item,i) in collabs" :key="i" class="m-3">
+                <div v-for="(item,i) in collabs" :key="i" class="m-2 p-2 clickable">
                     <p class="mb-1 subtitle-text4 link" @click="seeDetail(item)">{{item.title}}</p>
                     <!-- status -->
                     <div class="admin-chip" :class="getBg(item)">
@@ -50,23 +50,6 @@ export default {
         return {
             collabs: [],
             noText: '',
-            items: [{
-                    title: 'Founder advisor standard template',
-                    status: 'Overdue',
-                    comments: 15,
-                },
-                {
-                    title: 'Brain Trust New Sound Exchange Procedures For LOD',
-                    status: 'Work in Progress',
-                    comments: 3,
-                },
-                {
-                    title: 'Brain Trust Net Profits Producer Form',
-                    status: 'Available',
-                    comments: 0,
-                },
-
-            ],
             objects: [{
                     title: 'Claim Collaborator Seats'
                 },

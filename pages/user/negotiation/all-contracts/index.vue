@@ -4,7 +4,7 @@
         <div class="row px-2 justify-content-center">
             <div class="col" v-if="contracts.length>0">
                 <div v-if="contracts.length>0">
-                    <div v-for="(item,i) in contracts" :key="i" class="mt-4">
+                    <div v-for="(item,i) in contracts" :key="i" class="mt-4 clickable">
                         <p class="mb-1 subtitle-text4 link" @click="seeDetail(item)">Title is missing in api response</p>
                         <div class="chip" :class="getBg(item)">
                             <p :class="getColor(item)">
@@ -217,4 +217,5 @@ export default {
     }
 }
 </script>
+
 

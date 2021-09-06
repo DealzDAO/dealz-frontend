@@ -238,3 +238,11 @@ button.page-link{
 .b-pagination-pills .page-item .page-link{
   border:none;
 }
+.clickable{
+  cursor: pointer;
+  border-radius:8px;
+}
+.clickable:hover{
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+    transition-duration: 0.5s;
+}

@@ -85,7 +85,6 @@ export default {
     },
     mounted() {
         this.getContractDetails()
-        console.log('user:',this.dealzUser)
     },
     methods: {
         getContractDetails() {
@@ -120,7 +119,7 @@ export default {
                 .catch(err => console.log(err.response))
         },
         getBtn() {
-            if (this.contract.accepted.includes(this.dealzUser._id)) {
+            if (this.contract.accepted.includes(this.$auth.$state.user.id)) {
                 this.disabled = true
                 this.btnText = 'Collaborator Request Accepted'
             } else {

@@ -110,9 +110,6 @@ export default {
         id() {
             return this.$route.params.id
         },
-        dealzUser(){
-            return this.$store.state.dealz.dealzUser
-        }
     },
     watch: {
         commentText() {
@@ -187,7 +184,7 @@ export default {
                 .catch(err => console.log(err.response))
         },
         getBtn(){
-            if(this.contract.approved.includes(this.dealzUser.id)){
+            if(this.contract.approved.includes(this.$auth.$state.user.id)){
                 this.disabled=true
                 this.btnText='Contract Approved'
             }

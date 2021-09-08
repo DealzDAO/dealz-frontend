@@ -1,10 +1,10 @@
 <template>
 <div>
-    <div class="container">
+    <div class="container" v-if="contract != ''">
         <div class="row px-4 pt-3">
             <p class="subtitle-text2 link">
                 <b-icon icon="arrow-left" class="link mr-lg-3" @click="goBack"></b-icon>
-                {{contract.title}}
+                {{contract.contract.title}}
             </p>
         </div>
         <div class="row px-5">
@@ -13,35 +13,35 @@
                 <div class="admin-chip bg-secondary-light">
                     <p class="text-secondary">
                         <b-icon icon="clock-history"></b-icon>
-                        Ready to Send
+                        {{contract.contract.status}}
                     </p>
                 </div>
                 <!-- end status -->
 
-                <!-- comments -->
-                <div class="admin-chip bg-success-soft">
-                    <p class="text-success">
-                        <b-icon icon="chat"></b-icon>
-                        3 comments
+                 <!-- status -->
+                <div class="admin-chip bg-secondary-light">
+                    <p class="text-secondary">
+                        <b-icon icon="clock-history"></b-icon>
+                        {{contract.userContract.status}}
                     </p>
                 </div>
-                <!-- end spots -->
+                <!-- end status -->
 
                 <!-- accepted -->
                 <div class="chip bg-white">
-                    <span>Approved 2 days ago</span>
+                    <span>Approved {{moment.utc(contract.contract.createdAt).fromNow()}}</span>
                 </div>
                 <!-- end accepted -->
 
                 <!-- contract -->
                 <div class="contract-box mt-2">
-                    <div v-html="contract.contract_details"></div>
+                    <div v-html="contract.contract.contract_details"></div>
                 </div>
                 <div class="mt-2">
-                    <b-button class="my-btn bg-primary-light px-3">
+                    <b-button class="my-btn bg-primary-light px-3" @click="fillUp">
                         <p>
                             <b-icon icon="pencil"></b-icon>
-                            Edit Contrat
+                            Fill Contract
                         </p>
                     </b-button>
                     <b-button class="my-btn bg-primary-light px-3 float-right">
@@ -61,36 +61,47 @@
 
 <script>
 import axios from 'axios';
-
+import moment from 'moment';
 export default {
     data() {
         return {
-            contract: ''
+            contract: '',
+            moment:moment
         }
     },
     computed: {
         id() {
             return this.$route.params.id
-        }
+        },
     },
-    created() {
+    mounted() {
         this.getContractDetails()
     },
     methods: {
         getContractDetails() {
-            axios.get('https://dealzlegal.herokuapp.com/api/contracts/getcontract?id='+this.id, {
+            axios.get(this.$axios.defaults.baseURL +'/user/user-contract/'+this.id, {
                     headers: {
                         Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {
+                    console.log('edit:',res.data)
                     this.contract = res.data
+                    this.$store.commit('user/setFillable',res.data)
                 })
                 .catch(err => console.log(err))
 
         },
         goBack() {
             this.$router.push('/user/negotiation/all-contracts')
+        },
+        fillUp(){
+           this.$router.push({
+                        name: 'user-negotiation-all-contracts-id-fill',
+                        params: {
+                            id: this.contract.userContract._id
+                        }
+                    })
         }
 
     }

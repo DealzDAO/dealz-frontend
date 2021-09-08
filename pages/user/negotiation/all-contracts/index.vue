@@ -4,9 +4,9 @@
         <div class="row px-2 justify-content-center">
             <div class="col" v-if="contracts.length>0">
                 <div v-if="contracts.length>0">
-                    <div v-for="(item,i) in contracts" :key="i" class="mt-4 clickable">
-                        <p class="mb-1 subtitle-text4 link" @click="seeDetail(item)">Title is missing in api response</p>
-                        <div class="chip" :class="getBg(item)">
+                    <div v-for="(item,i) in contracts" :key="i" class="m-2 p-2 clickable">
+                        <p class="mb-1 subtitle-text4 link" @click="seeSelected(item)">{{item.contract[0]}}</p>
+                        <div class="admin-chip" :class="getBg(item)">
                             <p :class="getColor(item)">
                                 <b-icon :icon="getIcon(item)"></b-icon>
                                 {{item.status}}
@@ -19,15 +19,15 @@
                             </p>
                         </div>
                         <div v-if="item.approved" class="admin-chip bg-primary-soft">
-                             <p class="text-helper">
+                            <p class="text-helper">
                                 <b-icon icon="check2" class="user-icon"></b-icon>
-                                Approved 
+                                Approved
                             </p>
                         </div>
                         <div v-if="item.questions>0" class="admin-chip bg-primary-soft">
-                             <p class="text-helper">
+                            <p class="text-helper">
                                 <b-icon icon="check2" class="user-icon"></b-icon>
-                                {{item.questions}} Questions 
+                                {{item.questions}} Questions
                             </p>
                         </div>
 
@@ -39,14 +39,14 @@
                     <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
                 </div>
             </div>
-             <div v-else-if="contracts.length==0 && noText==''" class="d-flex justify-content-center mt-5">
+            <div v-else-if="contracts.length==0 && noText==''" class="d-flex justify-content-center mt-5">
                 <b-spinner variant="primary"></b-spinner>
             </div>
-            
+
             <p v-else class="helper-text3 text-center">{{noText}}</p>
         </div>
-        </div>
-    
+    </div>
+
 </div>
 </template>
 
@@ -62,51 +62,7 @@ export default {
             rows: 0,
             page: 1,
             hasBg: true,
-            items: [{
-                    title: 'Brain Trust New Sound Exchange Procedures for LOD',
-                    status: 'selected',
-                    comment: '',
-                    accepted: true,
-                    sent: true
-                },
-                {
-                    title: 'Founder advisor standard template',
-                    status: 'Pending review',
-                    comment: '3',
-                    accepted: false,
-                    sent: true
-                },
-                {
-                    title: 'Music contract',
-                    status: 'Overdue',
-                    comment: '8',
-                    accepted: false,
-                    sent: true
-                },
-                {
-                    title: 'Founder advisor standard template',
-                    status: 'Pending Signature',
-                    comment: '3',
-                    accepted: false,
-                    sent: true
-                },
-                {
-                    title: 'Founder advisor standard template',
-                    status: 'Pending review',
-                    comment: '3',
-                    accepted: false,
-                    sent: true
-                },
-                {
-                    title: 'Founder advisor standard template',
-                    status: 'Ownership requests',
-                    comment: '3',
-                    accepted: false,
-                    sent: true
-                },
-
-            ],
-            noText:''
+            noText: ''
         }
     },
     mounted() {
@@ -116,6 +72,9 @@ export default {
     methods: {
         getBg(item) {
             switch (item.status) {
+                case 'New':
+                    return 'bg-primary-soft';
+                    break;
                 case 'Ready to Send':
                     return 'bg-success-soft';
                     break;
@@ -165,6 +124,9 @@ export default {
         },
         getColor(item) {
             switch (item.status) {
+                case 'New':
+                    return 'text-primary-light';
+                    break;
                 case 'Ready to Send':
                 case 'Draft':
                     return 'text-secondary-light';
@@ -187,18 +149,18 @@ export default {
             }
         },
         getContracts() {
-            axios.get(this.$axios.defaults.baseURL+'/user/all-contracts?page=' + this.page + '&limit=' + this.limit, {
+            axios.get(this.$axios.defaults.baseURL + '/user/all-contracts?page=' + this.page + '&limit=' + this.limit, {
                     headers: {
                         Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {
                     console.log('nego:',res.data)
-                    this.contracts = res.data.contracts
-                    this.rows = res.data.docCount
-                    if(contracts.length==0){
-                        this.noText='No Contracts Found'
-                    }
+                    this.contracts = res.data
+                    // this.rows = res.data.docCount
+                    // if (this.contracts.length == 0) {
+                    //     this.noText = 'No Contracts Found'
+                    // }
                 })
                 .catch(err => console.log(err))
 
@@ -207,15 +169,41 @@ export default {
             this.page = 1
             this.getContracts()
         },
-        seeDetail(item){
-            this.$router.push({
-                name:'user-negotiation-all-contracts-id',
-                params:{id:item.contract_id._id}
-            })
+        seeSelected(item) {
+            switch (item.status) {
+                case 'New':
+                    this.$router.push({
+                        name: 'user-negotiation-all-contracts-id-edit',
+                        params: {
+                            id: item._id
+                        }
+                    })
+                    break;
+                case 'Ready to Send':
+                    return 'bg-success-soft';
+                    break;
+                case 'Draft':
+                    return 'bg-light';
+                    break;
+                case 'Sent':
+                    return 'bg-completed';
+                    break;
+                case 'Received':
+                    return 'bg-primary-soft';
+                    break;
+                case 'Pending Signature':
+                    return 'bg-secondary-soft';
+                    break;
+                case 'Cancel Requests':
+                    return 'bg-danger-soft';
+                    break;
+                case 'Verification Awaiting':
+                    return 'bg-warning-soft';
+                    break;
+            }
+
         }
-        
+
     }
 }
 </script>
-
-

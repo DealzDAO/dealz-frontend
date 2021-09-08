@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     layout: 'user',
     data() {
@@ -29,6 +30,23 @@ export default {
                 },
 
             ]
+        }
+    },
+    mounted(){
+        this.getDrafts()
+    },
+    methods:{
+        getDrafts(){
+            const config={
+                headers: {
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                    }
+            }
+            axios.get(this.$axios.defaults.baseURL +'/user/all-drafts/',config)
+                .then(res => {
+                    console.log(res.data)
+                })
+                .catch(err => console.log(err))
         }
     }
 }

@@ -81,10 +81,11 @@
                     <p class="data1">{{item.title}}</p>
                     <p class="helper-text3">{{item.text}}</p>
                     <p>
-                        <b-button v-if="item.button" class="my-btn mx-auto mt-2">
-                            <p>Connect</p>
+                        <b-button v-if="item.button" @click="connectWallet" class="my-btn mx-auto mt-2 enableEthereumButton">
+                            <p>{{walletBtn}}</p>
                         </b-button>
                     </p>
+                    <h5>Account: <span class="showAccount helper-text3"></span></h5>
 
                 </div>
             </div>
@@ -97,10 +98,11 @@
 <script>
 import axios from 'axios'
 export default {
-    middleware:'isUser',
+    middleware: 'isUser',
     layout: 'user',
     data() {
         return {
+            walletBtn:'Connect',
             financial: [{
                     price: '$230.89',
                     text: 'Dealz Balance'
@@ -131,21 +133,39 @@ export default {
             templates: [],
         }
     },
-    mounted(){
+    mounted() {
         this.getContracts()
     },
     methods: {
-        getContracts(){
-             axios.get('https://dealzlegal.herokuapp.com/api/user/userdash-contract', {
-                 headers: {
+        getContracts() {
+            axios.get('https://dealzlegal.herokuapp.com/api/user/userdash-contract', {
+                    headers: {
                         Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
-             })
-                    .then(res => {
-                       this.templates=res.data
-                       console.log(res.data)
-                    })
-                    .catch(err => console.log(err.response))
+                })
+                .then(res => {
+                    this.templates = res.data
+                    console.log(res.data)
+                })
+                .catch(err => console.log(err.response))
+        },
+        connectWallet() {
+            const ethereumButton = document.querySelector('.enableEthereumButton');
+            const showAccount = document.querySelector('.showAccount');
+
+            ethereumButton.addEventListener('click', () => {
+                getAccount();
+            });
+ 
+            async function getAccount() {
+                const accounts = await ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+                const account = accounts[0];
+                showAccount.innerHTML = account;
+                console.log(account)
+            }
+
         }
     }
 }

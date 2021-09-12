@@ -3,9 +3,10 @@
     <div class="container">
         <div class="row px-2 justify-content-center">
             <div class="col" v-if="contracts.length>0">
+                responses are different in draft ..title is missing
                 <div v-if="contracts.length>0">
                     <div v-for="(item,i) in contracts" :key="i" class="m-2 p-2 clickable">
-                        <p class="mb-1 subtitle-text4 link" @click="seeSelected(item)">{{item.contract[0]}}</p>
+                        <p class="mb-1 subtitle-text4 link" @click="seeSelected(item)">{{item._id}}</p>
                         <div class="admin-chip" :class="getBg(item)">
                             <p :class="getColor(item)">
                                 <b-icon :icon="getIcon(item)"></b-icon>
@@ -156,7 +157,7 @@ export default {
                 })
                 .then(res => {
                     console.log('nego:',res.data)
-                    this.contracts = res.data
+                    this.contracts = res.data.contract
                     // this.rows = res.data.docCount
                     // if (this.contracts.length == 0) {
                     //     this.noText = 'No Contracts Found'

@@ -18,7 +18,7 @@
                 </div>
                 <!-- end status -->
 
-                 <!-- status -->
+                <!-- status -->
                 <div class="admin-chip bg-secondary-light">
                     <p class="text-secondary">
                         <b-icon icon="clock-history"></b-icon>
@@ -44,7 +44,7 @@
                             Fill Contract
                         </p>
                     </b-button>
-                    <b-button class="my-btn bg-primary-light px-3 float-right">
+                    <b-button class="my-btn bg-primary-light px-3 float-right" @click="approvalDialog=true">
                         <p>
                             <b-icon icon="pencil"></b-icon>
                             Send for Approval
@@ -56,17 +56,64 @@
 
         </div>
     </div>
+    <!-- approval dialog -->
+    <b-modal v-model="approvalDialog" centered hide-footer>
+        <div class="bg-white viewBox">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <p class="text-center title-text2 mb-0">Send for approval</p>
+                    <p class="text-center helper-text3">Please enter the email address of the recipient.</p>
+                    <ValidationObserver ref="approveForm">
+                        <ValidationProvider name="email" rules="required|email" v-slot="{ errors }" ref="email">
+                            <b-form-input placeholder="Email Address" v-model="email" type="email" :state="errors.length > 0 ? false : null" class="mt-md-4 mb-0 radius10" />
+                            <span class="helper-text3 text-danger">{{ errors[0] }}</span>
+                        </ValidationProvider>
+                    </ValidationObserver>
+                    <b-button class="my-btn bg-primary-light mb-10 mt-3" block @click="sendForApproval">
+                        <p>{{sendText}}</p>
+                    </b-button>
+
+                </div>
+            </div>
+        </div>
+    </b-modal>
+    <!-- end approval -->
 </div>
 </template>
 
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import {
+    ValidationProvider,
+    ValidationObserver,
+    extend
+} from "vee-validate";
+import {
+    required,
+    email
+} from "vee-validate/dist/rules";
+extend("required", {
+    ...required,
+    message: "This field is required",
+});
+
+extend("email", {
+    ...email,
+    message: "This field must be a valid email",
+});
 export default {
+    components: {
+        ValidationProvider,
+        ValidationObserver
+    },
     data() {
         return {
             contract: '',
-            moment:moment
+            moment: moment,
+            approvalDialog:false,
+            email: '',
+            sendText:'Send Contract'
         }
     },
     computed: {
@@ -79,15 +126,15 @@ export default {
     },
     methods: {
         getContractDetails() {
-            axios.get(this.$axios.defaults.baseURL +'/user/user-contract/'+this.id, {
+            axios.get(this.$axios.defaults.baseURL + '/user/user-contract/' + this.id, {
                     headers: {
                         Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                     }
                 })
                 .then(res => {
-                    console.log('edit:',res.data)
+                    console.log('edit:', res.data)
                     this.contract = res.data
-                    this.$store.commit('user/setFillable',res.data)
+                    this.$store.commit('user/setFillable', res.data)
                 })
                 .catch(err => console.log(err))
 
@@ -95,19 +142,42 @@ export default {
         goBack() {
             this.$router.push('/user/negotiation/all-contracts')
         },
-        fillUp(){
-           this.$router.push({
-                        name: 'user-negotiation-all-contracts-id-fill',
-                        params: {
-                            id: this.contract.userContract._id
-                        }
-                    })
+        fillUp() {
+            this.$router.push({
+                name: 'user-negotiation-all-contracts-id-fill',
+                params: {
+                    id: this.contract.userContract._id
+                }
+            })
+        },
+        sendForApproval() {
+            const params = {
+                id: this.$auth.$state.user.id,
+                email: this.email
+            }
+            const config = {
+                headers: {
+                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                }
+            }
+            this.$refs.approveForm.validate().then((success) => {
+                    if (!success) {
+                        return;
+                    }
+                    this.sendText='Sending...'
+                    this.successToast('Contract successfully sent for approval');
+
+                    axios.post(this.$axios.defaults.baseURL + '/user/send-for-approval/', params, config)
+                        .then(res => {
+                             this.approvalDialog=false
+                             this.sendText='Send Contract'
+                            this.successToast('Contract successfully sent for approval');
+
+                        })
+                        .catch(err => console.log(err))
+
+                })
+            }
         }
-
     }
-}
 </script>
-
-<style scoped>
-
-</style>

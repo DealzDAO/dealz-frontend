@@ -70,7 +70,7 @@ export default {
           property: "token",
           required: true,
           type: "Bearer",
-          maxAge: 1800 * 2
+          maxAge: 1800 * 5
         },
         user: {
           property: false,
@@ -78,7 +78,7 @@ export default {
         },
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          // logout: { url: "/accounts/logout", method: "get" },
+          logout: { url: "/auth/logout", method: "get" },
           user: { url: "/profile/me", method: "get" }
         }
       }

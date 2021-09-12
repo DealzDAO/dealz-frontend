@@ -2,7 +2,7 @@
 <div>
     <div class="container">
         <div class="row px-4 pt-3">
-            <p class="subtitle-text2 link">
+            <p class="subtitle-text2">
                 <b-icon icon="arrow-left" class="link mr-lg-3" @click="goBack"></b-icon>
                 {{fillable.contract.title}}
             </p>
@@ -115,7 +115,7 @@ export default {
         },
         goBack() {
             this.$router.push({
-                name: '/user/negotiation/all-contracts-id-edit',
+                path: '/user/negotiation/all-contracts/'+this.fillable.userContract._id+'/edit',
                 params: {
                     id: this.fillable.userContract._id
                 }

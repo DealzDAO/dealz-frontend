@@ -1,6 +1,7 @@
 <template>
 <div>
     <div class="container">
+        <!-- search -->
         <div class="row py-3 px-4 line-border mild-back">
             <p class="subtitle-text mb-0">
                 <a href="/user/dashboard">
@@ -10,7 +11,7 @@
             </p>
         </div>
         <div>
-            <p class="subtitle-text4">Search contract templates</p>
+            <p class="subtitle-text4 mt-2">Search contract templates</p>
             <b-input-group class="p-0">
                 <template #prepend>
                     <b-input-group-text class="bg-white input-prepend p-0">
@@ -19,8 +20,12 @@
                 </template>
                 <b-form-input v-model="search" class="input-style" style="border-left:none;" :state="null" placeholder="Contract Templates"></b-form-input>
             </b-input-group>
+
             <div v-if="searched==true">
                 <p class="helper-text2 mt-3">Search Results</p>
+                <div v-if="searching" class="mt-3">
+                    <b-spinner variant="primary mx-5"></b-spinner>
+                </div>
                 <ul v-if="results.length>0">
                     <li v-for="(item,i) in results" :key="i" class="mt-2" @click="seeContractDetail(item)">
                         <a href="#" class=" list-group-item-action flex-column align-items-start">
@@ -30,30 +35,33 @@
                         </a>
                     </li>
                 </ul>
-                <small v-else class="text-muted ml-5">No contracts found. Try something else.</small>
+                <small v-if="results.length==0 && noText!=''" class="text-muted ml-5">{{noText}}</small>
             </div>
+
         </div>
 
         <div class="row center-push justify-content-center" v-if="results.length>0">
-            <b-pagination v-model="page" prev-text="Prev" next-text="Next" size="sm" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
+            <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" size="sm" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
         </div>
         <!-- end search section -->
 
         <!-- contract templates -->
         <div class="row px-3 mt-5">
             <p class="subtitle-text4 px-3 mb-1">New contract templates</p><br>
-            <div class="row">
-                <div class="col-4" v-for="(item,i) in templates" :key="i">
-                    <div class="data-box my-2">
-                        <p class="menu-text text-left mb-0">{{item.title}}</p>
-                        <div class="admin-chip bg-light-light">
-                            <p class="helper-text">{{item.type}}</p>
-                        </div>
+        </div>
+        <div class="row" v-if="newContract.length>0">
+            <div class="col-4" v-for="(item,i) in newContract" :key="i">
+                <div v-if="i<3" class="data-box my-2 link" @click="viewContract(item)">
+                    <p class="data2 text-left mb-0">{{item.title}}</p>
+                    <div v-if="item.bundles" class="admin-chip bg-light-light">
+                        <p class="helper-text">{{item.bundles}}</p>
                     </div>
                 </div>
             </div>
-
         </div>
+        <div v-else class="d-flex justify-content-center mt-5">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
         <!-- and contract templates -->
 
         <!-- contract bundles -->
@@ -215,7 +223,9 @@ export default {
             limit: 5,
             results: [],
             rows: 0,
+            searching: false,
             viewContractDialog: false,
+            noText: '',
             selectedContract: {
                 id: '',
                 title: ''
@@ -242,7 +252,12 @@ export default {
                     value: "Art",
                     text: "Art"
                 },
+                {
+                    value: "Music",
+                    text: "Music"
+                },
             ],
+            newContract: [],
             readyContract: false,
             fullViewDialog: false,
             token: '',
@@ -325,6 +340,10 @@ export default {
     },
     watch: {
         search(newValue, oldValue) {
+            this.results = []
+            this.noText = ''
+            this.searched = true
+            this.searching = true
             if (newValue.split(' ').length != oldValue.split(' ').length) {
                 this.page = 1
                 this.searchContracts()
@@ -337,24 +356,30 @@ export default {
 
         }
     },
+    mounted() {
+        this.getNewContract()
+    },
     methods: {
 
         searchContracts() {
             const params = {
-                    bundles: this.bundle,
-                    title: this.search
+                bundles: this.bundle,
+                title: this.search
+            }
+            const config = {
+                headers: {
+                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                 }
-                const config = {
-                    headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
-                    }
-                }
-            axios.post(this.$axios.defaults.baseURL+'/user/search-by-bundles?' + 'page=' + this.page + '&limit=' + this.limit,params,config)
+            }
+            axios.post(this.$axios.defaults.baseURL + '/user/search-by-bundles?' + 'page=' + this.page + '&limit=' + this.limit, params, config)
                 .then(res => {
                     console.log(res.data)
-                    this.searched = true
-                    this.results = res.data
-                    // this.rows = res.data.total_results
+                    this.searching = false
+                    this.results = res.data.contract
+                    this.rows = res.data.docCount
+                    if (res.data.docCount == 0) {
+                        this.noText = 'No contracts found. Try something else.'
+                    }
                 }).catch(err => console.log(err.response))
         },
         input(e) {
@@ -369,7 +394,7 @@ export default {
                     Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                 }
             }
-            axios.get(this.$axios.defaults.baseURL+'/user/get-single-contract/' + item._id,config)
+            axios.get(this.$axios.defaults.baseURL + '/user/get-single-contract/' + item._id, config)
                 .then(res => {
                     this.selectedContract = res.data
                 })
@@ -385,7 +410,7 @@ export default {
                     Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                 }
             }
-            axios.post(this.$axios.defaults.baseURL+'/user/select-contract',params, config)
+            axios.post(this.$axios.defaults.baseURL + '/user/select-contract', params, config)
                 .then(res => {
                     this.readyContract = true
                 }).catch(err => console.log(err.response))
@@ -393,14 +418,32 @@ export default {
         },
         getbundles() {
 
+        },
+        getNewContract() {
+            axios.get(this.$axios.defaults.baseURL + '/user/userdash-contract', {
+                    headers: {
+                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                    }
+                })
+                .then(res => {
+                    this.newContract = res.data
+                    console.log(res.data)
+                })
+                .catch(err => console.log(err.response))
+        },
+        viewContract(item) {
+            this.$router.push({
+                path: 'new-contract/'+item._id,
+                params: {
+                    id: item._id
+                }
+            })
         }
     }
 }
 </script>
 
 <style lang="scss">
-@import "~/assets/styles/Dashboard.scss";
-
 ::placeholder {
     opacity: 0.2;
     margin-left: -10px;

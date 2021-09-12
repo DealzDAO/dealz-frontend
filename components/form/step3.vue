@@ -135,8 +135,9 @@ export default {
             warn: false,
             warnText: '',
             selectedWords: [],
-            btnText:'Save Draft',
-            btnDisabled:false
+            btnText: 'Save Draft',
+            btnDisabled: false,
+            qCount: 0
         }
     },
     computed: {
@@ -163,13 +164,21 @@ export default {
     },
     methods: {
         next() {
-            this.$store.commit('lawyer/setQuestions',this.questions)
+            this.$store.commit('lawyer/setQuestions', this.questions)
             this.$store.commit('lawyer/nextStep')
         },
         selectWord() {
-            this.selected='Question '+(this.questions.length+1)
-            this.questioning=true
-            document.execCommand('insertHtml', false,"<span style='display:hidden'>{{"+this.selected+"}}</span>")
+            if (this.qCount == this.questions.length) {
+                this.qCount += 1
+                this.selected = 'Question ' + (this.questions.length + 1)
+                this.questioning = true
+                document.execCommand('insertHtml', false, "<span>{{" + this.selected + "}}</span>")
+            }
+            else{
+                this.warn=true
+                this.warnText='Fill this question first before adding another.'
+            }
+
             //this.selected = window.getSelection()
             // if (this.selected.length > 1) {
             //     if (!this.selectedWords.includes(this.selected)) {
@@ -212,7 +221,7 @@ export default {
                     this.warn = true
                 }
             } else {
-                if (this.type == 'Short Answer' || this.type== 'Date') {
+                if (this.type == 'Short Answer' || this.type == 'Date') {
 
                     this.questions.push({
                         title: this.selected,
@@ -256,8 +265,8 @@ export default {
             this.questions.splice(this.questions.indexOf(item), 1)
         },
         saveThirdDraft() {
-            this.btnText='Saving'
-            this.btnDisabled=true
+            this.btnText = 'Saving'
+            this.btnDisabled = true
             this.$store.dispatch('lawyer/saveThirdDraft', this.questions)
         }
     }

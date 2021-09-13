@@ -33,7 +33,7 @@
                     <div class="col" v-if="nego.length>0">
                         <div v-for="(item,i) in nego" :key="i" class=" clickable">
                             <div v-if="i<2" class="mb-3">
-                                <p class="mb-1 subtitle-text4 link" @click="viewContract(item.contract[0])">{{item.contract[0].title}}</p>
+                                <p class="mb-1 subtitle-text4 link" @click="viewContract(item.contract_id)">{{item.contract_id.title}}</p>
                                 <div class="admin-chip" :class="getBg(item)">
                                     <p :class="getColor(item)">
                                         <b-icon :icon="getIcon(item)"></b-icon>
@@ -169,7 +169,6 @@ export default {
                 })
                 .then(res => {
                     this.templates = res.data
-                    console.log(res.data)
                 })
                 .catch(err => console.log(err.response))
         },
@@ -210,7 +209,7 @@ export default {
                 })
                 .then(res => {
                     console.log(res.data)
-                    this.nego = res.data.contract
+                    this.nego = res.data.contracts
                     if (res.data.docCount == 0) {
                         this.noText = 'No contracts found'
                     }

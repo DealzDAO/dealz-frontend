@@ -3,40 +3,35 @@
     <div class="container">
         <div class="row px-2 justify-content-center">
             <div class="col" v-if="contracts.length>0">
-                responses are different in draft ..title is missing
-                <div v-if="contracts.length>0">
-                    <div v-for="(item,i) in contracts" :key="i" class="m-2 p-2 clickable">
-                        <p class="mb-1 subtitle-text4 link" @click="seeSelected(item)">{{item._id}}</p>
-                        <div class="admin-chip" :class="getBg(item)">
-                            <p :class="getColor(item)">
-                                <b-icon :icon="getIcon(item)"></b-icon>
-                                {{item.status}}
-                            </p>
-                        </div>
-                        <div v-if="item.comment" class="admin-chip bg-secondary-light">
-                            <p class="text-helper">
-                                <b-icon icon="chat" class="user-icon"></b-icon>
-                                {{item.comment}} Comments
-                            </p>
-                        </div>
-                        <div v-if="item.approved" class="admin-chip bg-primary-soft">
-                            <p class="text-helper">
-                                <b-icon icon="check2" class="user-icon"></b-icon>
-                                Approved
-                            </p>
-                        </div>
-                        <div v-if="item.questions>0" class="admin-chip bg-primary-soft">
-                            <p class="text-helper">
-                                <b-icon icon="check2" class="user-icon"></b-icon>
-                                {{item.questions}} Questions
-                            </p>
-                        </div>
-
+                <div v-for="(item,i) in contracts" :key="i" class="m-2 p-2 clickable">
+                    <p class="mb-1 subtitle-text4 link" @click="seeSelected(item)">{{item.contract_id.title}}</p>
+                    <div class="admin-chip" :class="getBg(item)">
+                        <p :class="getColor(item)">
+                            <b-icon v-if="item.status !='New'" :icon="getIcon(item)"></b-icon>
+                            {{item.status}}
+                        </p>
                     </div>
-                </div>
-                <p v-else class="text-muted text-center">No contracts found</p>
+                    <div v-if="item.comments.length>0" class="admin-chip bg-secondary-light">
+                        <p class="text-helper">
+                            <b-icon icon="chat" class="user-icon"></b-icon>
+                            {{item.comments.length}} Comments
+                        </p>
+                    </div>
+                    <div v-if="item.approved" class="admin-chip bg-primary-soft">
+                        <p class="text-helper">
+                            <b-icon icon="check2" class="user-icon"></b-icon>
+                            Approved
+                        </p>
+                    </div>
+                    <div v-if="item.contract_id.questions>0" class="admin-chip bg-primary-soft">
+                        <p class="text-helper">
+                            <b-icon icon="check2" class="user-icon"></b-icon>
+                            {{item.contract_id.questions.length}} Questions
+                        </p>
+                    </div>
 
-                <div v-if="contracts.length>0" class="px-4 mt-4">
+                </div>
+                <div class="px-4 mt-4">
                     <b-pagination v-model="page" pills prev-text="Prev" next-text="Next" @input="input" :total-rows="rows" hide-goto-end-buttons :per-page="limit"></b-pagination>
                 </div>
             </div>
@@ -59,7 +54,7 @@ export default {
     data() {
         return {
             contracts: [],
-            limit: 2,
+            limit: 5,
             rows: 0,
             page: 1,
             hasBg: true,
@@ -156,18 +151,18 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log('nego:',res.data)
-                    this.contracts = res.data.contract
-                    // this.rows = res.data.docCount
-                    // if (this.contracts.length == 0) {
-                    //     this.noText = 'No Contracts Found'
-                    // }
+                    console.log('nego:', res.data)
+                    this.contracts = res.data.contracts
+                    this.rows = res.data.docCount
+                    if (this.contracts.length == 0) {
+                        this.noText = 'No Contracts Found'
+                    }
                 })
                 .catch(err => console.log(err))
 
         },
         input(e) {
-            this.page = 1
+            this.page = e
             this.getContracts()
         },
         seeSelected(item) {
@@ -180,27 +175,27 @@ export default {
                         }
                     })
                     break;
-                case 'Ready to Send':
-                    return 'bg-success-soft';
-                    break;
-                case 'Draft':
-                    return 'bg-light';
-                    break;
-                case 'Sent':
-                    return 'bg-completed';
-                    break;
-                case 'Received':
-                    return 'bg-primary-soft';
-                    break;
-                case 'Pending Signature':
-                    return 'bg-secondary-soft';
-                    break;
-                case 'Cancel Requests':
-                    return 'bg-danger-soft';
-                    break;
-                case 'Verification Awaiting':
-                    return 'bg-warning-soft';
-                    break;
+                // case 'Ready to Send':
+                //     return 'bg-success-soft';
+                //     break;
+                // case 'Draft':
+                //     return 'bg-light';
+                //     break;
+                // case 'Sent':
+                //     return 'bg-completed';
+                //     break;
+                // case 'Received':
+                //     return 'bg-primary-soft';
+                //     break;
+                // case 'Pending Signature':
+                //     return 'bg-secondary-soft';
+                //     break;
+                // case 'Cancel Requests':
+                //     return 'bg-danger-soft';
+                //     break;
+                // case 'Verification Awaiting':
+                //     return 'bg-warning-soft';
+                //     break;
             }
 
         }

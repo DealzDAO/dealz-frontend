@@ -56,6 +56,9 @@
 
         </div>
     </div>
+    <div v-else class="d-flex justify-content-center mt-5">
+        <b-spinner variant="primary"></b-spinner>
+    </div>
     <!-- approval dialog -->
     <b-modal v-model="approvalDialog" centered hide-footer>
         <div class="bg-white viewBox">

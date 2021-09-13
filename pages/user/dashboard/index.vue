@@ -221,7 +221,7 @@ export default {
                 case 'New':
                     return 'bg-primary-soft';
                     break;
-                case 'Ready to Send':
+                case 'Ready to send':
                     return 'bg-success-soft';
                     break;
                 case 'Draft':
@@ -246,7 +246,7 @@ export default {
         },
         getIcon(item) {
             switch (item.status) {
-                case 'Ready to Send':
+                case 'Ready to send':
                     return 'arrow-up-right'
                 case 'Draft':
                     return 'pencil';
@@ -273,7 +273,7 @@ export default {
                 case 'New':
                     return 'text-primary-light';
                     break;
-                case 'Ready to Send':
+                case 'Ready to send':
                 case 'Draft':
                     return 'text-secondary-light';
                     break;

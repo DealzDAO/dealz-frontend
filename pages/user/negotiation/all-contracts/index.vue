@@ -8,7 +8,7 @@
                     <div class="admin-chip" :class="getBg(item)">
                         <p :class="getColor(item)">
                             <b-icon v-if="item.status !='New'" :icon="getIcon(item)"></b-icon>
-                            {{item.status}}
+                            {{getStatus(item)}}
                         </p>
                     </div>
                     <div v-if="item.comments.length>0" class="admin-chip bg-secondary-light">
@@ -66,12 +66,25 @@ export default {
 
     },
     methods: {
+        getStatus(item){
+            if(item.status=='Sent'){
+                if(item.sent_id.includes(this.$auth.$state.user.id)){
+                    return 'Received'
+                }
+                else{
+                    return 'Sent'
+                }
+            }
+            else{
+                return item.status
+            }
+        },
         getBg(item) {
             switch (item.status) {
                 case 'New':
                     return 'bg-primary-soft';
                     break;
-                case 'Ready to Send':
+                case 'Ready to send':
                     return 'bg-success-soft';
                     break;
                 case 'Draft':
@@ -96,7 +109,7 @@ export default {
         },
         getIcon(item) {
             switch (item.status) {
-                case 'Ready to Send':
+                case 'Ready to send':
                     return 'arrow-up-right'
                 case 'Draft':
                     return 'pencil';
@@ -123,7 +136,7 @@ export default {
                 case 'New':
                     return 'text-primary-light';
                     break;
-                case 'Ready to Send':
+                case 'Ready to send':
                 case 'Draft':
                     return 'text-secondary-light';
                     break;
@@ -168,6 +181,7 @@ export default {
         seeSelected(item) {
             switch (item.status) {
                 case 'New':
+                case 'Ready to send':
                     this.$router.push({
                         name: 'user-negotiation-all-contracts-id-edit',
                         params: {
@@ -175,9 +189,6 @@ export default {
                         }
                     })
                     break;
-                // case 'Ready to Send':
-                //     return 'bg-success-soft';
-                //     break;
                 // case 'Draft':
                 //     return 'bg-light';
                 //     break;

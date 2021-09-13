@@ -44,7 +44,7 @@
                             Fill Contract
                         </p>
                     </b-button>
-                    <b-button class="my-btn bg-primary-light px-3 float-right" @click="approvalDialog=true">
+                    <b-button v-if="contract.userContract.status=='Ready to send'" class="my-btn bg-primary-light px-3 float-right" @click="approvalDialog=true">
                         <p>
                             <b-icon icon="pencil"></b-icon>
                             Send for Approval
@@ -70,6 +70,8 @@
                         <ValidationProvider name="email" rules="required|email" v-slot="{ errors }" ref="email">
                             <b-form-input placeholder="Email Address" v-model="email" type="email" :state="errors.length > 0 ? false : null" class="mt-md-4 mb-0 radius10" />
                             <span class="helper-text3 text-danger">{{ errors[0] }}</span>
+                            <span class="helper-text3 text-danger">{{ emailError }}</span>
+
                         </ValidationProvider>
                     </ValidationObserver>
                     <b-button class="my-btn bg-primary-light mb-10 mt-3" block @click="sendForApproval">
@@ -114,9 +116,10 @@ export default {
         return {
             contract: '',
             moment: moment,
-            approvalDialog:false,
+            approvalDialog: false,
             email: '',
-            sendText:'Send Contract'
+            sendText: 'Send Contract',
+            emailError:''
         }
     },
     computed: {
@@ -155,7 +158,7 @@ export default {
         },
         sendForApproval() {
             const params = {
-                id: this.$auth.$state.user.id,
+                id: this.contract.userContract._id,
                 email: this.email
             }
             const config = {
@@ -163,24 +166,32 @@ export default {
                     Authorization: 'Bearer ' + this.$auth.$state.user.data.token
                 }
             }
+
             this.$refs.approveForm.validate().then((success) => {
-                    if (!success) {
-                        return;
-                    }
-                    this.sendText='Sending...'
-                    this.successToast('Contract successfully sent for approval');
-
-                    axios.post(this.$axios.defaults.baseURL + '/user/send-for-approval/', params, config)
-                        .then(res => {
+                if (!success) {
+                    return;
+                }
+                this.sendText = 'Sending...'
+                axios.post(this.$axios.defaults.baseURL + '/user/send-for-approval/', params, config)
+                    .then(res => {
+                        console.log(res.data)
+                        if (res.data.Success=='True') {
                              this.approvalDialog=false
-                             this.sendText='Send Contract'
-                            this.successToast('Contract successfully sent for approval');
+                             this.sendText='Contract sent'
+                            this.successToast('Contract sent for approval.');
+                            this.$router.push('/user/negotiation/all-contracts')
+                        }
+                        else{
+                            this.emailError=res.data.message
+                            this.sendText='Send Contract'
+                        }
+                        
 
-                        })
-                        .catch(err => console.log(err))
+                    })
+                    .catch(err => console.log(err))
 
-                })
-            }
+            })
         }
     }
+}
 </script>

@@ -412,6 +412,7 @@ export default {
             }
             axios.post(this.$axios.defaults.baseURL + '/user/select-contract', params, config)
                 .then(res => {
+                    console.log(res.data)
                     this.readyContract = true
                 }).catch(err => console.log(err.response))
 

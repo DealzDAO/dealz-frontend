@@ -60,7 +60,7 @@
         <div v-show="view == 'contract'">
             <div class="row">
                 <div class="col">
-                    <div class="contract-box mt-2">
+                    <div class="contract-box mt-2" id="container">
                         <div v-html="updatedContract"></div>
                     </div>
                 </div>
@@ -68,11 +68,11 @@
                     <div v-for="(item, i) in fillable.contract.questions" :key="i" class="w-75">
                         <p class="mb-0">{{ i + 1 }}. {{ item.type }}</p>
                         <div class="mb-3" style="max-height:40px">
-                            <b-form-input v-if="item.type == 'Short Answer'" @update="insertAnswer(item,i)" v-model="form.option[i]" placeholder="Write here..." class="radius10" style="width:100%" :disabled="inputDisabled"></b-form-input>
+                            <b-form-input v-if="item.type == 'Short Answer'" @click="scroll(item)" @update="insertAnswer(item,i)" v-model="form.option[i]" placeholder="Write here..." class="radius10" style="width:100%" :disabled="inputDisabled"></b-form-input>
                             
-                            <input type="date" v-model="form.option[i]" v-if="item.type == 'Date'" @change="insertAnswer(item,i)" style="width:100%;padding:8px 20px" :disabled="inputDisabled">
+                            <input type="date" v-model="form.option[i]" @click="scroll(item)" v-if="item.type == 'Date'" @change="insertAnswer(item,i)" style="width:100%;padding:8px 20px" :disabled="inputDisabled">
                             
-                            <b-form-radio-group v-model="form.option[i]" v-if="item.type == 'Multiple Choice'"  @change="insertAnswer(item,i)" stacked :options="item.options" :disabled="inputDisabled"></b-form-radio-group>
+                            <b-form-radio-group v-model="form.option[i]" @click="scroll(item)" v-if="item.type == 'Multiple Choice'"  @change="insertAnswer(item,i)" stacked :options="item.options" :disabled="inputDisabled"></b-form-radio-group>
                         </div>
                     </div>
 
@@ -241,6 +241,14 @@ export default {
             }
             this.updatedContract=output
             console.log(questions,answers)
+        },
+        scroll(item){
+            var container = this.$el.querySelector("#container");
+            // container.scrollTop = container.scrollHeight;
+            container.scrollTo({
+                top:item.pos,
+                behavior:"smooth"
+            })
         }
     }
 };

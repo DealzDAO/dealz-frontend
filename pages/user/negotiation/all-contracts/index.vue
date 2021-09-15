@@ -179,6 +179,7 @@ export default {
             this.getContracts()
         },
         seeSelected(item) {
+            console.log(item)
             switch (item.status) {
                 case 'New':
                 case 'Ready to send':
@@ -192,9 +193,15 @@ export default {
                 // case 'Draft':
                 //     return 'bg-light';
                 //     break;
-                // case 'Sent':
-                //     return 'bg-completed';
-                //     break;
+                case 'Sent':
+                    console.log(item)
+                    // this.$router.push({
+                    //     name: 'user-negotiation-all-contracts-id-view',
+                    //     params: {
+                    //         id: item._id
+                    //     }
+                    // })
+                    break;
                 // case 'Received':
                 //     return 'bg-primary-soft';
                 //     break;

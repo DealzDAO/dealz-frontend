@@ -18,8 +18,20 @@
                         </div>
                     </div>
                 </div>
-                <div v-else class="d-flex justify-content-center">
-                    <b-spinner variant="primary"></b-spinner>
+                <div v-else class="row justify-content-center">
+                    <div class="col">
+                        <div class="data-box my-2">
+                            <b-skeleton animation="wave" width="100%"></b-skeleton>
+                            <b-skeleton animation="wave" width="25%"></b-skeleton>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="data-box my-2">
+                            <b-skeleton animation="wave" width="100%"></b-skeleton>
+                            <b-skeleton animation="wave" width="25%"></b-skeleton>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- end contracts -->
 
@@ -61,9 +73,19 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else-if="nego.length==0 && noText==''" class="d-flex justify-content-center">
-                        <b-spinner variant="primary"></b-spinner>
+                    <div v-else-if="nego.length==0 && noText==''" class="col">
+                        <div class="col p-0">
+                            <div class="row">
+                                <b-skeleton animation="wave" width="100%"></b-skeleton>
+
+                            </div>
+                            <div class="row">
+                                <b-skeleton animation="wave" width="25%"></b-skeleton>
+                                <b-skeleton animation="wave" width="25%"></b-skeleton>
+                            </div>
+                        </div>
                     </div>
+
                     <div v-else class="d-flex justify-content-center">{{noText}}</div>
                 </div>
                 <!-- end pricing stats -->

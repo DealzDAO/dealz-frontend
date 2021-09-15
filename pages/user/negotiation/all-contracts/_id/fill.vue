@@ -235,11 +235,11 @@ export default {
             var a=this.updatedContract
             var questions=this.fillable.contract.questions
             var answers=this.fillable.userContract.contract_details
-            // var output=''
-            // for(var x=0;x<questions.length;x++){
-            //     output = [a.slice(0, questions[x].pos), answers[x], a.slice(questions[x].pos)].join('');
-            // }
-            // this.updatedContract=output
+            var output=''
+            for(var x=0;x<questions.length;x++){
+                output = [a.slice(0, questions[x].pos), answers[x], a.slice(questions[x].pos)].join('');
+            }
+            this.updatedContract=output
             console.log(questions,answers)
         }
     }

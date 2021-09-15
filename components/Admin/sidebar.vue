@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -70,8 +71,10 @@ export default {
 
         },
         logout() {
-            this.$auth.logout()
             this.$router.push('/login')
+            axios.get('https://dealzlegal.herokuapp.com/api/auth/logout')
+            .catch(errr=>console.log(err.response))
+            this.$auth.logout()
         }
     }
 }

@@ -143,7 +143,7 @@ export default {
         },
         saveDraft() {
             const params = {
-                id: this.fillable.userContract.contract_id,
+                id: this.fillable.userContract._id,
                 contract_details: this.form.option
             };
             const config = {

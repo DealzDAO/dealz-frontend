@@ -85,6 +85,7 @@ export default {
     },
     mounted() {
         this.getContractDetails()
+        console.log('auth:',this.$auth.$state.user.id)
     },
     methods: {
         getContractDetails() {
@@ -111,8 +112,8 @@ export default {
             }
             axios.post('https://dealzlegal.herokuapp.com/api/lawyer/accept-contract-collab', params, config)
                 .then(res => {
-                    this.contract = res.data
-                    this.getBtn()
+                    this.disabled=true
+                    this.btnText='Collaborator Request Accepted'
                     this.acceptedDialog=true
                     this.accepting=false
                 })

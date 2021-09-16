@@ -221,10 +221,11 @@ export default {
             //resetting contract to replace input content without changing position
             this.updatedContract=this.fillable.contract.contract_details
             var value=this.form.option[i]
-            var a=this.updatedContract
-            var output = [a.slice(0, item.pos), this.form.option[i], a.slice(item.pos)].join('');
+            var a=this.fillable.contract.contract_details
+            var output = [a.slice(0, item.pos), this.form.option[i], a.slice(item.pos)].join(' ');
             this.updatedContract=output
-            
+            console.log(item.pos)
+            console.log(a.slice(0,7))
             //slicing and adding
             // var output = [a.slice(0, item.pos+this.form.option[i].length), this.form.option[i].substr(this.form.option[i].length-1), a.slice(item.pos+this.form.option[i].length)].join('');
             //inserting variable inside a string

@@ -35,22 +35,32 @@
         </div>
         <!-- question view -->
         <div v-show="view == 'question'">
-            <div class="row px-5 mx-2 mt-2">
-                <div v-for="(item, i) in fillable.contract.questions" :key="i" class="w-75">
-                    <p class="mb-0">{{ i + 1 }}. {{ item.type }}</p>
+            <div v-if="fillable.contract.questions.length>0" class="row px-5 mx-2 mt-2">
+                <div v-for="(item, i) in questionList" :key="i" class="w-75">
+                    <p class="mb-0">{{ i + 1 }}. {{ item.question }}</p>
                     <div class="mb-3" style="max-height:40px">
                         <b-form-input v-if="item.type == 'Short Answer'" @update="insertAnswer(item,i)" v-model="form.option[i]" placeholder="Write here..." class="radius10" style="width:100%" :disabled="inputDisabled"></b-form-input>
-                            
+
                         <input type="date" v-model="form.option[i]" v-if="item.type == 'Date'" @change="insertAnswer(item,i)" style="width:100%;padding:8px 20px" :disabled="inputDisabled">
-                            
-                        <b-form-radio-group v-model="form.option[i]" v-if="item.type == 'Multiple Choice'"  @change="insertAnswer(item,i)" stacked :options="item.options" :disabled="inputDisabled"></b-form-radio-group>
+
+                        <b-form-radio-group v-model="form.option[i]" v-if="item.type == 'Multiple Choice'" @change="insertAnswer(item,i)" stacked :options="item.options" :disabled="inputDisabled"></b-form-radio-group>
                     </div>
                 </div>
             </div>
-            <div class="row px-5 mt-3 justify-content-end">
-                <b-button v-if="fillable.userContract.status == 'New'" class="my-btn px-3 bg-primary-light" @click="saveDraft">
-                    <p>Save Draft</p>
-                </b-button>
+            <div v-else class="d-flex justify-content-center mt-5">
+                <p class="helper-text3">No questions</p>
+            </div>
+            <div class="row px-5 mt-3 justify-content-between">
+                <p class="text-secondary-light link" @click="previous">Previous Questions</p>
+                <div>
+                    <b-button v-if="fillable.userContract.status == 'New' || fillable.userContract.status == 'Draft'" class="my-btn px-3 bg-white" style="border:1px solid #04a5f6" @click="saveDraft">
+                        <p class="text-primary-light">Save Draft</p>
+                    </b-button>
+                    <b-button class="my-btn px-3 bg-primary-light" @click="next">
+                        <p>Next Questions</p>
+                    </b-button>
+                </div>
+
             </div>
 
         </div>
@@ -65,18 +75,19 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div v-for="(item, i) in fillable.contract.questions" :key="i" class="w-75">
-                        <p class="mb-0">{{ i + 1 }}. {{ item.type }}</p>
-                        <div class="mb-3" style="max-height:40px">
-                            <b-form-input v-if="item.type == 'Short Answer'" @click="scroll(item)" @update="insertAnswer(item,i)" v-model="form.option[i]" placeholder="Write here..." class="radius10" style="width:100%" :disabled="inputDisabled"></b-form-input>
-                            
-                            <input type="date" v-model="form.option[i]" @click="scroll(item)" v-if="item.type == 'Date'" @change="insertAnswer(item,i)" style="width:100%;padding:8px 20px" :disabled="inputDisabled">
-                            
-                            <b-form-radio-group v-model="form.option[i]" @click="scroll(item)" v-if="item.type == 'Multiple Choice'"  @change="insertAnswer(item,i)" stacked :options="item.options" :disabled="inputDisabled"></b-form-radio-group>
+                    <div style="max-height:300px;overflow-y:auto">
+                        <div v-for="(item, i) in fillable.contract.questions" :key="i" class="w-75">
+                            <p class="mb-0">{{ i + 1 }}. {{ item.type }}</p>
+                            <div class="mb-3" style="max-height:40px">
+                                <b-form-input v-if="item.type == 'Short Answer'" @click="scroll(item)" @update="insertAnswer(item,i)" v-model="form.option[i]" placeholder="Write here..." class="radius10" style="width:100%" :disabled="inputDisabled"></b-form-input>
+
+                                <input type="date" v-model="form.option[i]" @click="scroll(item)" v-if="item.type == 'Date'" @change="insertAnswer(item,i)" style="width:100%;padding:8px 20px" :disabled="inputDisabled">
+
+                                <b-form-radio-group v-model="form.option[i]" @click="scroll(item)" v-if="item.type == 'Multiple Choice'" @change="insertAnswer(item,i)" stacked :options="item.options" :disabled="inputDisabled"></b-form-radio-group>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="row justify-content-between p-5" v-if="fillable.userContract.status == 'New'">
+                    <div class="row justify-content-between p-5" v-if="fillable.userContract.status == 'New' || fillable.userContract.status == 'Draft'">
                         <b-button class="my-btn px-3 bg-primary-light" @click="finishContract">
                             <p>{{ finishText }}</p>
                         </b-button>
@@ -109,8 +120,14 @@ export default {
             },
             finishText: "Finish Contract",
             fillable: "",
-            updatedContract:'',
-            inputDisabled:false,
+            updatedContract: '',
+            inputDisabled: false,
+            // question view
+            initIndex: 0,
+            lastIndex: 2,
+            pageLimit: 0,
+            page: 1,
+            questionList: []
         };
     },
     computed: {
@@ -130,14 +147,23 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log('fill:',res.data)
+                    console.log('fill:', res.data)
                     this.fillable = res.data;
-                    this.updatedContract=res.data.contract.contract_details
-                    if(this.fillable.userContract.contract_details.length == this.fillable.contract.questions.length){
-                        this.form.option=this.fillable.userContract.contract_details
-                        this.inputDisabled=true
-                        this.feedAnswers()
+                    this.updatedContract = res.data.contract.contract_details
+                    this.form.option = this.fillable.userContract.contract_details
+                    if (res.data.userContract.status == 'Ready to send') {
+                        this.inputDisabled = true
                     }
+                    this.setList()
+                    //setting page limit for question view
+                    
+                    if(res.data.contract.questions.length % 2==0){
+                        this.pageLimit=res.data.contract.questions.length / 2
+                    }
+                    else{
+                        this.pageLimit=Math.ceil(res.data.contract.questions.length / 2)
+                    }
+
                 })
                 .catch(err => console.log(err));
         },
@@ -217,39 +243,60 @@ export default {
                 return "not-active";
             }
         },
-        insertAnswer(item,i) {
+        insertAnswer(item, i) {
             //resetting contract to replace input content without changing position
-            this.updatedContract=this.fillable.contract.contract_details
-            var value=this.form.option[i]
-            var a=this.fillable.contract.contract_details
+            this.updatedContract = this.fillable.contract.contract_details
+            var value = this.form.option[i]
+            var a = this.fillable.contract.contract_details
             var output = [a.slice(0, item.pos), this.form.option[i], a.slice(item.pos)].join(' ');
-            this.updatedContract=output
-            console.log(item.pos)
-            console.log(a.slice(0,7))
+            this.updatedContract = output
             //slicing and adding
             // var output = [a.slice(0, item.pos+this.form.option[i].length), this.form.option[i].substr(this.form.option[i].length-1), a.slice(item.pos+this.form.option[i].length)].join('');
             //inserting variable inside a string
             // this.fillable.contract.contract_details=`${this.form.option[0]}`
-           
+
         },
-        feedAnswers(){
-            var a=this.updatedContract
-            var questions=this.fillable.contract.questions
-            var answers=this.fillable.userContract.contract_details
-            var output=''
-            for(var x=0;x<questions.length;x++){
-                output = [a.slice(0, questions[x].pos), answers[x], a.slice(questions[x].pos)].join('');
-            }
-            this.updatedContract=output
-            console.log(questions,answers)
-        },
-        scroll(item){
+        scroll(item) {
             var container = this.$el.querySelector("#container");
             // container.scrollTop = container.scrollHeight;
             container.scrollTo({
-                top:item.pos,
-                behavior:"smooth"
+                top: item.pos,
+                behavior: "smooth"
             })
+        },
+        setList() {
+            var set = this.fillable.contract.questions
+            var list = []
+            for (var x = this.initIndex; x < this.lastIndex; x++) {
+                list.push(set[x])
+            }
+            this.questionList = list
+            console.log(this.questionList)
+        },
+        next() {
+            if (this.page < this.pageLimit) {
+                this.page += 1
+                this.initIndex += 2
+                this.lastIndex += 2
+                //last page ma trim garxa 
+                if(this.lastIndex > this.fillable.contract.questions.length){
+                    this.lastIndex=this.fillable.contract.questions.length
+                }
+                this.setList()
+            }
+
+        },
+        previous() {
+            if (this.page > 1) {
+                this.initIndex -= 2
+                //last page bata back garda  trim vaeko data milaudai
+                if(this.page==this.pageLimit){
+                    this.lastIndex=this.initIndex + 2
+                }
+                this.page -= 1
+                this.setList()
+            }
+
         }
     }
 };

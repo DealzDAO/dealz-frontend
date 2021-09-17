@@ -66,16 +66,14 @@ export default {
 
     },
     methods: {
-        getStatus(item){
-            if(item.status=='Sent'){
-                if(item.sent_id.includes(this.$auth.$state.user.id)){
+        getStatus(item) {
+            if (item.status == 'Sent') {
+                if (item.sent_id.includes(this.$auth.$state.user.id)) {
                     return 'Received'
-                }
-                else{
+                } else {
                     return 'Sent'
                 }
-            }
-            else{
+            } else {
                 return item.status
             }
         },
@@ -190,9 +188,14 @@ export default {
                         }
                     })
                     break;
-                // case 'Draft':
-                //     return 'bg-light';
-                //     break;
+                case 'Draft':
+                    this.$router.push({
+                        name: "user-negotiation-all-contracts-id-fill",
+                        params: {
+                            id: item._id
+                        }
+                    });
+                    break;
                 case 'Sent':
                     console.log(item)
                     // this.$router.push({
@@ -202,18 +205,18 @@ export default {
                     //     }
                     // })
                     break;
-                // case 'Received':
-                //     return 'bg-primary-soft';
-                //     break;
-                // case 'Pending Signature':
-                //     return 'bg-secondary-soft';
-                //     break;
-                // case 'Cancel Requests':
-                //     return 'bg-danger-soft';
-                //     break;
-                // case 'Verification Awaiting':
-                //     return 'bg-warning-soft';
-                //     break;
+                    // case 'Received':
+                    //     return 'bg-primary-soft';
+                    //     break;
+                    // case 'Pending Signature':
+                    //     return 'bg-secondary-soft';
+                    //     break;
+                    // case 'Cancel Requests':
+                    //     return 'bg-danger-soft';
+                    //     break;
+                    // case 'Verification Awaiting':
+                    //     return 'bg-warning-soft';
+                    //     break;
             }
 
         }

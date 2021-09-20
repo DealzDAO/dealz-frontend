@@ -70,14 +70,14 @@
         <div v-show="view == 'contract'">
             <div class="row">
                 <div class="col">
-                    <div class="contract-box mt-2" id="container">
-                        <div v-html="updatedContract"></div>
+                    <div class="contract-box mt-2">
+                        <div v-html="updatedContract" id="container" contenteditable="true"></div>
                     </div>
                 </div>
                 <div class="col">
                     <div style="max-height:300px;overflow-y:auto">
                         <div v-for="(item, i) in fillable.contract.questions" :key="i" class="w-75">
-                            <p class="mb-0">{{ i + 1 }}. {{ item.type }}</p>
+                            <p class="mb-0">{{ i + 1 }}. {{ item.question }}</p>
                             <div class="mb-3" style="max-height:40px">
                                 <b-form-input v-if="item.type == 'Short Answer'" @click="scroll(item)" @update="insertAnswer(item,i)" v-model="form.option[i]" placeholder="Write here..." class="radius10" style="width:100%" :disabled="inputDisabled"></b-form-input>
 
@@ -124,10 +124,11 @@ export default {
             inputDisabled: false,
             // question view
             initIndex: 0,
-            lastIndex: 2,
+            lastIndex: 1,
             pageLimit: 0,
             page: 1,
-            questionList: []
+            questionList: [],
+            pos:null
         };
     },
     computed: {
@@ -148,20 +149,19 @@ export default {
                 })
                 .then(res => {
                     console.log('fill:', res.data)
-                    this.fillable = res.data;
-                    this.updatedContract = res.data.contract.contract_details
+                    this.fillable = res.data
+                    this.updatedContract=res.data.contract.contract_details
                     this.form.option = this.fillable.userContract.contract_details
                     if (res.data.userContract.status == 'Ready to send') {
                         this.inputDisabled = true
                     }
                     this.setList()
                     //setting page limit for question view
-                    
-                    if(res.data.contract.questions.length % 2==0){
-                        this.pageLimit=res.data.contract.questions.length / 2
-                    }
-                    else{
-                        this.pageLimit=Math.ceil(res.data.contract.questions.length / 2)
+
+                    if (res.data.contract.questions.length % 2 == 0) {
+                        this.pageLimit = res.data.contract.questions.length / 2
+                    } else {
+                        this.pageLimit = Math.ceil(res.data.contract.questions.length / 2)
                     }
 
                 })
@@ -191,7 +191,8 @@ export default {
         finishContract() {
             const params = {
                 id: this.fillable.userContract._id,
-                contract_details: this.form.option
+                contract_details: this.form.option,
+                new_contract: document.getElementById('container').innerHTML
             };
             const config = {
                 headers: {
@@ -244,25 +245,20 @@ export default {
             }
         },
         insertAnswer(item, i) {
-            //resetting contract to replace input content without changing position
-            this.updatedContract = this.fillable.contract.contract_details
-            var value = this.form.option[i]
-            var a = this.fillable.contract.contract_details
-            var output = [a.slice(0, item.pos), this.form.option[i], a.slice(item.pos)].join(' ');
-            this.updatedContract = output
-            //slicing and adding
-            // var output = [a.slice(0, item.pos+this.form.option[i].length), this.form.option[i].substr(this.form.option[i].length-1), a.slice(item.pos+this.form.option[i].length)].join('');
-            //inserting variable inside a string
-            // this.fillable.contract.contract_details=`${this.form.option[0]}`
-
+            document.getElementById(item.title).innerHTML=' '+this.form.option[i]
         },
         scroll(item) {
-            var container = this.$el.querySelector("#container");
-            // container.scrollTop = container.scrollHeight;
-            container.scrollTo({
-                top: item.pos,
-                behavior: "smooth"
-            })
+            //scroll using id
+            document.getElementById(item.title).scrollIntoView({
+                behavior: 'smooth'
+            });
+            // var container = this.$el.querySelector("#container");
+            // container.scrollTop = container.scrollHeight;//scroll to bottom
+            //scroll to an index position
+            // container.scrollTo({
+            //     top: this.updatedContract.indexOf("{{" + item.title + "}}"),
+            //     behavior: "smooth"
+            // })
         },
         setList() {
             var set = this.fillable.contract.questions
@@ -271,7 +267,7 @@ export default {
                 list.push(set[x])
             }
             this.questionList = list
-            console.log(this.questionList)
+            console.log('list:',this.questionList)
         },
         next() {
             if (this.page < this.pageLimit) {
@@ -279,8 +275,8 @@ export default {
                 this.initIndex += 2
                 this.lastIndex += 2
                 //last page ma trim garxa 
-                if(this.lastIndex > this.fillable.contract.questions.length){
-                    this.lastIndex=this.fillable.contract.questions.length
+                if (this.lastIndex > this.fillable.contract.questions.length) {
+                    this.lastIndex = this.fillable.contract.questions.length
                 }
                 this.setList()
             }
@@ -290,8 +286,8 @@ export default {
             if (this.page > 1) {
                 this.initIndex -= 2
                 //last page bata back garda  trim vaeko data milaudai
-                if(this.page==this.pageLimit){
-                    this.lastIndex=this.initIndex + 2
+                if (this.page == this.pageLimit) {
+                    this.lastIndex = this.initIndex + 2
                 }
                 this.page -= 1
                 this.setList()

@@ -89,9 +89,8 @@
           <div
             v-if="i < 3"
             class="data-box my-2 link"
-            @click="viewContract(item)"
           >
-            <p class="data2 text-left mb-0">{{ item.title }}</p>
+            <p class="data2 text-left mb-0 clickable" @click="seeContractDetail(item)">{{ item.title }}</p>
             <div v-if="item.bundles" class="admin-chip bg-light-light">
               <p class="helper-text">{{ item.bundles }}</p>
             </div>
@@ -475,7 +474,6 @@ export default {
           config
         )
         .then(res => {
-          console.log(res.data);
           this.searching = false;
           this.results = res.data.contract;
           this.rows = res.data.docCount;

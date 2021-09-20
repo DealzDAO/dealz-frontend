@@ -103,8 +103,8 @@ export default {
         },
         logout() {
             this.$router.push('/login')
-            axios.get('https://dealzlegal.herokuapp.com/api/auth/logout')
-            .catch(errr=>console.log(err.response))
+            // axios.get('https://dealzlegal.herokuapp.com/api/auth/logout')
+            // .catch(errr=>console.log(err.response))
             this.$auth.logout()
         }
     }

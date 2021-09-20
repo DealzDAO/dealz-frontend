@@ -10,8 +10,8 @@
                 <p class="data-head mb-n3">New Contracts Template</p><br>
                 <div class="row" v-if="templates.length>0">
                     <div class="col-6" v-for="(item,i) in templates" :key="i">
-                        <div class="data-box my-2 link" @click="viewContract(item)">
-                            <p class="data2 text-left mb-0">{{item.title}}</p>
+                        <div class="data-box my-2 link" @click="selectContract(item)">
+                            <p class="data2 text-left mb-0 clickable">{{item.title}}</p>
                             <div v-if="item.bundles" class="admin-chip bg-light-light">
                                 <p class="helper-text">{{item.bundles}}</p>
                             </div>
@@ -135,6 +135,10 @@
             <!-- end essential -->
         </div>
     </div>
+
+    <!-- select contract dialog -->
+    <DialogContractviewdialog />
+    <!-- end select contract dialog -->
 </div>
 </template>
 
@@ -316,6 +320,10 @@ export default {
                     break;
             }
         },
+        selectContract(item){
+            this.$store.commit('user/setSelectedContract',item)
+            this.$store.dispatch('user/seeContractDetail')
+        }
     }
 }
 </script>

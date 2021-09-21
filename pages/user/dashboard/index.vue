@@ -45,7 +45,7 @@
                     <div class="col" v-if="nego.length>0">
                         <div v-for="(item,i) in nego" :key="i" class=" clickable">
                             <div v-if="i<2" class="mb-3">
-                                <p class="mb-1 subtitle-text4 link" @click="viewContract(item.contract_id)">{{item.contract_id.title}}</p>
+                                <p class="mb-1 subtitle-text4 clickable" @click="seeSelected(item)">{{item.contract_id.title}}</p>
                                 <div class="admin-chip" :class="getBg(item)">
                                     <p :class="getColor(item)">
                                         <b-icon :icon="getIcon(item)"></b-icon>
@@ -323,6 +323,49 @@ export default {
         selectContract(item){
             this.$store.commit('user/setSelectedContract',item)
             this.$store.dispatch('user/seeContractDetail')
+        },
+         seeSelected(item) {
+            switch (item.status) {
+                case 'New':
+                case 'Ready to send':
+                    this.$router.push({
+                        name: 'user-negotiation-all-contracts-id-edit',
+                        params: {
+                            id: item._id
+                        }
+                    })
+                    break;
+                case 'Draft':
+                    this.$router.push({
+                        name: "user-negotiation-all-contracts-id-fill",
+                        params: {
+                            id: item._id
+                        }
+                    });
+                    break;
+                case 'Sent':
+                    console.log(item)
+                    // this.$router.push({
+                    //     name: 'user-negotiation-all-contracts-id-view',
+                    //     params: {
+                    //         id: item._id
+                    //     }
+                    // })
+                    break;
+                    // case 'Received':
+                    //     return 'bg-primary-soft';
+                    //     break;
+                    // case 'Pending Signature':
+                    //     return 'bg-secondary-soft';
+                    //     break;
+                    // case 'Cancel Requests':
+                    //     return 'bg-danger-soft';
+                    //     break;
+                    // case 'Verification Awaiting':
+                    //     return 'bg-warning-soft';
+                    //     break;
+            }
+
         }
     }
 }

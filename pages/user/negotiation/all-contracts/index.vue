@@ -107,6 +107,9 @@ export default {
                 case 'Verification Awaiting':
                     return 'bg-warning-soft';
                     break;
+                case 'Signed':
+                    return 'bg-success-soft'
+                    break;
             }
         },
         getIcon(item) {
@@ -130,6 +133,9 @@ export default {
                     break;
                 case 'Verification Awaiting':
                     return 'clock-history';
+                    break;
+                case 'Signed':
+                    return 'check2'
                     break;
             }
         },
@@ -156,6 +162,9 @@ export default {
                     break;
                 case 'Verification Awaiting':
                     return 'text-warning-light';
+                    break;
+                case 'Signed':
+                    return 'text-success-light'
                     break;
             }
         },

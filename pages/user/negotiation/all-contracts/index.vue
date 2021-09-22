@@ -3,18 +3,18 @@
     <div class="container">
         <div class="row px-2 justify-content-center">
             <div class="col" v-if="contracts.length>0">
-                <div v-for="(item,i) in contracts" :key="i" class="m-2 p-2 clickable">
-                    <p class="mb-1 subtitle-text4 link" @click="seeSelected(item)">{{item.contract_id.title}}</p>
+                <div v-for="(item,i) in contracts" :key="i" class="m-2 p-2">
+                    <p class="mb-1 subtitle-text4 clickable" @click="seeSelected(item)">{{item.contract_id.title}}</p>
                     <div class="admin-chip" :class="getBg(item)">
                         <p :class="getColor(item)">
                             <b-icon v-if="item.status !='New'" :icon="getIcon(item)"></b-icon>
                             {{getStatus(item)}}
                         </p>
                     </div>
-                    <div v-if="item.comments.length>0" class="admin-chip bg-secondary-light">
+                    <div v-if="item.comments" class="admin-chip bg-secondary-light">
                         <p class="text-helper">
                             <b-icon icon="chat" class="user-icon"></b-icon>
-                            {{item.comments.length}} Comments
+                            {{item.comments}} Comments
                         </p>
                     </div>
                     <div v-if="item.approved" class="admin-chip bg-primary-soft">
@@ -63,16 +63,20 @@ export default {
     },
     mounted() {
         this.getContracts()
-        console.log('id:',this.$auth.$state.user)
     },
     methods: {
         getStatus(item) {
             if (item.status == 'Sent') {
-                if (item.sent_id.includes(this.$auth.$state.user.id)) {
-                    return 'Received'
+                if (item.sent_status) {
+                    return 'Pending Signature'
                 } else {
-                    return 'Sent'
+                    if (item.sent_id.includes(this.$auth.$state.user.id)) {
+                        return 'Received'
+                    } else {
+                        return 'Sent'
+                    }
                 }
+
             } else {
                 return item.status
             }
@@ -162,7 +166,7 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log('nego:', res.data)
+                    console.log('nego:', res.data.contracts)
                     this.contracts = res.data.contracts
                     this.rows = res.data.docCount
                     if (this.contracts.length == 0) {
@@ -196,23 +200,30 @@ export default {
                     });
                     break;
                 case 'Sent':
-                    if(item.sent_id.includes(this.$auth.$state.user.id)){
+                    if (item.sent_status) {
                         this.$router.push({
-                        name: 'user-negotiation-all-contracts-id-approve-question',
-                        params: {
-                            id: item._id
+                            name: 'user-negotiation-all-contracts-id-sign',
+                            params: {
+                                id: item._id
+                            }
+                        })
+                    } else {
+                        if (item.sent_id.includes(this.$auth.$state.user.id)) {
+                            this.$router.push({
+                                name: 'user-negotiation-all-contracts-id-approve-question',
+                                params: {
+                                    id: item._id
+                                }
+                            })
+                        } else {
+                            this.$router.push({
+                                name: 'user-negotiation-all-contracts-id-view-question',
+                                params: {
+                                    id: item._id
+                                }
+                            })
                         }
-                    })
                     }
-                    else{
-                        this.$router.push({
-                        name: 'user-negotiation-all-contracts-id-view-question',
-                        params: {
-                            id: item._id
-                        }
-                    })
-                    }
-                    
                     break;
                     // case 'Received':
                     //     return 'bg-primary-soft';

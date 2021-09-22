@@ -229,7 +229,7 @@ export default {
       };
       const config = {
         headers: {
-          Authorization: "Bearer " + this.$auth.$state.user.data.token
+          Authorization: this.$auth.strategy.token.get()
         }
       };
       axios
@@ -262,12 +262,11 @@ export default {
       axios
         .get(this.$axios.defaults.baseURL + "/user/userdash-contract", {
           headers: {
-            Authorization: "Bearer " + this.$auth.$state.user.data.token
+            Authorization: this.$auth.strategy.token.get()
           }
         })
         .then(res => {
           this.newContract = res.data;
-          console.log(res.data);
         })
         .catch(err => console.log(err.response));
     },

@@ -75,7 +75,7 @@ export default {
         getContractDetails() {
             axios.get(this.$axios.defaults.baseURL +'/user/get-single-contract/'+this.id, {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {

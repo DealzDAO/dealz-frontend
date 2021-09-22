@@ -25,7 +25,7 @@ export const actions={
    seeContractDetail(context) {
       const config = {
         headers: {
-          Authorization: "Bearer " + this.$auth.$state.user.data.token
+          Authorization: this.$auth.strategy.token.get()
         }
       };
       axios

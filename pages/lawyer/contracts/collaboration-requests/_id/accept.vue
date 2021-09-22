@@ -91,7 +91,7 @@ export default {
         getContractDetails() {
             axios.get('https://dealzlegal.herokuapp.com/api/lawyer/single-collab-requests/' + this.id, {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {
@@ -107,7 +107,7 @@ export default {
             }
             const config = {
                 headers: {
-                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                    Authorization: this.$auth.strategy.token.get()
                 }
             }
             axios.post('https://dealzlegal.herokuapp.com/api/lawyer/accept-contract-collab', params, config)

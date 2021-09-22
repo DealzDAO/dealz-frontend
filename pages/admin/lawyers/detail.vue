@@ -135,7 +135,7 @@ export default {
             }
             const config = {
                 headers: {
-                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                    Authorization: this.$auth.strategy.token.get()
                 }
             }
             axios.post('https://dealzlegal.herokuapp.com/api/admin/accept-lawyer',params,config)
@@ -155,7 +155,7 @@ export default {
             }
             const config = {
                 headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                    Authorization: this.$auth.strategy.token.get()
                 }
             }
             axios.post('https://dealzlegal.herokuapp.com/api/admin/reject-lawyer',params,config)

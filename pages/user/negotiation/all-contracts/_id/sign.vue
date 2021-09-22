@@ -47,7 +47,7 @@ export default {
             axios
                 .get(this.$axios.defaults.baseURL + "/user/user-contract/" + this.id, {
                     headers: {
-                        Authorization: "Bearer " + this.$auth.$state.user.data.token
+                        Authorization: "Bearer " + this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {

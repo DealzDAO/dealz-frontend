@@ -63,7 +63,7 @@ export default {
     },
     mounted() {
         this.getContracts()
-
+        console.log('id:',this.$auth.$state.user)
     },
     methods: {
         getStatus(item) {
@@ -158,7 +158,7 @@ export default {
         getContracts() {
             axios.get(this.$axios.defaults.baseURL + '/user/all-contracts?page=' + this.page + '&limit=' + this.limit, {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {
@@ -177,7 +177,6 @@ export default {
             this.getContracts()
         },
         seeSelected(item) {
-            console.log(item)
             switch (item.status) {
                 case 'New':
                 case 'Ready to send':
@@ -197,13 +196,23 @@ export default {
                     });
                     break;
                 case 'Sent':
-                    console.log(item)
-                    // this.$router.push({
-                    //     name: 'user-negotiation-all-contracts-id-view',
-                    //     params: {
-                    //         id: item._id
-                    //     }
-                    // })
+                    if(item.sent_id.includes(this.$auth.$state.user.id)){
+                        this.$router.push({
+                        name: 'user-negotiation-all-contracts-id-approve-question',
+                        params: {
+                            id: item._id
+                        }
+                    })
+                    }
+                    else{
+                        this.$router.push({
+                        name: 'user-negotiation-all-contracts-id-view-question',
+                        params: {
+                            id: item._id
+                        }
+                    })
+                    }
+                    
                     break;
                     // case 'Received':
                     //     return 'bg-primary-soft';

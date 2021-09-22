@@ -290,7 +290,7 @@ export default {
                 text: 'Startup'
             },
         ],
-        tab: 2,
+        tab: 1,
         btnText: 'Next',
         btnText2: 'Finish Registration',
         formText: 'Please fill up the following details to register.',

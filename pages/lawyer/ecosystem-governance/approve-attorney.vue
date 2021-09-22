@@ -73,7 +73,7 @@ export default {
         getAttorneys() {
             axios.get('https://dealzlegal.herokuapp.com/api/lawyer/accepted-lawyer', {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {
@@ -135,7 +135,7 @@ export default {
                 }
                 const config = {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 }
                 axios.post('https://dealzlegal.herokuapp.com/api/lawyer/upvote-accepted-lawyer', params, config)
@@ -154,7 +154,7 @@ export default {
                 }
                 const config = {
                     headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('dealz-token')
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 }
                 axios.post('https://dealzlegal.herokuapp.com/api/lawyer/downvote-accepted-lawyer', params, config)

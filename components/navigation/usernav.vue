@@ -102,10 +102,11 @@ export default {
             this.$router.push('/user/new-contract')
         },
         logout() {
+            this.$auth.logout()
             this.$router.push('/login')
             // axios.get('https://dealzlegal.herokuapp.com/api/auth/logout')
             // .catch(errr=>console.log(err.response))
-            this.$auth.logout()
+            
         }
     }
 }

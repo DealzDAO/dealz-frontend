@@ -74,7 +74,7 @@ export default {
         },
         user: {
           property: false,
-          autoFetch: false
+          autoFetch: true
         },
         endpoints: {
           login: { url: "/auth/login", method: "post" },

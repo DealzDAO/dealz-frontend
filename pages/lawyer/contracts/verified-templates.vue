@@ -51,7 +51,7 @@ export default {
         getVerifiedTemplates(){
             axios.get('https://dealzlegal.herokuapp.com/api/lawyer/verified-templates',{
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {

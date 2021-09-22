@@ -57,7 +57,7 @@ export default {
         getLawyerContracts() {
             axios.get(this.$axios.defaults.baseURL+'/lawyer/all-contracts?page=' + this.page + '&limit=' + this.limit,{
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {

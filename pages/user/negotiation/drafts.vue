@@ -40,7 +40,7 @@ export default {
         getDrafts() {
             const config = {
                 headers: {
-                    Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                    Authorization: this.$auth.strategy.token.get()
                 }
             }
             axios.get(this.$axios.defaults.baseURL + '/user/all-drafts/', config)

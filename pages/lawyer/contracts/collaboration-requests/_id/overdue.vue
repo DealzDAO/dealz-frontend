@@ -57,7 +57,7 @@ export default {
         getContractDetails() {
             axios.get('https://dealzlegal.herokuapp.com/api/lawyer/single-collab-requests/' + this.id, {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {

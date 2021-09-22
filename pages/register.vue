@@ -251,7 +251,7 @@ export default {
                     email: this.email,
                     password: this.password,
                     User_type: "User",
-                    profession: 'Employee',
+                    profession: 'Art',
                 };
                 this.isProcessing = true;
                 ApiService.register(userData)

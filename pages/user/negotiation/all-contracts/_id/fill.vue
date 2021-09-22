@@ -51,12 +51,16 @@
                 <p class="helper-text3">No questions</p>
             </div>
             <div class="row px-5 mt-3 justify-content-between">
-                <p class="text-secondary-light link" @click="previous">Previous Questions</p>
+                <p v-if="page>1" class="text-secondary-light link" @click="previous">Previous Questions</p>
+                <span v-else></span>
                 <div>
                     <b-button v-if="fillable.userContract.status == 'New' || fillable.userContract.status == 'Draft'" class="my-btn px-3 bg-white" style="border:1px solid #04a5f6" @click="saveDraft">
                         <p class="text-primary-light">Save Draft</p>
                     </b-button>
-                    <b-button class="my-btn px-3 bg-primary-light" @click="next">
+                    <b-button v-if="page==pageLimit" class="my-btn px-3 bg-primary-light" @click="finishContract">
+                        <p>Finish Contract</p>
+                    </b-button>
+                    <b-button v-if="fillable.contract.questions.length>3" class="my-btn px-3 bg-primary-light" @click="next">
                         <p>Next Questions</p>
                     </b-button>
                 </div>
@@ -124,7 +128,7 @@ export default {
             inputDisabled: false,
             // question view
             initIndex: 0,
-            lastIndex: 1,
+            lastIndex: 3,
             pageLimit: 0,
             page: 1,
             questionList: [],
@@ -144,11 +148,10 @@ export default {
             axios
                 .get(this.$axios.defaults.baseURL + "/user/user-contract/" + this.id, {
                     headers: {
-                        Authorization: "Bearer " + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {
-                    console.log('fill:', res.data)
                     this.fillable = res.data
                     this.updatedContract=res.data.contract.contract_details
                     this.form.option = this.fillable.userContract.contract_details
@@ -158,10 +161,10 @@ export default {
                     this.setList()
                     //setting page limit for question view
 
-                    if (res.data.contract.questions.length % 2 == 0) {
-                        this.pageLimit = res.data.contract.questions.length / 2
+                    if (res.data.contract.questions.length % 3 == 0) {
+                        this.pageLimit = res.data.contract.questions.length / 3
                     } else {
-                        this.pageLimit = Math.ceil(res.data.contract.questions.length / 2)
+                        this.pageLimit = Math.ceil(res.data.contract.questions.length / 3)
                     }
 
                 })
@@ -174,7 +177,7 @@ export default {
             };
             const config = {
                 headers: {
-                    Authorization: "Bearer " + this.$auth.$state.user.data.token
+                    Authorization: this.$auth.strategy.token.get()
                 }
             };
             axios
@@ -196,7 +199,7 @@ export default {
             };
             const config = {
                 headers: {
-                    Authorization: "Bearer " + this.$auth.$state.user.data.token
+                    Authorization: this.$auth.strategy.token.get()
                 }
             };
             if (this.fillable.contract.questions.length == this.form.option.length) {
@@ -263,36 +266,37 @@ export default {
         setList() {
             var set = this.fillable.contract.questions
             var list = []
-            for (var x = this.initIndex; x < this.lastIndex; x++) {
+            for (var x = this.initIndex; x < this.fillable.contract.questions.length; x++) {
                 list.push(set[x])
             }
             this.questionList = list
             console.log('list:',this.questionList)
         },
         next() {
-            if (this.page < this.pageLimit) {
+            if (this.page <= this.pageLimit) {
                 this.page += 1
-                this.initIndex += 2
-                this.lastIndex += 2
+                this.initIndex += 3
+                this.lastIndex += 3
                 //last page ma trim garxa 
                 if (this.lastIndex > this.fillable.contract.questions.length) {
-                    this.lastIndex = this.fillable.contract.questions.length
+                    this.lastIndex = this.lastIndex-this.fillable.contract.questions.length
                 }
                 this.setList()
             }
-
         },
         previous() {
             if (this.page > 1) {
-                this.initIndex -= 2
+                this.initIndex -= 3
                 //last page bata back garda  trim vaeko data milaudai
                 if (this.page == this.pageLimit) {
-                    this.lastIndex = this.initIndex + 2
+                    this.lastIndex = this.fillable.contract.questions.length-(this.page *3)
+                }
+                else{
+                    this.lastIndex -=3
                 }
                 this.page -= 1
                 this.setList()
             }
-
         }
     }
 };

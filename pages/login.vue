@@ -121,8 +121,8 @@ export default {
                         password: this.password
                     }
                 })
-                this.$auth.setUser(response)
-                
+                //autofetch is true in nuxt.config so no need to set user
+                // this.$auth.setUser(response)
                 var token = response.data.token
                 var base64Url = token.split('.')[1];
                 var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -130,7 +130,7 @@ export default {
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
                 var decoded = JSON.parse(jsonPayload)
-
+                
                 if (decoded.User_type == 'User') {
                     this.$router.push('/user')
                 } else if (decoded.User_type == 'Lawyer') {

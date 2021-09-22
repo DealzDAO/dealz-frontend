@@ -72,7 +72,7 @@ export default {
         getCollabs() {
             axios.get('https://dealzlegal.herokuapp.com/api/lawyer/all-collab-requests', {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {

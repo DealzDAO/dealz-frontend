@@ -50,7 +50,7 @@ export const actions = {
   getDetail(context) {
     axios
       .get(
-        "https://dealzlegal.herokuapp.com/api/admin/single-contract/" +
+        this.$axios.defaults.baseURL + "/admin/single-contract/" +
         context.state.selectedContract._id, {
           headers: {
             Authorization: this.$auth.strategy.token.get()
@@ -58,14 +58,13 @@ export const actions = {
         }
       )
       .then(res => {
-        console.log(res.data)
         context.commit("setContractDetail", res.data);
       })
       .catch(err => console.log(err.response));
 
       axios
           .get(
-            "https://dealzlegal.herokuapp.com/api/contracts/get-comment/" +
+            this.$axios.defaults.baseURL + "/contracts/get-comment/" +
             context.state.selectedContract._id, {
               headers: {
                 Authorization: this.$auth.strategy.token.get()
@@ -80,7 +79,7 @@ export const actions = {
   getLawyerDetail(context) {
     axios
       .get(
-        "https://dealzlegal.herokuapp.com/api/admin/single-lawyer/" +
+        this.$axios.defaults.baseURL + "/admin/single-lawyer/" +
         context.state.selectedLawyer._id, {
           headers: {
             Authorization: this.$auth.strategy.token.get()

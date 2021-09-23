@@ -87,7 +87,7 @@ export const state = () => ({
                 Authorization: this.$auth.strategy.token.get()
             }
         }
-        axios.post('https://dealzlegal.herokuapp.com/api/contracts/save-as-draft',params,config).then(res => {
+        axios.post(this.$axios.defaults.baseURL + '/contracts/save-as-draft',params,config).then(res => {
             context.commit('resetForm')
             context.commit('resetStep')
             // context.commit('setContractTabs',{'n':1,'title':'my-drafts'})
@@ -105,7 +105,7 @@ export const state = () => ({
                 Authorization: this.$auth.strategy.token.get()
             }
         }
-        axios.post('https://dealzlegal.herokuapp.com/api/contracts/save-as-draft',params,config).then(res => {
+        axios.post(this.$axios.defaults.baseURL + '/contracts/save-as-draft',params,config).then(res => {
             context.commit('resetForm')
             context.commit('resetStep')
             this.$router.push('/lawyer/dashboard')
@@ -127,7 +127,7 @@ export const state = () => ({
                 Authorization: this.$auth.strategy.token.get()
             }
         }
-        axios.post('https://dealzlegal.herokuapp.com/api/contracts/save-as-draft',params,config).then(res => {
+        axios.post(this.$axios.defaults.baseURL + '/contracts/save-as-draft',params,config).then(res => {
             context.commit('resetForm')
             context.commit('resetStep')
             this.$router.push('/lawyer/dashboard')
@@ -149,7 +149,7 @@ export const state = () => ({
                 Authorization: this.$auth.strategy.token.get()
             }
         }
-        axios.post('https://dealzlegal.herokuapp.com/api/contracts/upload',params,config)
+        axios.post(this.$axios.defaults.baseURL + '/contracts/upload',params,config)
         .then(res=>{
             context.commit('setContractFinishDialog')
             context.commit('resetForm')

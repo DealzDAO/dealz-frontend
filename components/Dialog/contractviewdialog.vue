@@ -26,7 +26,7 @@
                         </div>
                     </b-card>
                     <div class="row justify-content-center">
-                        <b-button class="my-btn px-5 mt-2" @click="$router.push('/user/dashboard')">
+                        <b-button class="my-btn px-5 mt-2" to="/user">
                             <p>Go to Dashboard</p>
                         </b-button>
                     </div>
@@ -220,7 +220,7 @@ export default {
             };
             const config = {
                 headers: {
-                    Authorization: "Bearer " + this.$auth.$state.user.data.token
+                    Authorization: this.$auth.strategy.token.get()
                 }
             };
             axios
@@ -234,6 +234,11 @@ export default {
                 })
                 .catch(err => console.log(err.response));
         },
+        seeDashboard(){
+            this.$router.push({
+                path:'/user/dashboard'
+            })
+        }
     }
 }
 </script>

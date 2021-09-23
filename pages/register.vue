@@ -16,7 +16,7 @@
                 <p class="helper-text3">Select a desired avatar</p>
                 <div class="row justify-content-around px-3">
                     <div v-for="(item,i) in avatars" :key="i" @click="selectAvatar(item)">
-                        <b-avatar  class="bg-white hoverable" :class="getSelected(item)"  rounded="lg" size="58px" :src="require(`~/assets/img/${item.title}.png`)"></b-avatar>
+                        <b-avatar class="bg-white hoverable" :class="getSelected(item)" rounded="lg" size="58px" :src="require(`~/assets/img/${item.title}.png`)"></b-avatar>
                     </div>
                 </div>
                 <!-- end avatar -->
@@ -53,14 +53,14 @@
 
                 <!-- Practice -->
                 <ValidationProvider name="practice" v-slot="{ errors }">
-                    <b-form-select v-model="selected" :options="practice" class="text-box mt-4"></b-form-select>
+                    <b-form-select v-model="practice" :options="practices" class="text-box mt-4"></b-form-select>
                     <span class="helper-text3 text-danger">{{ errors[0] }}</span>
                 </ValidationProvider>
                 <!-- End practice -->
 
                 <!-- State -->
-                <ValidationProvider name="practice" v-slot="{ errors }">
-                    <b-form-select v-model="selected" :options="state" class="text-box mt-2"></b-form-select>
+                <ValidationProvider name="state" v-slot="{ errors }">
+                    <b-form-select v-model="state" :options="states" class="text-box mt-2"></b-form-select>
                     <span class="helper-text3 text-danger">{{ errors[0] }}</span>
                 </ValidationProvider>
                 <!-- End state -->
@@ -71,7 +71,8 @@
                 <span class="helper-text3 text-danger">{{ agreeText }}</span>
 
                 <b-button class="btn-block bg-primary-light mt-2" @click="register">
-                    <span>{{btnText}}</span>
+                    <b-spinner class="mr-2" small v-if="isProcessing"></b-spinner>
+                    <span v-else>Sign in</span>
                 </b-button>
             </div>
         </div>
@@ -80,6 +81,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {
     BCard,
     BInputGroup,
@@ -165,54 +167,24 @@ export default {
         }, {
             title: 'avatar6'
         }],
-        state: [{
+        states: [{
                 value: null,
-                text: 'Select state'
-            },
-            {
-                value: 'a',
-                text: 'This is First option'
-            },
-        ],
-        practice: [{
-                value: null,
-                text: 'Select practice'
-            },
-            {
-                value: 'Art',
-                text: 'Art'
-            },
-            {
-                value: 'Crypto',
-                text: 'Crypto'
-            },
-            {
-                value: 'Music',
-                text: 'Music'
-            },
-            {
-                value: 'Startup',
-                text: 'Startup'
-            },
-        ],
-        selectedAvatar: 'avatar1',
-        selected: null,
-        isPassword: true,
-        fullName: null,
-        email: null,
-        password: null,
-        profession: null,
-        agreeTerm: false,
-        agreeText:'',
-        btnText:'Sign in',
-        professions: [{
-                value: null,
-                text: "Please select a profession",
+                text: 'Select state',
                 disabled: true
             },
             {
-                value: "Music Artist",
-                text: "Music Artist"
+                value: 'First state',
+                text: 'First state'
+            },
+        ],
+        practices: [{
+                value: null,
+                text: "Select profession",
+                disabled: true
+            },
+            {
+                value: "Startup",
+                text: "Startup"
             },
             {
                 value: "Designer",
@@ -222,13 +194,33 @@ export default {
                 value: "Founder",
                 text: "Founder"
             },
+            {
+                value: "Art",
+                text: "Art"
+            },
+            {
+                value: "Music",
+                text: "Music"
+            }
         ],
+        practice: null,
+        state: null,
+        selectedAvatar: 'avatar1',
+        selected: null,
+        isPassword: true,
+        fullName: null,
+        email: null,
+        password: null,
+        profession: null,
+        agreeTerm: false,
+        agreeText: '',
+        btnText: 'Sign in',
         isProcessing: false,
     }),
-    watch:{
-        agreeTerm(newValue,oldValue){
-            if(newValue==true){
-                this.agreeText=''
+    watch: {
+        agreeTerm(newValue, oldValue) {
+            if (newValue == true) {
+                this.agreeText = ''
             }
         }
     },
@@ -240,34 +232,31 @@ export default {
             this.$refs.registerForm.validate().then((success) => {
                 if (!success) {
                     return;
-                }
-                else if(!this.agreeTerm){
-                    this.agreeText='You must agree to terms and conditions'
+                } else if (!this.agreeTerm) {
+                    this.agreeText = 'You must agree to terms and conditions'
                     return;
                 }
-                this.btnText='Signing you in...'
+                this.btnText = 'Signing you in...'
                 let userData = {
                     name: this.fullName,
                     email: this.email,
                     password: this.password,
                     User_type: "User",
-                    profession: 'Art',
+                    profession: this.practice,
+                    state: this.state,
+                    avatar: this.selectedAvatar
                 };
                 this.isProcessing = true;
-                ApiService.register(userData)
-                    .then((response) => {
-                        this.successToast(response.data.message);
+                axios
+                    .post(
+                        this.$axios.defaults.baseURL + "/auth/register", userData)
+                    .then(res => {
                         this.$router.push('/login')
+                        this.successToast('Registration successful. Check your email to verify account.');
 
                     })
-                    .catch((errors) => {
-                        this.btnText='Sign in'
-                        errors.response.data.errors.forEach((err) => {
-                            this.$refs[err.param].setErrors([err.msg]);
-                        });
-                    })
-                    .finally(() => {
-                        this.isProcessing = false;
+                    .catch(err => {
+                        this.failureToast(err.response.data.errors[0].msg)
                     });
             });
         },

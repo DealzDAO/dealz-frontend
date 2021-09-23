@@ -38,18 +38,23 @@
                 <p class="data2 float-right link" @click="forgotPass">Forgot Password</p>
                 <b-button @click="login" block class="my-btn bg-primary-light">
                     <b-spinner class="mr-2" small v-if="isProcessing"></b-spinner>
-                    <p class="">Sign in</p>
+                    <p v-else class="">Sign in</p>
                 </b-button>
                 <p class="data2 mt-2">or sign in using</p>
                 <b-button @click="login" block class="my-btn" style="background:#DFE6EC;">
+                    <div class="row justify-content-center">
+                        <img :src="require('~/assets/img/google-icon.png')" width="20" height="20" class="float-left mr-2" alt="">
+                        <p class="visible">
+                            Sign in with Google
+                        </p>
+                    </div>
 
-                    <p class="visible">
-                        <b-icon icon="google" class="visible"></b-icon>
-                        Sign in with Google
-                    </p>
                 </b-button>
                 <b-button @click="login" block class="my-btn" style="background:#DFE6EC;">
-                    <p class="visible">Sign in with Apple</p>
+                    <div class="row justify-content-center">
+                        <img :src="require('~/assets/img/apple-icon.svg')" width="20" height="20" class="float-left mr-2" alt="">
+                        <p class="visible">Sign in with Apple</p>
+                    </div>
                 </b-button>
 
                 <p class="data2 mt-2">Don't have an account? <a href="/register"><b>Register now</b></a></p>
@@ -92,7 +97,7 @@ extend("email", {
 });
 
 export default {
-    middleware:'check-login',
+    middleware: 'check-login',
     components: {
         BCard,
         BInputGroup,
@@ -113,35 +118,43 @@ export default {
             this.isPassword = !this.isPassword;
         },
         async login() {
-            this.isProcessing = true;
-            try {
-                let response = await this.$auth.loginWith('local', {
-                    data: {
-                        email: this.email,
-                        password: this.password
-                    }
-                })
-                //autofetch is true in nuxt.config so no need to set user
-                // this.$auth.setUser(response)
-                var token = response.data.token
-                var base64Url = token.split('.')[1];
-                var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                var decoded = JSON.parse(jsonPayload)
-                
-                if (decoded.User_type == 'User') {
-                    this.$router.push('/user')
-                } else if (decoded.User_type == 'Lawyer') {
-                    this.$router.push('/lawyer')
-                } else if (decoded.User_type == 'Admin') {
-                    this.$router.push('/admin')
+            this.$refs.loginForm.validate().then((success) => {
+                if (!success) {
+                    return;
                 }
-                this.successToast(response.data.message);
-            } catch (err) {
-                console.log(err)
-            }
+                this.isProcessing = true;
+                try {
+                    let response = this.$auth.loginWith('local', {
+                        data: {
+                            email: this.email,
+                            password: this.password
+                        }
+                    })
+                    //autofetch is true in nuxt.config so no need to set user
+                    // this.$auth.setUser(response)
+                    var token = response.data.token
+                    var base64Url = token.split('.')[1];
+                    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                    var decoded = JSON.parse(jsonPayload)
+
+                    if (decoded.User_type == 'User') {
+                        this.$router.push('/user')
+                    } else if (decoded.User_type == 'Lawyer') {
+                        this.$router.push('/lawyer')
+                    } else if (decoded.User_type == 'Admin') {
+                        this.$router.push('/admin')
+                    }
+                    this.successToast(response.data.message);
+
+                } catch (err) {
+                    this.isProcessing = false
+                    this.failureToast('Login failure! Check your credentials again.');
+                    console.log(err)
+                }
+            })
         },
         forgotPass() {
             this.$router.push('/forgot-password')

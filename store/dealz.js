@@ -1,10 +1,14 @@
 import axios from "axios";
 export const state = () => ({
    dealzUser:null,
-   dealzToken:null
+   dealzToken:null,
+   email:''
 });
 
 export const mutations = {
+  setEmail(state,payload){
+     state.email=payload
+  },
   setDealzAuth(state,payload){
       state.dealzUser=payload
   },

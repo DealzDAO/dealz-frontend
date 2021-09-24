@@ -117,14 +117,14 @@ export default {
         togglePassword() {
             this.isPassword = !this.isPassword;
         },
-        async login() {
-            this.$refs.loginForm.validate().then((success) => {
+        login() {
+            this.$refs.loginForm.validate().then(async(success) => {
                 if (!success) {
                     return;
                 }
                 this.isProcessing = true;
                 try {
-                    let response = this.$auth.loginWith('local', {
+                    let response =await this.$auth.loginWith('local', {
                         data: {
                             email: this.email,
                             password: this.password
@@ -152,7 +152,7 @@ export default {
                 } catch (err) {
                     this.isProcessing = false
                     this.failureToast('Login failure! Check your credentials again.');
-                    console.log(err)
+                    console.log(err.response)
                 }
             })
         },

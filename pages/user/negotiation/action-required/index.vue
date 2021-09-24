@@ -197,7 +197,7 @@ export default {
             var cont = []
             axios.get('https://dealzlegal.herokuapp.com/api/user/contracts?page=' + this.page + '&limit=' + this.limit, {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {

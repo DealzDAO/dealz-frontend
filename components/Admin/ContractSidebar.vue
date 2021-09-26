@@ -29,7 +29,7 @@
             </div>
         </div>
         <hr class="mb-0">
-        <div style="overflow:auto;max-height:500px" >
+        <div style="overflow:auto;max-height:500px">
             <b-list-group v-if="contracts.length>0" flush class="pt-0 mx-0">
                 <b-list-group-item v-for="(item,i) in contracts" :key="i" class="link" :class="checkActive(item)" @click="selectContract(item)">
                     <div class="row" style="overflow-x:hidden">
@@ -65,12 +65,14 @@
                 </b-list-group-item>
             </b-list-group>
             <div v-else class="d-flex justify-content-center">
+                <b-spinner variant="primary"></b-spinner>
+            </div>
+            <div class="d-flex justify-content-center mb-3">
                 <p class="helper-text3">{{noText}}</p>
             </div>
 
             <div class="d-flex justify-content-center mb-3">
-                <p v-if="dataEnd" class="helper-text3">End of contracts</p>
-                <b-spinner v-else variant="primary" v-b-visible="loadOnScroll"></b-spinner>
+                <b-spinner v-if="loadMore" variant="primary" v-b-visible="loadOnScroll"></b-spinner>
             </div>
         </div>
 
@@ -85,9 +87,9 @@ export default {
     data() {
         return {
             moment: moment,
-            page: 0,
+            page: 1,
             limit: 5,
-            dataEnd: false,
+            loadMore: false,
             noText: ''
         }
     },
@@ -99,18 +101,20 @@ export default {
             return this.$store.state.admin.contracts
         },
     },
+    mounted() {
+        this.getContracts()
+    },
     methods: {
         getContracts() {
             axios.get('https://dealzlegal.herokuapp.com/api/admin/all-contracts?page=' + this.page + '&limit=' + this.limit, {
                     headers: {
-                        Authorization: 'Bearer ' + this.$auth.$state.user.data.token
+                        Authorization: this.$auth.strategy.token.get()
                     }
                 })
                 .then(res => {
-                    console.log('fethed:', res.data)
-                    if (res.data.contracts.length == 0) {
-                        this.dataEnd = true
-                        this.noText = 'No contracts found'
+                    
+
+                    if (res.data.contracts.length < 3) {
                     }
                     if (this.page == 1) {
                         this.$store.commit('admin/setContracts', res.data.contracts)
@@ -121,6 +125,13 @@ export default {
                             this.$store.commit('admin/insertIntoContract', res.data.contracts[x])
                         }
 
+                    }
+                    if(this.contracts.length==res.data.countContracts){
+                        this.loadMore = false
+                        this.noText='End of contracts'
+                    }
+                    else{
+                        this.loadMore=true
                     }
 
                 })
@@ -149,7 +160,7 @@ export default {
     max-width: 400px;
     padding: 25px 0px;
     background-color: white;
-    border:1px solid #DFE6EC;
+    border: 1px solid #DFE6EC;
 }
 
 .adjusted {

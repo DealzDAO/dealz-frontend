@@ -17,6 +17,9 @@ export const mutations = {
   insertIntoContract(state,payload){
      state.contracts.push(payload)
   },
+  resetContract(state){
+    state.contracts=[]
+  },
   selectContract(state, payload) {
     state.selectedContract = payload;
   },

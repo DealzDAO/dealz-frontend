@@ -65,7 +65,8 @@
 
 <script>
 export default {
-    // middleware: "auth",
+    middleware: ["auth","isLawyer"],
+    layout:'lawyer',
     data() {
         return {
             tabIndex: 0,

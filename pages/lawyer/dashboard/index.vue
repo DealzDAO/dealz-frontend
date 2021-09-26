@@ -131,7 +131,7 @@
 // import EarnDealz from '../../../components/dialog/earndealz';
 // import BuyDealz from '../../../components/dialog/buydealz';
 export default {
-    layout: 'user',
+    layout: 'lawyer',
     // components:{EarnDealz},
     data() {
         return {
